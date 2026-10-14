@@ -4,7 +4,7 @@
 
 **HEPBench** is a collection of **high-energy physics benchmarks for LLM agents**: tasks, scientific inputs, grading rubrics, and the campaign records behind the accompanying paper. Each benchmark is a self-contained directory that fixes the physics objective, the required output artifacts, a rerunnable ground truth, and a rubric that grades the submitted artifacts stage by stage.
 
-Benchmarks run through [toolbench](https://github.com/tonymenzo/toolbench), which drives the agent harness, grades the results, and records every trial. Domain tools come from [HEPTAPOD](https://github.com/tonymenzo/heptapod), served at a pinned version by [toolbase](https://github.com/alexr314/toolbase). HEPBench contains no runner or metrics code of its own.
+Benchmarks run through [toolbench](https://github.com/tonymenzo/toolbench), which drives the agent harness, grades the results, and records every trial. Domain tools come from [HEPTAPOD](https://github.com/tonymenzo/heptapod), served at a pinned version by [toolbase](https://github.com/alexr314/toolbase). 
 
 ## Quickstart
 
@@ -70,13 +70,12 @@ The symbolic tools need `wolframscript` with FeynCalc; set it with `tb config se
 
 ## Campaign records
 
-[`campaigns/`](campaigns/) holds the data behind the paper: the ledger of every cell, the as-run configuration, the collected results, and the scripts that build the figures and tables.
+[`campaigns/`](campaigns/) holds the data behind the paper: the ledger of every cell, the as-run configuration, and the collected results.
 
 | Directory | Contents |
 |---|---|
 | `campaigns/llp_forward/` | four systems, two loadouts, five trials each |
 | `campaigns/symbolic/` | eight tasks, ten trials per task and configuration |
-| `campaigns/publication/` | `make_figures.py`, `make_tables.py`, and their outputs |
 
 The per-trial transcripts and artifacts are attached to each [release](https://github.com/tonymenzo/hepbench/releases) as `hepbench-trials-<campaign>.tar.gz`. Extract one into its campaign directory and open it in the dashboard:
 
@@ -97,7 +96,7 @@ benchmarks/<name>/
 ├── variants/             prompt and scaffolding variants
 └── soln/ | ground_truth/ committed, rerunnable reference
 .toolbase/loadouts/       served-toolkit loadouts
-campaigns/                campaign records and publication scripts
+campaigns/                campaign records
 scripts/                  oracle-access audit, tool-use and code-volume analysis
 tests/                    rubric self-grading, convention audits, check functions
 ```
