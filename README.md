@@ -2,106 +2,158 @@
 
 # **HEPBench**
 
-**HEPBench** is a collection of **high-energy physics benchmarks for LLM agents**: tasks, scientific inputs, grading rubrics, and the campaign records behind the accompanying paper. Each benchmark is a self-contained directory that fixes the physics objective, the required output artifacts, a rerunnable ground truth, and a rubric that grades the submitted artifacts stage by stage.
+**HEPBench** is a collection of **high-energy physics benchmarks for LLM agents**.
 
-Benchmarks run through [toolbench](https://github.com/tonymenzo/toolbench), which drives the agent harness, grades the results, and records every trial. Domain tools come from [HEPTAPOD](https://github.com/tonymenzo/heptapod), served at a pinned version by [toolbase](https://github.com/alexr314/toolbase). 
+Benchmarks run through [toolbench](https://github.com/tonymenzo/toolbench), which launches agents, grades their outputs, and provides a dashboard for inspecting results. Domain tools come from [HEPTAPOD](https://github.com/tonymenzo/heptapod), served over the [Model Context Protocol (MCP)](https://modelcontextprotocol.io) by [toolbase](https://github.com/alexr314/toolbase).
+
+- [Run a benchmark](#run-a-benchmark) to evaluate an agent on an included task.
+- [Inspect the campaigns](#inspect-the-campaigns) to browse the recorded runs, grades, and trial evidence.
 
 ## Quickstart
 
-You'll need **Python 3.12 or 3.13** and a logged-in coding agent, such as Claude Code or Codex. No API key is used.
-
-Install toolbench and clone the benchmarks:
+You'll need **Python 3.12 or 3.13**. Clone the repository and install HEPBench with its runner and grading dependencies:
 
 ```bash
-pip install "toolbench[toolbase]"
-git clone https://github.com/tonymenzo/hepbench.git && cd hepbench
+git clone https://github.com/tonymenzo/hepbench.git
+cd hepbench
+python -m pip install .
 ```
 
-Check the wiring without spending tokens. The `stub` model writes no answer, so every score is zero:
+Run the commands below from this directory.
 
-```bash
-toolbench run --benchmark benchmarks/symbolic/decay_S_to_SS \
-    --model stub --loadouts core_only --n 1 --max-cost-usd 0 --dry-run
-```
+## Run a benchmark
 
-Run one task under Claude Code with the harness's own tools:
+For the example below, install Claude Code and log in before running it. The Claude Code and Codex harnesses use the agent's subscription access, so they do not require a separate API key.
+
+Run three trials of the scalar-decay task with a live dashboard:
 
 ```bash
 toolbench run --benchmark benchmarks/symbolic/decay_S_to_SS \
-    --harnesses claude-code/default --model claude-opus-4-8 \
-    --loadouts core_only --n 3 --max-cost-usd 5
+    --harnesses claude-code/default --model claude-haiku-4-5 \
+    --variants unguided --loadouts core_only --n 3 --max-cost-usd 5 \
+    --dashboard --dashboard-port 0
 ```
 
-Results land in `runs/<run_id>/`. Start with `summary.txt`; `trials.jsonl` holds one graded row per trial, `manifest.json` the resolved configuration, and `trials/` the transcripts and preserved artifacts. To watch a run, or browse a finished one:
+The `core_only` loadout uses the agent's built-in tools. The dashboard selects an available port and prints its URL in the terminal. Open that URL in your browser to follow the trials. The dashboard stops when the run ends; results are saved under `runs/<run_id>/`.
+
+To inspect the latest run afterward, launch the dashboard again:
 
 ```bash
-toolbench dashboard
+toolbench dashboard --port 0
 ```
 
-Comma-separate any axis to sweep it, for example `--loadouts core_only,tools_eda` for a tools ablation or `--harnesses claude-code/default,codex/default` for a cross-system comparison.
+The `--port 0` option automatically selects an available port and prints the dashboard URL in the terminal. Open that URL in your browser. Pass `runs/<run_id>` to open a specific run, or `runs` to browse all local runs. The run directory contains `trials.jsonl` with one graded record per trial, `manifest.json` with the resolved configuration, `summary.txt` with aggregate scores, and `trials/` with the trial evidence.
 
-## Benchmarks
+### Choose a task and configuration
 
-| Benchmark | Tasks | What the agent does |
-|-----------|:---:|---|
-| [`llp_forward`](benchmarks/llp_forward/) | 1 | Forward long-lived-particle reach for a muon-philic scalar: generate the forward meson flux with Pythia, decay it to the scalar across every open channel, propagate through a decay volume, and report signal yields and the sensitivity boundary. |
-| [`symbolic`](benchmarks/symbolic/) | 14 | Tree-level decay widths and cross sections on generic toy field theories, returned as numerical values and closed forms. Ten two-body decays cover every renormalizable three-point vertex among scalars, fermions, and massive vectors. |
+Available benchmarks cover symbolic decay widths and cross sections, and forward long-lived-particle searches. See the [benchmark catalog](benchmarks/README.md) for task paths and links to their prompts, tool requirements, deliverables, and grading.
 
-Every benchmark carries harness definitions for Claude Code, Codex, and the in-process [orchestral](https://github.com/orchestralAI/orchestral-core) harness, prompt variants along the scaffolding axis, and loadouts along the tools axis. Each benchmark's README gives its physics, deliverable, variants, and loadouts.
+The main run options are:
 
-## Domain tools
+| Flag | Purpose | Example or default |
+|---|---|---|
+| `--benchmark` | Task directory containing `benchmark.yaml` (required) | `benchmarks/symbolic/decay_S_to_SS` |
+| `--harnesses` | Agent runtime and configuration | `claude-code/default` or `codex/default` |
+| `--model` | Model used by the runtime | `claude-haiku-4-5` |
+| `--variants` | Prompt and initial files | `unguided` for symbolic tasks; `bare` for the LLP campaign |
+| `--loadouts` | Tools available to the agent | `core_only` or a benchmark's `tools_*` loadout |
+| `--n` | Trials per configuration | Default: `3` |
+| `--parallel` | Maximum number of trials running concurrently across the run | Default: `1`; use `3` to run up to three at once |
+| `--max-cost-usd` | Run budget cap (required) | `5` |
+| `--dashboard` | Serve a live dashboard and print its URL; stops when the run ends | Include to enable |
+| `--dashboard-port` | Port for the live dashboard | Use `0` to select an available port |
+| `--campaign` | Group new runs under `runs/campaigns/<name>/` | `symbolic-comparison` |
 
-The `tools_*` loadouts serve HEPTAPOD over MCP. Download `heptapod-3.0.0.tar.gz` from the [HEPTAPOD releases](https://github.com/tonymenzo/heptapod/releases) and install it:
+`--n` sets trials per configuration; `--parallel` limits concurrent trials. In-flight trials may finish after the budget cap is reached. See `toolbench run --help` for all options.
+
+Comma-separated values compare configurations. After [configuring HEPTAPOD](#configure-domain-tools), this example runs six trials across two loadouts, up to three at once:
+
+```bash
+toolbench run --benchmark benchmarks/symbolic/decay_S_to_SS \
+    --harnesses claude-code/default --model claude-haiku-4-5 \
+    --variants unguided --loadouts core_only,tools_eda --n 3 --parallel 3 \
+    --max-cost-usd 10 --dashboard --dashboard-port 0
+```
+
+## Inspect the campaigns
+
+The [`campaigns/`](campaigns/README.md) directory contains the trial runs from the two campaigns described in [HEPTABench](https://arxiv.org/abs/2610.18454). You can inspect these records without running new trials.
+
+| Campaign | Comparison | Trials |
+|---|---|:---:|
+| [`llp_forward`](campaigns/llp_forward/README.md) | Built-in tools and HEPTAPOD on four agent systems, five trials per configuration | 40 |
+| [`symbolic`](campaigns/symbolic/README.md) | Built-in tools and HEPTAPOD on Claude Haiku 4.5, with a GPT-5.5 baseline, ten trials per task and configuration | 280 |
+
+Open either campaign on its own:
+
+```bash
+toolbench dashboard campaigns/symbolic/trials --port 0
+```
+
+or:
+
+```bash
+toolbench dashboard campaigns/llp_forward/trials --port 0
+```
+
+Open the URL printed in the terminal, select a run, then a trial in its matrix to inspect the recorded result and per-stage grades. Each command selects an available port automatically. Use `toolbench dashboard campaigns --port 0` to browse both campaigns together. Stop a dashboard with `Ctrl+C` in the terminal when finished.
+
+### Add transcripts and artifacts
+
+The full trial evidence is distributed separately as `hepbench-trials-<campaign>.tar.gz` assets on the [Releases page](https://github.com/tonymenzo/hepbench/releases). Download the archive for the campaign you want to inspect, then extract it into that campaign's directory. Replace the example path with your downloaded file:
+
+```bash
+tar xzf /path/to/hepbench-trials-symbolic.tar.gz -C campaigns/symbolic
+toolbench dashboard campaigns/symbolic/trials --port 0
+```
+
+For the forward-LLP campaign:
+
+```bash
+tar xzf /path/to/hepbench-trials-llp_forward.tar.gz -C campaigns/llp_forward
+toolbench dashboard campaigns/llp_forward/trials --port 0
+```
+
+## Configure domain tools
+
+The `tools_*` loadouts use **HEPTAPOD 3.0.0**. Download `heptapod-3.0.0.tar.gz` from the [HEPTAPOD releases](https://github.com/tonymenzo/heptapod/releases), then install and select it:
 
 ```bash
 tb install "/path/to/heptapod-3.0.0.tar.gz"
 tb use heptapod@3.0.0
 ```
 
-The loadouts under [`.toolbase/loadouts/`](.toolbase/loadouts/) apply automatically from the repository root:
+The benchmark loadouts select the tools automatically using the definitions in [`.toolbase/loadouts/`](.toolbase/loadouts/).
 
-| Loadout | Serves | Used by |
+| Benchmark loadout | Tools | Configuration required |
 |---|---|---|
-| `symbolic-eda` | `ComputeDecayRate`, `ComputeCrossSection` | `symbolic` `tools_eda` arm |
-| `forward-llp-defined` | the `llp` bundle and `PythiaFromRunCard` | `llp_forward` `tools_defined` arm |
-| `forward-llp-derived` | the above plus the `eda` bundle | `llp_forward` `tools_derived` arm |
+| `symbolic`: `tools_eda` | `ComputeDecayRate`, `ComputeCrossSection` | WolframScript and FeynCalc |
+| `llp_forward`: `tools_defined` | The `llp` bundle and `PythiaFromRunCard` | No additional paths |
+| `llp_forward`: `tools_derived` | The above plus the `eda` bundle | WolframScript and FeynCalc |
 
-The symbolic tools need `wolframscript` with FeynCalc; set it with `tb config set heptapod wolframscript_path /path/to/wolframscript`. The `llp` tools are pure Python. No loadout serves literature, particle-data, or web tools, since the tasks are graded against a committed reference.
-
-## Campaign records
-
-[`campaigns/`](campaigns/) holds the data behind the paper: the ledger of every cell, the as-run configuration, and the collected results.
-
-| Directory | Contents |
-|---|---|
-| `campaigns/llp_forward/` | four systems, two loadouts, five trials each |
-| `campaigns/symbolic/` | eight tasks, ten trials per task and configuration |
-
-The per-trial transcripts and artifacts are attached to each [release](https://github.com/tonymenzo/hepbench/releases) as `hepbench-trials-<campaign>.tar.gz`. Extract one into its campaign directory and open it in the dashboard:
+For symbolic calculations, install FeynCalc and set the path to your WolframScript executable:
 
 ```bash
-tar xzf hepbench-trials-symbolic.tar.gz -C campaigns/symbolic
-toolbench dashboard campaigns/symbolic/trials
+tb config set heptapod wolframscript_path /path/to/wolframscript
 ```
 
-The dashboard shows each run's trial matrix, per-stage grades, and transcripts.
+For `llp_forward` with `core_only`, Pythia must be available in the agent's own environment. The supplied [Conda environment](environment.yml) includes the runner and the Pythia version used by the reference:
 
-## Layout
-
-```
-benchmarks/<name>/
-├── benchmark.yaml        task, rubric, artifact policy, defaults
-├── harnesses/            claude-code, codex, orchestral
-├── loadouts/             tool surfaces served per arm
-├── variants/             prompt and scaffolding variants
-└── soln/ | ground_truth/ committed, rerunnable reference
-.toolbase/loadouts/       served-toolkit loadouts
-campaigns/                campaign records
-scripts/                  oracle-access audit, tool-use and code-volume analysis
-tests/                    rubric self-grading, convention audits, check functions
+```bash
+conda env create -f environment.yml
+conda activate hepbench
 ```
 
-Ground truth lives outside the agent's sandbox, the harness denies reading it, and a transcript auditor scans finished runs for answer-key access:
+Run the benchmark from that environment. A forward-LLP trial takes tens of minutes, much of it generating events with Pythia.
+
+## Examples and reference
+
+- **Benchmarks:** [`symbolic`](benchmarks/symbolic/README.md), its [conventions](benchmarks/symbolic/CONVENTIONS.md), and [`llp_forward`](benchmarks/llp_forward/README.md).
+- **Campaigns:** [`symbolic`](campaigns/symbolic/README.md) and [`llp_forward`](campaigns/llp_forward/README.md), including the configurations used in the paper.
+- **Analysis:** [tool-use checks](scripts/check_tool_use.py) and [token and code-volume analysis](scripts/token_io_analysis.py).
+- **Validation:** `python -m pip install -e ".[dev]"`, then `pytest tests/` to check the rubrics against the reference answers and audit symbolic conventions.
+
+The harnesses restrict access to the committed reference answers, and no loadout serves literature, particle-data, or web tools. After a new run, check the transcripts for answer-key access:
 
 ```bash
 python scripts/audit_oracle_access.py runs/<run_id> --zero
@@ -109,7 +161,13 @@ python scripts/audit_oracle_access.py runs/<run_id> --zero
 
 ## Citation
 
-If you use HEPBench in your research, please cite the accompanying paper (arXiv number to follow). BibTeX is in [CITATION.bib](CITATION.bib).
+If you use HEPBench in your research, please cite:
+
+- **HEPTABench:** [https://arxiv.org/abs/2610.18454](https://arxiv.org/abs/2610.18454).
+- For the domain tools, also cite **HEPTAPOD:** [https://arxiv.org/abs/2512.15867](https://arxiv.org/abs/2512.15867).
+- For the symbolic tools, also cite **Agentic Diagrammatica:** [https://arxiv.org/abs/2603.26990](https://arxiv.org/abs/2603.26990).
+
+BibTeX entries are available in [CITATION.bib](CITATION.bib).
 
 ## License
 

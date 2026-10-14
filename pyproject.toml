@@ -31,15 +31,9 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Physics",
 ]
 
-# HEPBench is benchmark *content*: the framework (runner, metrics, CLI)
-# is toolbench; tool packaging/serving is toolbase. Everything else
-# (numpy, matplotlib, orchestral, ...) arrives transitively.
-#
-# toolbase is a hard dependency by choice — the loadout arms we care
-# about serve heptapod's toolkits through toolbase profiles. The
-# `python:` tool source (tools/heptapod_source.py) still works without
-# it, so demoting toolbase to an extra is a two-line change if ever
-# needed.
+# HEPBench is benchmark content. The runner, metrics, and CLI come from
+# toolbench; the tools_* loadouts serve HEPTAPOD through toolbase. Everything
+# else (numpy, matplotlib, orchestral, ...) arrives transitively.
 dependencies = [
     "toolbench[toolbase]>=0.11.0",
     # benchmarks/symbolic grades formula answers by numeric sampling of
@@ -52,20 +46,12 @@ dependencies = [
 dev = [
     "pytest>=7.4.0",
 ]
-# Build the static results site with `python scripts/build_site.py`. PyYAML
-# reads the benchmark definitions; latex2mathml renders score-definition LaTeX
-# to self-contained MathML at build time (no runtime JS, no external requests).
-site = [
-    "pyyaml>=6.0",
-    "latex2mathml>=3.77",
-]
 
 [project.urls]
 Repository = "https://github.com/tonymenzo/hepbench"
 Issues = "https://github.com/tonymenzo/hepbench/issues"
 
-# No package code ships (yet): benchmarks/ is data resolved by path via
-# `toolbench run --benchmark`. A future `hepbench/` adapter package
-# (heptapod runtime registration) will be added here when it lands.
+# No package code ships: benchmarks/ is data resolved by path via
+# `toolbench run --benchmark`.
 [tool.setuptools]
 packages = []

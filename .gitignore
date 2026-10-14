@@ -28,20 +28,16 @@ runs/
 # Toolkit tarballs
 /heptapod-*.tar.gz
 
-# Per-trial campaign evidence: distributed as release assets, extracted here
-campaigns/*/trials/*/*/trials/
-
-# benchmarks/llp_forward/soln: the solution is tracked, its construction trail is not
-benchmarks/llp_forward/soln/reference/*.ipynb
-benchmarks/llp_forward/soln/reference/figures/
-benchmarks/llp_forward/soln/reference/out/*_200k.json
-benchmarks/llp_forward/soln/reference/out/*_prefold.json
-benchmarks/llp_forward/soln/reference/out/*_k40untruncated.json
-benchmarks/llp_forward/soln/reference/out/fine_contour_a.json
-benchmarks/llp_forward/soln/reference/flux/
-benchmarks/llp_forward/soln/figs/*.png
-benchmarks/llp_forward/soln/leptonic_ground_truth.pdf
-benchmarks/llp_forward/soln/depr/
+# Campaign trials: git holds each run's ledgers; the per-trial evidence is
+# distributed as a release asset and extracted here
+campaigns/*/trials/*/*/*
+!campaigns/*/trials/*/*/manifest.json
+!campaigns/*/trials/*/*/plan.json
+!campaigns/*/trials/*/*/status.json
+!campaigns/*/trials/*/*/summary.json
+!campaigns/*/trials/*/*/summary.txt
+!campaigns/*/trials/*/*/trials.jsonl
+campaigns/*/trials/OMITTED.txt
 
 # LaTeX build artifacts inside sandbox templates
 benchmarks/*/variants/*/sandbox/template/*.aux
