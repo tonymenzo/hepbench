@@ -144,28 +144,14 @@ conda env create -f environment.yml
 conda activate hepbench
 ```
 
-Run the benchmark from that environment. A forward-LLP trial takes tens of minutes, much of it generating events with Pythia.
-
-## Examples and reference
-
-- **Benchmarks:** [`symbolic`](benchmarks/symbolic/README.md), its [conventions](benchmarks/symbolic/CONVENTIONS.md), and [`llp_forward`](benchmarks/llp_forward/README.md).
-- **Campaigns:** [`symbolic`](campaigns/symbolic/README.md) and [`llp_forward`](campaigns/llp_forward/README.md), including the configurations used in the paper.
-- **Analysis:** [tool-use checks](scripts/check_tool_use.py) and [token and code-volume analysis](scripts/token_io_analysis.py).
-- **Validation:** `python -m pip install -e ".[dev]"`, then `pytest tests/` to check the rubrics against the reference answers and audit symbolic conventions.
-
-The harnesses restrict access to the committed reference answers, and no loadout serves literature, particle-data, or web tools. After a new run, check the transcripts for answer-key access:
-
-```bash
-python scripts/audit_oracle_access.py runs/<run_id> --zero
-```
+Run the benchmark from that environment. A forward-LLP trial can take ~tens of minutes.
 
 ## Citation
 
 If you use HEPBench in your research, please cite:
 
 - **HEPTABench:** [https://arxiv.org/abs/2610.18454](https://arxiv.org/abs/2610.18454).
-- For the domain tools, also cite **HEPTAPOD:** [https://arxiv.org/abs/2512.15867](https://arxiv.org/abs/2512.15867).
-- For the symbolic tools, also cite **Agentic Diagrammatica:** [https://arxiv.org/abs/2603.26990](https://arxiv.org/abs/2603.26990).
+- For the domain tools, also cite **HEPTAPOD:** [https://arxiv.org/abs/2512.15867](https://arxiv.org/abs/2512.15867), [https://arxiv.org/abs/2603.26990](https://arxiv.org/abs/2603.26990).
 
 BibTeX entries are available in [CITATION.bib](CITATION.bib).
 
