@@ -1,0 +1,29 @@
+{
+  "part_a_width_gev": 23.219067397452875,
+  "part_a_width_formula": "g**2 * ((mS**2-(mSp+mV)**2)*(mS**2-(mSp-mV)**2))**(3/2) / (16*pi*mS**3*mV**2)",
+  "part_b_width_gev": 19.01311899962958,
+  "part_b_width_formula": "g**2 * (mS**2 - mV**2)**3 / (16*pi*mS**3*mV**2)",
+  "_metadata": {
+    "generated_by": "ground_truth/derivation.py",
+    "conventions": "../CONVENTIONS.md",
+    "parameters": {
+      "part_a": {
+        "g": 0.9,
+        "mS_gev": 600.0,
+        "mSp_gev": 140.0,
+        "mV_gev": 250.0
+      },
+      "part_b": {
+        "g": 0.7,
+        "mS_gev": 600.0,
+        "mSp_gev": 0.0,
+        "mV_gev": 250.0
+      }
+    },
+    "verification": "analytic formulas reproduced to <1e-9 by independent numeric computation with explicit polarization vectors",
+    "citations": [
+      "M.D. Schwartz, Quantum Field Theory and the Standard Model (scalar-QED emission vertex)",
+      "A. Djouadi, Phys.Rept. 459 (2008), arXiv:hep-ph/0503173 (Higgs-to-Higgs+gauge-boson decays)"
+    ]
+  }
+}

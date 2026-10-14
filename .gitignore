@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Virtual envs and caches
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Run output (toolbench writes runs/ under the cwd)
+runs/
+
+# Environment files and local runtime state
+.env
+.orchestral/
+
+# Toolkit tarballs
+/heptapod-*.tar.gz
+
+# Campaign trials: git holds each run's ledgers; the per-trial evidence is
+# distributed as a release asset and extracted here
+campaigns/*/trials/*/*/*
+!campaigns/*/trials/*/*/manifest.json
+!campaigns/*/trials/*/*/plan.json
+!campaigns/*/trials/*/*/status.json
+!campaigns/*/trials/*/*/summary.json
+!campaigns/*/trials/*/*/summary.txt
+!campaigns/*/trials/*/*/trials.jsonl
+campaigns/*/trials/OMITTED.txt
+
+# LaTeX build artifacts inside sandbox templates
+benchmarks/*/variants/*/sandbox/template/*.aux
+benchmarks/*/variants/*/sandbox/template/*.log
+
+# Machine-local toolbase overlay
+/.toolbase/loadouts/*.local.yaml

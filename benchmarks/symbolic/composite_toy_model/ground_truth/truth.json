@@ -1,0 +1,30 @@
+{
+  "width_psi1_gev": 11.79927802617631,
+  "width_psi2_gev": 1.8843945262080408,
+  "width_chichi_gev": 1.6777797891493025,
+  "width_total_gev": 15.361452341533653,
+  "br_psi1": 0.7681095357288527,
+  "br_psi2": 0.12267033639215828,
+  "br_chichi": 0.10922012787898912,
+  "lifetime_s": 4.284828948890164e-26,
+  "xsec_pb": 0.006480958579235235,
+  "_metadata": {
+    "generated_by": "ground_truth/derivation.py",
+    "parameters": {
+      "mPhi_gev": 1850.0,
+      "m1_gev": 230.0,
+      "m2_gev": 0.0,
+      "mchi_gev": 410.0,
+      "y1": 0.42,
+      "y2": 0.16,
+      "mu_gev": 590.0,
+      "sqrt_s_gev": 1100.0
+    },
+    "verification": "all widths and the cross section reproduced to <1e-10 by independent explicit-spinor numerics (_shared/dirac_numeric.py)",
+    "citations": [
+      "A. Djouadi, arXiv:hep-ph/0503172, sec. 2.3 (beta^3 fermionic widths)",
+      "PDG, Kinematics review (two-body master formula; identical-particle 1/S) and PDG physical constants (hbar = 6.582119569e-25 GeV s)",
+      "M.E. Peskin, D.V. Schroeder, ch. 5 (s-channel annihilation trace algebra)"
+    ]
+  }
+}

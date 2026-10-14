@@ -1,0 +1,400 @@
+{
+  "cells": [
+    {
+      "model": "claude-opus-4-8",
+      "condition": "core_only",
+      "n": 5,
+      "mean_score": 0.7978,
+      "score_ci95": [
+        0.6601,
+        0.926
+      ],
+      "reach_bar_k": 0.7978,
+      "reach_bar_k_ci95": [
+        0.6601,
+        0.9243
+      ],
+      "reach_bar_k_uniform": 0.9188,
+      "reach_bar_k_uniform_ci95": [
+        0.8693,
+        0.9622
+      ],
+      "reach_at_k_uniform": 0.9682,
+      "reach_caret_k_uniform": 0.8301,
+      "pass_at_k": 1.0,
+      "pass_caret_k": 0.0,
+      "pass_at_1": 0.4,
+      "metric_correlations": {
+        "labels": [
+          "reach_bar_k",
+          "pass_at_k",
+          "pass_caret_k"
+        ],
+        "matrix": [
+          [
+            1.0,
+            0.412,
+            0.2894
+          ],
+          [
+            0.412,
+            1.0,
+            0.041
+          ],
+          [
+            0.2894,
+            0.041,
+            1.0
+          ]
+        ],
+        "n_bootstrap": 500
+      },
+      "k": 5,
+      "mean_cost_usd": 0.0,
+      "mean_estimated_api_equivalent_cost_usd": null,
+      "mean_wall_clock_s": 3175.5,
+      "mean_tokens": {
+        "initial_input": 199644,
+        "input": 4,
+        "output": 1295,
+        "cache_read": 231952,
+        "cache_creation": 168712
+      },
+      "stages": {
+        "answer_present": 1.0,
+        "pythia_ran": 1.0,
+        "width_correct": 1.0,
+        "channels_present": 1.0,
+        "yield_distance": 0.0,
+        "contour_lower": 0.0,
+        "contour_upper": 0.0,
+        "no_spurious_reach": 0.6,
+        "reach_plot": 1.0
+      },
+      "stage_display": {
+        "answer_present": {
+          "continuous": false,
+          "credit_mean": 1.0,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "pythia_ran": {
+          "continuous": false,
+          "credit_mean": 1.0,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "width_correct": {
+          "continuous": false,
+          "credit_mean": 1.0,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "channels_present": {
+          "continuous": true,
+          "credit_mean": 1.0,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "yield_distance": {
+          "continuous": true,
+          "credit_mean": 0.6241,
+          "distance_mean": 0.3097,
+          "distance_label": "median |dex| vs reference"
+        },
+        "contour_lower": {
+          "continuous": true,
+          "credit_mean": 0.7492,
+          "distance_mean": 0.1266,
+          "distance_label": "median |dex| vs reference"
+        },
+        "contour_upper": {
+          "continuous": true,
+          "credit_mean": 0.9103,
+          "distance_mean": 0.043,
+          "distance_label": "median |dex| vs reference"
+        },
+        "no_spurious_reach": {
+          "continuous": true,
+          "credit_mean": 0.9857,
+          "distance_mean": 0.3552,
+          "distance_label": "dex (log10 g) of invented band"
+        },
+        "reach_plot": {
+          "continuous": true,
+          "credit_mean": 1.0,
+          "distance_mean": null,
+          "distance_label": null
+        }
+      },
+      "failure_modes": {
+        "INCOMPLETE_AT_YIELD_DISTANCE": 5
+      },
+      "n_excluded": 0,
+      "excluded_failure_modes": {},
+      "trial_scores": [
+        0.5538,
+        0.6974,
+        0.8462,
+        0.9419,
+        0.9499
+      ],
+      "pass_threshold": 0.9,
+      "retries": {
+        "rate_limit": 0,
+        "transient": 0,
+        "nudges": 0
+      },
+      "tool_usage": {
+        "per_tool": {},
+        "per_tool_errors": {},
+        "total_calls": 0,
+        "total_errors": 0,
+        "adopted_trials": 0,
+        "adopted_mcp": 0,
+        "adopted_script": 0,
+        "n_trials": 5
+      },
+      "ux_ratings": [
+        8
+      ]
+    },
+    {
+      "model": "claude-opus-4-8",
+      "condition": "tools_defined",
+      "n": 5,
+      "mean_score": 0.9686,
+      "score_ci95": [
+        0.9547,
+        0.9775
+      ],
+      "reach_bar_k": 0.9686,
+      "reach_bar_k_ci95": [
+        0.9543,
+        0.9776
+      ],
+      "reach_bar_k_uniform": 0.9815,
+      "reach_bar_k_uniform_ci95": [
+        0.9725,
+        0.987
+      ],
+      "reach_at_k_uniform": 0.9881,
+      "reach_caret_k_uniform": 0.9637,
+      "pass_at_k": 1.0,
+      "pass_caret_k": 1.0,
+      "pass_at_1": 1.0,
+      "metric_correlations": {
+        "labels": [
+          "reach_bar_k",
+          "pass_at_k",
+          "pass_caret_k"
+        ],
+        "matrix": [
+          [
+            1.0,
+            null,
+            null
+          ],
+          [
+            null,
+            1.0,
+            null
+          ],
+          [
+            null,
+            null,
+            1.0
+          ]
+        ],
+        "n_bootstrap": 500
+      },
+      "k": 5,
+      "mean_cost_usd": 0.0,
+      "mean_estimated_api_equivalent_cost_usd": null,
+      "mean_wall_clock_s": 3896.93,
+      "mean_tokens": {
+        "initial_input": 190633,
+        "input": 6,
+        "output": 3905,
+        "cache_read": 417952,
+        "cache_creation": 158182
+      },
+      "stages": {
+        "answer_present": 1.0,
+        "pythia_ran": 1.0,
+        "width_correct": 1.0,
+        "channels_present": 1.0,
+        "yield_distance": 0.0,
+        "contour_lower": 0.8,
+        "contour_upper": 0.0,
+        "no_spurious_reach": 1.0,
+        "reach_plot": 1.0
+      },
+      "stage_display": {
+        "answer_present": {
+          "continuous": false,
+          "credit_mean": 1.0,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "pythia_ran": {
+          "continuous": false,
+          "credit_mean": 1.0,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "width_correct": {
+          "continuous": false,
+          "credit_mean": 1.0,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "channels_present": {
+          "continuous": true,
+          "credit_mean": 1.0,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "yield_distance": {
+          "continuous": true,
+          "credit_mean": 0.9744,
+          "distance_mean": 0.0113,
+          "distance_label": "median |dex| vs reference"
+        },
+        "contour_lower": {
+          "continuous": true,
+          "credit_mean": 0.9499,
+          "distance_mean": 0.0248,
+          "distance_label": "median |dex| vs reference"
+        },
+        "contour_upper": {
+          "continuous": true,
+          "credit_mean": 0.9092,
+          "distance_mean": 0.0415,
+          "distance_label": "median |dex| vs reference"
+        },
+        "no_spurious_reach": {
+          "continuous": true,
+          "credit_mean": 1.0,
+          "distance_mean": 0.0,
+          "distance_label": "dex (log10 g) of invented band"
+        },
+        "reach_plot": {
+          "continuous": true,
+          "credit_mean": 1.0,
+          "distance_mean": null,
+          "distance_label": null
+        }
+      },
+      "failure_modes": {
+        "INCOMPLETE_AT_YIELD_DISTANCE": 5
+      },
+      "n_excluded": 0,
+      "excluded_failure_modes": {},
+      "trial_scores": [
+        0.9404,
+        0.9715,
+        0.9742,
+        0.9781,
+        0.9788
+      ],
+      "pass_threshold": 0.9,
+      "retries": {
+        "rate_limit": 0,
+        "transient": 0,
+        "nudges": 0
+      },
+      "tool_usage": {
+        "per_tool": {},
+        "per_tool_errors": {},
+        "total_calls": 0,
+        "total_errors": 0,
+        "adopted_trials": 1,
+        "adopted_mcp": 0,
+        "adopted_script": 1,
+        "n_trials": 5
+      },
+      "ux_ratings": [
+        8,
+        9,
+        8,
+        8,
+        8
+      ]
+    }
+  ],
+  "paired_deltas": [
+    {
+      "model": "claude-opus-4-8",
+      "condition_a": "core_only",
+      "condition_b": "tools_defined",
+      "n_pairs": 5,
+      "reach_delta": 0.1708,
+      "pass_delta": 0.6,
+      "reach_delta_ci95": [
+        0.0454,
+        0.3087
+      ],
+      "pass_delta_ci95": [
+        0.2,
+        1.0
+      ]
+    }
+  ],
+  "n_total_trials": 10,
+  "n_excluded_trials": 0,
+  "excluded_failure_modes": {},
+  "run_id": "2026-08-10T01-46-52_llp_forward-reach_claude-opus-4-8_run",
+  "k": 5,
+  "pass_criterion": "reach>=0.9",
+  "reach_weights": {
+    "stage_order": [
+      "answer_present",
+      "pythia_ran",
+      "width_correct",
+      "channels_present",
+      "yield_distance",
+      "contour_lower",
+      "contour_upper",
+      "no_spurious_reach",
+      "reach_plot"
+    ],
+    "w": [
+      0.0,
+      0.0,
+      0.1,
+      0.1,
+      0.4,
+      0.15,
+      0.15,
+      0.05,
+      0.05
+    ],
+    "pass_threshold": 0.9
+  },
+  "total_spent_usd": 0.0,
+  "subscription_harnesses": [
+    "claude-code/default"
+  ],
+  "aborted_by_budget": false,
+  "aborted_by_session_limit": false,
+  "session_limit": {
+    "aborted": false,
+    "excluded_trials": 0,
+    "not_attempted": 0
+  },
+  "integrity": {
+    "scanned": 10,
+    "flagged": {}
+  },
+  "provenance": {
+    "git_sha": "f2682f7fb9f9eae282e27d3229b1efb65165a986",
+    "versions": {
+      "toolbench": "0.7.0",
+      "claude_code": "2.1.225"
+    },
+    "harnesses": [
+      "claude-code/default"
+    ]
+  }
+}

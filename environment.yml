@@ -1,0 +1,20 @@
+# HEPBench environment.
+#
+#   conda env create -f environment.yml
+#   conda activate hepbench
+#
+# Toolkit dependencies do not belong here: toolbase installs HEPTAPOD into its
+# own environment. This one carries the benchmark runner and Pythia, which the
+# llp_forward benchmark needs in the agent's own environment when no toolkit is
+# served (`core_only`). The reference flux was generated with Pythia 8.317, so
+# the pin keeps a generator difference out of the comparison between loadouts.
+name: hepbench
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - pip
+  - pip:
+      - -e .
+      - pythia8mc==8.317.2
+      - pytest>=7.4

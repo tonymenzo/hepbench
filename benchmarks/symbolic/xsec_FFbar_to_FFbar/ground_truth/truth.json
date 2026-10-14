@@ -1,0 +1,29 @@
+{
+  "part_a_xsec_pb": 1.773563977991934,
+  "part_a_xsec_formula": "g**4 / (12*pi*s)",
+  "part_b_xsec_pb": 0.04265786089078201,
+  "part_b_xsec_formula": "y1**2 * y2**2 * s / (16*pi*(s - MS**2)**2)",
+  "_metadata": {
+    "generated_by": "ground_truth/derivation.py",
+    "parameters": {
+      "common": {
+        "sqrt_s_gev": 730.0,
+        "fermion_masses_gev": 0.0
+      },
+      "part_a": {
+        "g": 0.55
+      },
+      "part_b": {
+        "y1": 0.92,
+        "y2": 0.34,
+        "MS_gev": 1900.0
+      }
+    },
+    "units": "values in pb (1 GeV^-2 = 3.893793721e8 pb); formulas in natural units (GeV^-2)",
+    "verification": "part (a) reproduced to <1e-4 (angular grid) and part (b) to <1e-10 by independent numeric integration of explicit-spinor amplitudes",
+    "citations": [
+      "M.E. Peskin, D.V. Schroeder, An Introduction to QFT, eq. (5.13) (e+e- -> mu+mu-, with g -> e)",
+      "P&S ch. 5 (s-channel scalar exchange: isotropic angular distribution)"
+    ]
+  }
+}

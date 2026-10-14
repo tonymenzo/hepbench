@@ -1,0 +1,285 @@
+{
+  "run_id": "2026-10-01T12-48-57_symbolic-decay_V_to_VVp_gpt-5.5_run",
+  "campaign": "core_gpt55",
+  "created_at": "2026-10-01T12:48:57",
+  "git_sha": "unknown",
+  "benchmark_git_sha": "1dc3a4fb2a8ccb14b529058817f243363aa4ea32",
+  "environment": {
+    "python": "3.12.12",
+    "python_executable": "<python>",
+    "platform": "macOS-15.1-arm64-arm-64bit",
+    "packages": {
+      "numpy": "2.5.1",
+      "scipy": "1.18.0",
+      "matplotlib": "3.11.1",
+      "sympy": "1.14.0",
+      "pythia8mc": "8.317.2",
+      "uproot": "5.7.5",
+      "awkward": "2.11.0",
+      "pyhepmc": "2.16.1"
+    },
+    "conda_prefix": "<conda>"
+  },
+  "benchmark": "symbolic-decay_V_to_VVp",
+  "benchmark_dir": "<hepbench>/benchmarks/symbolic/decay_V_to_VVp",
+  "benchmark_extends": null,
+  "benchmark_config": {
+    "name": "symbolic-decay_V_to_VVp",
+    "version": "1.0.0",
+    "description": "Tree-level two-body width of a massive vector into two distinct massive\nvectors via the Yang-Mills triple-gauge vertex (the Z'->W+W- archetype).\nThe non-abelian structure forbids identical final vectors. Longitudinal\nmodes give a strong m_V^5/(m1^2 m2^2) enhancement. The closed form is\nunwieldy, so this benchmark grades NUMERIC widths only (no formula\nstage). Each width is validated in ground_truth/derivation.py by two\nindependent contractions of the vertex (explicit polarization vectors vs\ncompleteness-tensor einsum); conventions in ../CONVENTIONS.md.\n",
+    "default_harness": "orchestral/anthropic",
+    "default_loadout": "core_only",
+    "default_variant": "unguided",
+    "ground_truth": {
+      "dir": "<hepbench>/benchmarks/symbolic/decay_V_to_VVp/ground_truth"
+    },
+    "checks": "<hepbench>/benchmarks/symbolic/_shared/checks.py",
+    "artifacts": {
+      "keep_full": [
+        ".json",
+        ".py",
+        ".md",
+        ".wl",
+        ".txt"
+      ],
+      "keep_root": [
+        "todos.md"
+      ]
+    },
+    "rubric": {
+      "type": "stagewise",
+      "stages": [
+        {
+          "id": "answer_present",
+          "description": "results/answer.json exists with all 2 answer fields.",
+          "weight": 0.04,
+          "checks": [
+            {
+              "json_with_keys": {
+                "file": "results/answer.json",
+                "required_keys": [
+                  "part_a_width_gev",
+                  "part_b_width_gev"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "a_order_of_magnitude",
+          "gating": false,
+          "description": "Part (a) within half a decade (NDA-passable rung).",
+          "weight": 0.06,
+          "checks": [
+            {
+              "answer_value": {
+                "file": "results/answer.json",
+                "field": "part_a_width_gev",
+                "reference": "ground_truth/truth.json",
+                "log10_tol": 0.5
+              }
+            }
+          ]
+        },
+        {
+          "id": "a_within_10pct",
+          "gating": false,
+          "description": "Part (a) within 10%.",
+          "weight": 0.18,
+          "checks": [
+            {
+              "answer_value": {
+                "file": "results/answer.json",
+                "field": "part_a_width_gev",
+                "reference": "ground_truth/truth.json",
+                "rel_tol": 0.1
+              }
+            }
+          ]
+        },
+        {
+          "id": "a_within_1pct",
+          "gating": false,
+          "description": "Part (a) within 1% (exact-computation rung).",
+          "weight": 0.24,
+          "checks": [
+            {
+              "answer_value": {
+                "file": "results/answer.json",
+                "field": "part_a_width_gev",
+                "reference": "ground_truth/truth.json",
+                "rel_tol": 0.01
+              }
+            }
+          ]
+        },
+        {
+          "id": "b_order_of_magnitude",
+          "gating": false,
+          "description": "Part (b) within half a decade (NDA-passable rung).",
+          "weight": 0.06,
+          "checks": [
+            {
+              "answer_value": {
+                "file": "results/answer.json",
+                "field": "part_b_width_gev",
+                "reference": "ground_truth/truth.json",
+                "log10_tol": 0.5
+              }
+            }
+          ]
+        },
+        {
+          "id": "b_within_10pct",
+          "gating": false,
+          "description": "Part (b) within 10%.",
+          "weight": 0.18,
+          "checks": [
+            {
+              "answer_value": {
+                "file": "results/answer.json",
+                "field": "part_b_width_gev",
+                "reference": "ground_truth/truth.json",
+                "rel_tol": 0.1
+              }
+            }
+          ]
+        },
+        {
+          "id": "b_within_1pct",
+          "gating": false,
+          "description": "Part (b) within 1% (exact-computation rung).",
+          "weight": 0.24,
+          "checks": [
+            {
+              "answer_value": {
+                "file": "results/answer.json",
+                "field": "part_b_width_gev",
+                "reference": "ground_truth/truth.json",
+                "rel_tol": 0.01
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "extends": null
+  },
+  "harnesses": [
+    {
+      "id": "codex/default",
+      "runtime": {
+        "name": "codex",
+        "call_timeout_s": 3600,
+        "sandbox": "workspace-write",
+        "reasoning_effort": "medium"
+      },
+      "provider": {
+        "name": "subscription"
+      },
+      "core": {
+        "builtin": true
+      },
+      "loop": {
+        "ux_feedback": "graded",
+        "max_format_retries": 5,
+        "continue_nudges": 0,
+        "max_rate_limit_retries": 3
+      }
+    }
+  ],
+  "loadouts": [
+    "core_only"
+  ],
+  "variants": [
+    {
+      "name": "unguided",
+      "description": "The task stated directly, as a specification rather than a tutorial:\nthe physics, the parameters, and the deliverables, with no\npedagogical scaffolding at all.\nSame physics, parameters and conventions as `guided` (so ground truth\nand grading are unchanged), but there is no worked output schema, no\nexample, no \"give the EXACT result\" instruction, no order-of-magnitude\nwarning, and no convention hints; the system prompt carries no task\nguidance whatsoever, only the autonomy contract. Only the irreducible\ngrading interface survives -- the answer path, the field names, the\nunits and the formula symbol alphabet -- because without it a correct\ncomputation is ungradeable.\n\nThe prompt also asks for `results/derivation.md`, a free-form record of\nhow the answer was reached. It is deliberately UNGRADED (the rubric is\nfamily-level, so all three spec rungs stay reach-comparable); it\nsurvives via the benchmark's artifacts keep_full '.md' rule purely as\npost-hoc evidence for diagnosing error modes.\n\nThe guided -> scaffold_minimal -> unguided ladder is the specification\naxis at full, lean and zero scaffolding.\n",
+      "axes": {
+        "spec": "none",
+        "env": "bare"
+      }
+    }
+  ],
+  "models": [
+    {
+      "model": "gpt-5.5"
+    }
+  ],
+  "task": "symbolic-decay_V_to_VVp",
+  "conditions": [
+    "core_only"
+  ],
+  "n_per_cell": 10,
+  "seeds": [
+    1001,
+    1002,
+    1003,
+    1004,
+    1005,
+    1006,
+    1007,
+    1008,
+    1009,
+    1010
+  ],
+  "judge": {
+    "kind": "rule",
+    "harness": null,
+    "model": null
+  },
+  "max_cost_usd": 150.0,
+  "max_iterations": null,
+  "max_format_retries": null,
+  "continue_nudges": null,
+  "max_rate_limit_retries": 8,
+  "max_transient_retries": null,
+  "ux_feedback": null,
+  "audit_html": false,
+  "parallel": 5,
+  "dry_run": false,
+  "versions": {
+    "orchestral-ai": "1.10.0",
+    "toolbench": "0.10.0"
+  },
+  "runtime_versions": {
+    "codex": "codex-cli 0.152.1"
+  },
+  "rubric_total_weight": 1.0,
+  "pass_criterion": "all_stages",
+  "reach_weights": {
+    "stage_order": [
+      "answer_present",
+      "a_order_of_magnitude",
+      "a_within_10pct",
+      "a_within_1pct",
+      "b_order_of_magnitude",
+      "b_within_10pct",
+      "b_within_1pct"
+    ],
+    "w": [
+      0.04,
+      0.06,
+      0.18,
+      0.24,
+      0.06,
+      0.18,
+      0.24
+    ],
+    "pass_threshold": null
+  },
+  "litellm_pricing": null,
+  "resolution": [
+    {
+      "harness": "codex/default",
+      "loadout": "core_only",
+      "core": {
+        "builtin": true,
+        "tools": []
+      },
+      "sources": [],
+      "skills": []
+    }
+  ],
+  "mcp_preflight": []
+}

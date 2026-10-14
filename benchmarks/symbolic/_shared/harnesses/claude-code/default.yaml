@@ -1,0 +1,21 @@
+# Claude Code CLI (`claude -p`) under the user's subscription.
+name: claude-code/default
+runtime:
+  name: claude_code
+  call_timeout_s: 3600                 # per MCP call, seconds
+  disallowed_tools: [WebSearch, WebFetch, Monitor, ScheduleWakeup]
+  sandbox: true                        # confine Bash to the sandbox and deny reads of the benchmark tree
+  env:
+    ENABLE_TOOL_SEARCH: "false"        # serve MCP tools eagerly rather than behind ToolSearch
+provider:
+  name: subscription                   # the CLI owns the model call
+  model: claude-haiku-4-5              # overridden by --model
+  max_tokens: 8192
+core:
+  builtin: true                        # Claude Code's own tools; MCP tools come from the loadout
+loop:
+  max_iterations: 150
+  ux_feedback: graded                  # two unscored post-trial turns: a critique of the served tools
+  max_format_retries: 5                # resume after a malformed tool call
+  continue_nudges: 0                   # no resume when the agent stops early
+  max_rate_limit_retries: 3

@@ -1,0 +1,109 @@
+# benchmarks/symbolic/decay_V_to_VVp/benchmark.yaml is a part of HEPBench.
+# Copyright (C) 2026 HEPBench authors (see AUTHORS for details).
+# HEPBench is licensed under the GNU GPL v3 or later, see LICENSE for details.
+
+name: symbolic-decay_V_to_VVp
+version: "1.0.0"
+extends: ../_shared
+description: |
+  Tree-level two-body width of a massive vector into two distinct massive
+  vectors via the Yang-Mills triple-gauge vertex (the Z'->W+W- archetype).
+  The non-abelian structure forbids identical final vectors. Longitudinal
+  modes give a strong m_V^5/(m1^2 m2^2) enhancement. The closed form is
+  unwieldy, so this benchmark grades NUMERIC widths only (no formula
+  stage). Each width is validated in ground_truth/derivation.py by two
+  independent contractions of the vertex (explicit polarization vectors vs
+  completeness-tensor einsum); conventions in ../CONVENTIONS.md.
+
+ground_truth:
+  dir: ./ground_truth
+
+artifacts:
+  keep_full: [".json", ".py", ".md", ".wl", ".txt"]
+  keep_root: ["todos.md"]
+
+rubric:
+  type: stagewise
+  # This benchmark requests VALUES ONLY (the closed form is unwieldy), so it
+  # has no formula stages. Their weight is folded into the exactness rungs
+  # rather than spread evenly: spreading it evenly put 0.28 on
+  # answer_present + order-of-magnitude versus 0.16 everywhere else, so a
+  # trial that only got the magnitudes right scored 0.28 here and 0.16 on
+  # any sibling benchmark, inflating the cross-benchmark mean.
+  #
+  # Stage independence: `answer_present` is a real prerequisite and gates
+  # (no file -> nothing else is assessable). Every other stage here grades a
+  # SEPARATE quantity or a separate rung of a nested tolerance ladder, so
+  # none of them presuppose the one before -- part (b) being right does not
+  # depend on part (a)'s formula. They are therefore non-gating: a miss
+  # costs its own weight and nothing else. The ladder stays self-consistent
+  # without absorption, since a value within 1% is necessarily within 10%
+  # and within half a decade.
+  stages:
+    - id: answer_present
+      description: results/answer.json exists with all 2 answer fields.
+      weight: 0.04
+      checks:
+        - json_with_keys:
+            file: results/answer.json
+            required_keys: [part_a_width_gev, part_b_width_gev]
+    - id: a_order_of_magnitude
+      gating: false
+      description: Part (a) within half a decade (NDA-passable rung).
+      weight: 0.06
+      checks:
+        - answer_value:
+            file: results/answer.json
+            field: part_a_width_gev
+            reference: ground_truth/truth.json
+            log10_tol: 0.5
+    - id: a_within_10pct
+      gating: false
+      description: Part (a) within 10%.
+      weight: 0.18
+      checks:
+        - answer_value:
+            file: results/answer.json
+            field: part_a_width_gev
+            reference: ground_truth/truth.json
+            rel_tol: 0.1
+    - id: a_within_1pct
+      gating: false
+      description: Part (a) within 1% (exact-computation rung).
+      weight: 0.24
+      checks:
+        - answer_value:
+            file: results/answer.json
+            field: part_a_width_gev
+            reference: ground_truth/truth.json
+            rel_tol: 0.01
+    - id: b_order_of_magnitude
+      gating: false
+      description: Part (b) within half a decade (NDA-passable rung).
+      weight: 0.06
+      checks:
+        - answer_value:
+            file: results/answer.json
+            field: part_b_width_gev
+            reference: ground_truth/truth.json
+            log10_tol: 0.5
+    - id: b_within_10pct
+      gating: false
+      description: Part (b) within 10%.
+      weight: 0.18
+      checks:
+        - answer_value:
+            file: results/answer.json
+            field: part_b_width_gev
+            reference: ground_truth/truth.json
+            rel_tol: 0.1
+    - id: b_within_1pct
+      gating: false
+      description: Part (b) within 1% (exact-computation rung).
+      weight: 0.24
+      checks:
+        - answer_value:
+            file: results/answer.json
+            field: part_b_width_gev
+            reference: ground_truth/truth.json
+            rel_tol: 0.01

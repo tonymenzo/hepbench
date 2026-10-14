@@ -1,0 +1,156 @@
+================================================================
+                     RUN  llp_forward-reach                     
+================================================================
+  run_id     2026-08-10T10-31-36_llp_forward-reach_gpt-5.5_run
+  task       llp_forward-reach       k          5   (n per cell)
+  trials     10                      cells      2
+  budget     $0.00 spent — SUBSCRIPTION (no metered API spend)   $116.15 API-equivalent (estimated)
+  start      2026-08-10T10:31:36
+  wall       2h36m
+  versions   toolbench 0.7.0  codex 0.146.0
+  provenance git 2392f5e9bc   harness codex/gpt-5-5
+  integrity  CLEAN (10 trials scanned)
+================================================================
+
+
+================================================================
+                  CELL  gpt-5.5  ×  core_only                   
+================================================================
+
+  THREE-VECTOR              (k=5)
+  ------------
+
+      Each row is an expectation over k iid trials of a per-trial
+      score M_j ∈ [0,1]. bar_k = E[mean], at_k = E[max], ^k = E[min].
+      See the accompanying manuscript for definitions and estimators.
+
+      reach         0.57         productivity     (rubric-weighted)
+      reach (eq-w)  0.84         depth            (equal-weight, no rubric)
+      pass@k        0.00         exploration      (best of k)
+      pass^k        0.00         trustworthiness  (worst of k)
+
+      pass criterion: a trial passes iff reach >= 0.9
+
+  STAGES
+  ------
+
+      answer_present        5/5       1.00
+      pythia_ran            5/5       1.00
+      width_correct         5/5       1.00
+      channels_present      5/5  credit 1.00   dist   -
+      yield_distance        0/5  credit 0.16   dist 0.933 median |dex| vs reference
+      contour_lower         0/5  credit 0.68   dist 0.195 median |dex| vs reference
+      contour_upper         0/5  credit 0.71   dist 0.173 median |dex| vs reference
+      no_spurious_reach     3/5  credit 0.99   dist 0.177 dex (log10 g) of invented band
+      reach_plot            5/5  credit 1.00   dist   -
+
+  TRIALS
+  ------
+
+      scores     0.49  0.51  0.52  0.67  0.67   (min 0.49  max 0.67  spread 0.17)
+
+  FAILURES
+  --------
+
+      INCOMPLETE_AT_YIELD_DISTANCE    5
+
+  COST
+  ----
+
+      cost      $0.00 total       $0.00 / trial
+      wall      1h07m total      13m29s / trial
+      tokens    1,565,493 initial input / trial
+                202,373 input  /  36,396 output  (cumulative / trial)
+                2,994,611 cache read  /  0 cache write  / trial
+
+
+================================================================
+                CELL  gpt-5.5  ×  tools_defined                 
+================================================================
+
+  THREE-VECTOR              (k=5)
+  ------------
+
+      Each row is an expectation over k iid trials of a per-trial
+      score M_j ∈ [0,1]. bar_k = E[mean], at_k = E[max], ^k = E[min].
+      See the accompanying manuscript for definitions and estimators.
+
+      reach         0.92         productivity     (rubric-weighted)
+      reach (eq-w)  0.95         depth            (equal-weight, no rubric)
+      pass@k        1.00         exploration      (best of k)
+      pass^k        1.00         trustworthiness  (worst of k)
+
+      pass criterion: a trial passes iff reach >= 0.9
+
+  STAGES
+  ------
+
+      answer_present        5/5       1.00
+      pythia_ran            5/5       1.00
+      width_correct         5/5       1.00
+      channels_present      5/5  credit 1.00   dist   -
+      yield_distance        0/5  credit 0.94   dist 0.025 median |dex| vs reference
+      contour_lower         0/5  credit 0.76   dist 0.117 median |dex| vs reference
+      contour_upper         0/5  credit 0.88   dist 0.054 median |dex| vs reference
+      no_spurious_reach     5/5  credit 1.00   dist 0.000 dex (log10 g) of invented band
+      reach_plot            5/5  credit 1.00   dist   -
+
+  TRIALS
+  ------
+
+      scores     0.91  0.92  0.92  0.93  0.94   (min 0.91  max 0.94  spread 0.03)
+
+  TOOLS
+  -----
+
+      adoption   5/5 trials used domain tools  (5 via MCP)
+      MCP calls:
+        DecayInVolumeVsCoupling  98
+        ProductionSpectrum       44
+        MesonDecayToLLP          40
+        HarvestForwardFlux       7
+        PythiaFromRunCard        5
+
+  FAILURES
+  --------
+
+      INCOMPLETE_AT_YIELD_DISTANCE    5
+
+  COST
+  ----
+
+      cost      $0.00 total       $0.00 / trial
+      wall      1h28m total      17m44s / trial
+      tokens    3,324,287 initial input / trial
+                431,226 input  /  53,572 output  (cumulative / trial)
+                9,850,957 cache read  /  0 cache write  / trial
+
+
+================================================================
+               CONDITION DELTAS  (paired by seed)               
+================================================================
+
+      Δ = condition_b − condition_a, averaged over shared seeds;
+      CI95 is a paired bootstrap over the seed dimension.
+
+  gpt-5.5:  tools_defined − core_only
+      Δreach    +0.35  CI95 [+0.30, +0.41]      (n_pairs=5)
+      Δpass     +1.00  CI95 [+1.00, +1.00]
+
+
+================================================================
+                           ARTIFACTS                            
+================================================================
+
+  manifest           <hepbench>/runs/2026-08-10T10-31-36_llp_forward-reach_gpt-5.5_run/manifest.json
+  summary (json)     <hepbench>/runs/2026-08-10T10-31-36_llp_forward-reach_gpt-5.5_run/summary.json
+  summary (txt)      <hepbench>/runs/2026-08-10T10-31-36_llp_forward-reach_gpt-5.5_run/summary.txt
+  trials (jsonl)     <hepbench>/runs/2026-08-10T10-31-36_llp_forward-reach_gpt-5.5_run/trials.jsonl
+  per-trial dirs     <hepbench>/runs/2026-08-10T10-31-36_llp_forward-reach_gpt-5.5_run/trials/
+  per-trial audit    <hepbench>/runs/2026-08-10T10-31-36_llp_forward-reach_gpt-5.5_run/trials/<id>/audit.txt  (+ audit.html)
+  three-vector plot  <hepbench>/runs/2026-08-10T10-31-36_llp_forward-reach_gpt-5.5_run/parallel_coords.png
+  k-dependence plot  <hepbench>/runs/2026-08-10T10-31-36_llp_forward-reach_gpt-5.5_run/k_sweep.png
+  per-stage k plot   <hepbench>/runs/2026-08-10T10-31-36_llp_forward-reach_gpt-5.5_run/per_stage_k.png
+  overview plot      <hepbench>/runs/2026-08-10T10-31-36_llp_forward-reach_gpt-5.5_run/overview.png
+
+================================================================

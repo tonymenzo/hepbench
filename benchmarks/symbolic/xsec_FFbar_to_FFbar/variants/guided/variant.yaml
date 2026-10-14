@@ -1,0 +1,17 @@
+# benchmarks/symbolic/xsec_FFbar_to_FFbar/variants/guided/variant.yaml is a part of HEPBench.
+# Copyright (C) 2026 HEPBench authors (see AUTHORS for details).
+# HEPBench is licensed under the GNU GPL v3 or later, see LICENSE for details.
+
+name: guided
+description: |
+  Generic presentation. Part (a) is the QED point cross section with a
+  generic coupling; part (b) contrasts the scalar mediator (isotropic,
+  different power of s, off-resonance propagator). pb conversion is
+  part of the task.
+
+axes:
+  spec: full
+  env: bare
+
+user_prompt_file: ./prompts/user.md
+system_prompt_file: ./prompts/system.md

@@ -1,0 +1,426 @@
+{
+  "cells": [
+    {
+      "model": "gpt-5.6-sol",
+      "condition": "core_only",
+      "n": 5,
+      "mean_score": 0.8395,
+      "score_ci95": [
+        0.7597,
+        0.905
+      ],
+      "reach_bar_k": 0.8395,
+      "reach_bar_k_ci95": [
+        0.7598,
+        0.901
+      ],
+      "reach_bar_k_uniform": 0.9326,
+      "reach_bar_k_uniform_ci95": [
+        0.9042,
+        0.9542
+      ],
+      "reach_at_k_uniform": 0.9599,
+      "reach_caret_k_uniform": 0.8742,
+      "pass_at_k": 1.0,
+      "pass_caret_k": 0.0,
+      "pass_at_1": 0.2,
+      "metric_correlations": {
+        "labels": [
+          "reach_bar_k",
+          "pass_at_k",
+          "pass_caret_k"
+        ],
+        "matrix": [
+          [
+            1.0,
+            0.358,
+            null
+          ],
+          [
+            0.358,
+            1.0,
+            null
+          ],
+          [
+            null,
+            null,
+            1.0
+          ]
+        ],
+        "n_bootstrap": 500
+      },
+      "k": 5,
+      "mean_cost_usd": 0.0,
+      "mean_estimated_api_equivalent_cost_usd": 9.625458,
+      "mean_wall_clock_s": 938.62,
+      "mean_tokens": {
+        "initial_input": 2650202,
+        "input": 234383,
+        "output": 47886,
+        "cache_read": 5126758,
+        "cache_creation": 0
+      },
+      "stages": {
+        "answer_present": 1.0,
+        "pythia_ran": 1.0,
+        "width_correct": 1.0,
+        "channels_present": 1.0,
+        "yield_distance": 0.0,
+        "contour_lower": 0.0,
+        "contour_upper": 0.0,
+        "no_spurious_reach": 1.0,
+        "reach_plot": 1.0
+      },
+      "stage_display": {
+        "answer_present": {
+          "continuous": false,
+          "credit_mean": 1.0,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "pythia_ran": {
+          "continuous": false,
+          "credit_mean": 1.0,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "width_correct": {
+          "continuous": false,
+          "credit_mean": 1.0,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "channels_present": {
+          "continuous": true,
+          "credit_mean": 1.0,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "yield_distance": {
+          "continuous": true,
+          "credit_mean": 0.7217,
+          "distance_mean": 0.1564,
+          "distance_label": "median |dex| vs reference"
+        },
+        "contour_lower": {
+          "continuous": true,
+          "credit_mean": 0.7543,
+          "distance_mean": 0.1311,
+          "distance_label": "median |dex| vs reference"
+        },
+        "contour_upper": {
+          "continuous": true,
+          "credit_mean": 0.9176,
+          "distance_mean": 0.0377,
+          "distance_label": "median |dex| vs reference"
+        },
+        "no_spurious_reach": {
+          "continuous": true,
+          "credit_mean": 1.0,
+          "distance_mean": 0.0,
+          "distance_label": "dex (log10 g) of invented band"
+        },
+        "reach_plot": {
+          "continuous": true,
+          "credit_mean": 1.0,
+          "distance_mean": null,
+          "distance_label": null
+        }
+      },
+      "failure_modes": {
+        "INCOMPLETE_AT_YIELD_DISTANCE": 5
+      },
+      "n_excluded": 0,
+      "excluded_failure_modes": {},
+      "trial_scores": [
+        0.689,
+        0.8069,
+        0.8784,
+        0.8979,
+        0.9253
+      ],
+      "pass_threshold": 0.9,
+      "retries": {
+        "rate_limit": 0,
+        "transient": 0,
+        "nudges": 0
+      },
+      "tool_usage": {
+        "per_tool": {},
+        "per_tool_errors": {},
+        "total_calls": 0,
+        "total_errors": 0,
+        "adopted_trials": 0,
+        "adopted_mcp": 0,
+        "adopted_script": 0,
+        "n_trials": 5
+      },
+      "ux_ratings": [
+        7,
+        8,
+        7,
+        8,
+        8
+      ]
+    },
+    {
+      "model": "gpt-5.6-sol",
+      "condition": "tools_defined",
+      "n": 5,
+      "mean_score": 0.9241,
+      "score_ci95": [
+        0.9184,
+        0.9294
+      ],
+      "reach_bar_k": 0.924,
+      "reach_bar_k_ci95": [
+        0.9184,
+        0.9297
+      ],
+      "reach_bar_k_uniform": 0.9522,
+      "reach_bar_k_uniform_ci95": [
+        0.9487,
+        0.9558
+      ],
+      "reach_at_k_uniform": 0.9589,
+      "reach_caret_k_uniform": 0.9469,
+      "pass_at_k": 1.0,
+      "pass_caret_k": 1.0,
+      "pass_at_1": 1.0,
+      "metric_correlations": {
+        "labels": [
+          "reach_bar_k",
+          "pass_at_k",
+          "pass_caret_k"
+        ],
+        "matrix": [
+          [
+            1.0,
+            null,
+            null
+          ],
+          [
+            null,
+            1.0,
+            null
+          ],
+          [
+            null,
+            null,
+            1.0
+          ]
+        ],
+        "n_bootstrap": 500
+      },
+      "k": 5,
+      "mean_cost_usd": 0.0,
+      "mean_estimated_api_equivalent_cost_usd": 16.181457,
+      "mean_wall_clock_s": 1073.33,
+      "mean_tokens": {
+        "initial_input": 3351603,
+        "input": 380113,
+        "output": 53526,
+        "cache_read": 9971635,
+        "cache_creation": 0
+      },
+      "stages": {
+        "answer_present": 1.0,
+        "pythia_ran": 1.0,
+        "width_correct": 1.0,
+        "channels_present": 1.0,
+        "yield_distance": 0.0,
+        "contour_lower": 0.0,
+        "contour_upper": 0.0,
+        "no_spurious_reach": 1.0,
+        "reach_plot": 1.0
+      },
+      "stage_display": {
+        "answer_present": {
+          "continuous": false,
+          "credit_mean": 1.0,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "pythia_ran": {
+          "continuous": false,
+          "credit_mean": 1.0,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "width_correct": {
+          "continuous": false,
+          "credit_mean": 1.0,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "channels_present": {
+          "continuous": true,
+          "credit_mean": 1.0,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "yield_distance": {
+          "continuous": true,
+          "credit_mean": 0.9541,
+          "distance_mean": 0.0204,
+          "distance_label": "median |dex| vs reference"
+        },
+        "contour_lower": {
+          "continuous": true,
+          "credit_mean": 0.7602,
+          "distance_mean": 0.1191,
+          "distance_label": "median |dex| vs reference"
+        },
+        "contour_upper": {
+          "continuous": true,
+          "credit_mean": 0.8558,
+          "distance_mean": 0.0681,
+          "distance_label": "median |dex| vs reference"
+        },
+        "no_spurious_reach": {
+          "continuous": true,
+          "credit_mean": 1.0,
+          "distance_mean": 0.0,
+          "distance_label": "dex (log10 g) of invented band"
+        },
+        "reach_plot": {
+          "continuous": true,
+          "credit_mean": 1.0,
+          "distance_mean": null,
+          "distance_label": null
+        }
+      },
+      "failure_modes": {
+        "INCOMPLETE_AT_YIELD_DISTANCE": 5
+      },
+      "n_excluded": 0,
+      "excluded_failure_modes": {},
+      "trial_scores": [
+        0.916,
+        0.9164,
+        0.9274,
+        0.9296,
+        0.9309
+      ],
+      "pass_threshold": 0.9,
+      "retries": {
+        "rate_limit": 0,
+        "transient": 0,
+        "nudges": 0
+      },
+      "tool_usage": {
+        "per_tool": {
+          "DecayInVolumeVsCoupling": 120,
+          "ProductionSpectrum": 45,
+          "MesonDecayToLLP": 41,
+          "HarvestForwardFlux": 8,
+          "PythiaFromRunCard": 7
+        },
+        "per_tool_errors": {
+          "PythiaFromRunCard": 3
+        },
+        "total_calls": 221,
+        "total_errors": 3,
+        "adopted_trials": 5,
+        "adopted_mcp": 5,
+        "adopted_script": 0,
+        "n_trials": 5
+      },
+      "ux_ratings": [
+        8,
+        8,
+        8,
+        8,
+        8
+      ]
+    }
+  ],
+  "paired_deltas": [
+    {
+      "model": "gpt-5.6-sol",
+      "condition_a": "core_only",
+      "condition_b": "tools_defined",
+      "n_pairs": 5,
+      "reach_delta": 0.0846,
+      "pass_delta": 0.8,
+      "reach_delta_ci95": [
+        0.0158,
+        0.1674
+      ],
+      "pass_delta_ci95": [
+        0.4,
+        1.0
+      ]
+    }
+  ],
+  "n_total_trials": 10,
+  "n_excluded_trials": 0,
+  "excluded_failure_modes": {},
+  "run_id": "2026-08-10T21-16-39_llp_forward-reach_gpt-5.6-sol_run",
+  "k": 5,
+  "pass_criterion": "reach>=0.9",
+  "reach_weights": {
+    "stage_order": [
+      "answer_present",
+      "pythia_ran",
+      "width_correct",
+      "channels_present",
+      "yield_distance",
+      "contour_lower",
+      "contour_upper",
+      "no_spurious_reach",
+      "reach_plot"
+    ],
+    "w": [
+      0.0,
+      0.0,
+      0.1,
+      0.1,
+      0.4,
+      0.15,
+      0.15,
+      0.05,
+      0.05
+    ],
+    "pass_threshold": 0.9
+  },
+  "total_spent_usd": 0.0,
+  "subscription_harnesses": [
+    "codex/gpt-5-6"
+  ],
+  "estimated_api_equivalent_cost_usd": 129.034578,
+  "estimated_cost_basis": {
+    "basis": "api_equivalent_estimate",
+    "actual_billing": "subscription",
+    "model": "gpt-5.6-sol",
+    "rates_usd_per_million_tokens": {
+      "input": 5.0,
+      "cached_input": 0.5,
+      "output": 30.0
+    },
+    "long_context_threshold": 272000,
+    "long_context_pricing_applied": true,
+    "source": "https://developers.openai.com/api/docs/models/gpt-5.6-sol"
+  },
+  "aborted_by_budget": false,
+  "aborted_by_session_limit": false,
+  "session_limit": {
+    "aborted": false,
+    "excluded_trials": 0,
+    "not_attempted": 0
+  },
+  "integrity": {
+    "scanned": 10,
+    "flagged": {}
+  },
+  "provenance": {
+    "git_sha": "d8cefaa12a0f6cb767f57ff83cf8ceb837e33bac",
+    "versions": {
+      "toolbench": "0.7.0",
+      "codex": "0.146.0"
+    },
+    "harnesses": [
+      "codex/gpt-5-6"
+    ]
+  }
+}

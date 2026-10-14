@@ -1,0 +1,29 @@
+{
+  "part_a_width_gev": 374.5880874851535,
+  "part_b_width_gev": 508.73602698863533,
+  "_metadata": {
+    "generated_by": "ground_truth/derivation.py",
+    "conventions": "../CONVENTIONS.md",
+    "grading": "numeric widths only; the closed form in (m_V,m_1,m_2) is unwieldy (no formula stage)",
+    "parameters": {
+      "part_a": {
+        "g": 0.8,
+        "mV_gev": 900.0,
+        "m1_gev": 200.0,
+        "m2_gev": 250.0
+      },
+      "part_b": {
+        "g": 0.65,
+        "mV_gev": 1200.0,
+        "m1_gev": 180.0,
+        "m2_gev": 400.0
+      }
+    },
+    "verification": "vertex validated against the literature Z'->W+W- closed form at m_V/m = 3, 5, 10 and 300 (rel <1e-9, the check that discriminates the all-incoming momentum assignment); each width then computed by two independent contractions (explicit polarization vectors vs completeness-tensor einsum) agreeing <1e-9; longitudinal m_V^5/(m1^2 m2^2) scaling checked",
+    "convention": "YM triple-gauge vertex with ALL-INCOMING momenta (k1+k2+k3=0); for P -> q1 q2 that is (P, -q1, -q2). The as-drawn (P, q1, q2) assignment is the vertex outside its domain and gives widths low by ~2.9x at these mass ratios.",
+    "citations": [
+      "J.L. Hewett, T.G. Rizzo, Phys.Rept. 183 (1989) 193 (Z' -> W+W- and heavy-vector decays)",
+      "M.E. Peskin, D.V. Schroeder, An Introduction to QFT, ch. 16 (Yang-Mills triple-gauge vertex)"
+    ]
+  }
+}

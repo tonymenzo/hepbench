@@ -1,0 +1,124 @@
+# benchmarks/symbolic/decay_V_to_SS/benchmark.yaml is a part of HEPBench.
+# Copyright (C) 2026 HEPBench authors (see AUTHORS for details).
+# HEPBench is licensed under the GNU GPL v3 or later, see LICENSE for details.
+
+name: symbolic-decay_V_to_SS
+version: "1.0.0"
+extends: ../_shared
+description: |
+  Tree-level two-body width of a massive vector into two scalars via the
+  derivative coupling L = g V^mu (S1 d_mu S2 - S2 d_mu S1) (g dimensionless):
+  (a) distinct massive scalars, (b) one massless scalar. The antisymmetric
+  vertex forbids identical scalars; the rate is a pure p-wave
+  Gamma ~ lambda^(3/2). Exact numeric widths (GeV) + closed-form formulas.
+  Ground truth derived and verified in ground_truth/derivation.py
+  (rho->pi pi structure; conventions in ../CONVENTIONS.md).
+
+ground_truth:
+  dir: ./ground_truth
+
+artifacts:
+  keep_full: [".json", ".py", ".md", ".wl", ".txt"]
+  keep_root: ["todos.md"]
+
+rubric:
+  type: stagewise
+  # Stage independence: `answer_present` is a real prerequisite and gates
+  # (no file -> nothing else is assessable). Every other stage here grades a
+  # SEPARATE quantity or a separate rung of a nested tolerance ladder, so
+  # none of them presuppose the one before -- part (b) being right does not
+  # depend on part (a)'s formula. They are therefore non-gating: a miss
+  # costs its own weight and nothing else. The ladder stays self-consistent
+  # without absorption, since a value within 1% is necessarily within 10%
+  # and within half a decade.
+  stages:
+    - id: answer_present
+      description: results/answer.json exists with all 4 answer fields.
+      weight: 0.04
+      checks:
+        - json_with_keys:
+            file: results/answer.json
+            required_keys: [part_a_width_gev, part_a_width_formula, part_b_width_gev, part_b_width_formula]
+    - id: a_order_of_magnitude
+      gating: false
+      description: Part (a) within half a decade (NDA-passable rung).
+      weight: 0.06
+      checks:
+        - answer_value:
+            file: results/answer.json
+            field: part_a_width_gev
+            reference: ground_truth/truth.json
+            log10_tol: 0.5
+    - id: a_within_10pct
+      gating: false
+      description: Part (a) within 10%.
+      weight: 0.09
+      checks:
+        - answer_value:
+            file: results/answer.json
+            field: part_a_width_gev
+            reference: ground_truth/truth.json
+            rel_tol: 0.1
+    - id: a_within_1pct
+      gating: false
+      description: Part (a) within 1% (exact-computation rung).
+      weight: 0.12
+      checks:
+        - answer_value:
+            file: results/answer.json
+            field: part_a_width_gev
+            reference: ground_truth/truth.json
+            rel_tol: 0.01
+    - id: a_formula
+      gating: false
+      description: Part (a) closed form matches at sampled points.
+      weight: 0.21
+      checks:
+        - answer_formula:
+            file: results/answer.json
+            field: part_a_width_formula
+            reference: ground_truth/truth.json
+            symbols: {g: [0.1, 1.5], mV: [400.0, 1500.0], m1: [20.0, 300.0], m2: [20.0, 300.0]}
+            constraints: ["mV**2 - (m1+m2)**2"]
+    - id: b_order_of_magnitude
+      gating: false
+      description: Part (b) within half a decade (NDA-passable rung).
+      weight: 0.06
+      checks:
+        - answer_value:
+            file: results/answer.json
+            field: part_b_width_gev
+            reference: ground_truth/truth.json
+            log10_tol: 0.5
+    - id: b_within_10pct
+      gating: false
+      description: Part (b) within 10%.
+      weight: 0.09
+      checks:
+        - answer_value:
+            file: results/answer.json
+            field: part_b_width_gev
+            reference: ground_truth/truth.json
+            rel_tol: 0.1
+    - id: b_within_1pct
+      gating: false
+      description: Part (b) within 1% (exact-computation rung).
+      weight: 0.12
+      checks:
+        - answer_value:
+            file: results/answer.json
+            field: part_b_width_gev
+            reference: ground_truth/truth.json
+            rel_tol: 0.01
+    - id: b_formula
+      gating: false
+      description: Part (b) closed form matches at sampled points.
+      weight: 0.21
+      checks:
+        - answer_formula:
+            file: results/answer.json
+            field: part_b_width_formula
+            reference: ground_truth/truth.json
+            symbols: {g: [0.1, 1.5], mV: [400.0, 1500.0], m1: [20.0, 350.0]}
+            fixed: {m2: 0.0}
+            constraints: ["mV**2 - m1**2"]

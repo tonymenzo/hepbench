@@ -1,0 +1,30 @@
+{
+  "part_a_width_gev": 1.0876381460471457e-12,
+  "part_a_width_formula": "g**4 * mF**5 / (1536*pi**3 * MV**4)",
+  "part_b_width_gev": 1.2482177598132849e-12,
+  "part_b_width_formula": "y1**2 * y2**2 * mF**5 / (1536*pi**3 * MS**4)",
+  "_metadata": {
+    "generated_by": "ground_truth/derivation.py",
+    "parameters": {
+      "common": {
+        "mF_gev": 17.3,
+        "final_masses_gev": 0.0
+      },
+      "part_a": {
+        "g": 0.62,
+        "MV_gev": 1450.0
+      },
+      "part_b": {
+        "y1": 0.71,
+        "y2": 0.58,
+        "MS_gev": 1450.0
+      }
+    },
+    "verification": "analytic coefficients reproduced to <1e-3 (midpoint Dalitz grid) by independent numeric integration of explicit-spinor contact amplitudes; integrator itself reproduces the muon width in tests/",
+    "citations": [
+      "F. Halzen, A.D. Martin, Quarks and Leptons, ch. 12 (muon decay, G_F^2 m^5/(192 pi^3))",
+      "PDG, Electroweak model review (G_F/sqrt(2) = g_w^2/(8 M_W^2) matching)",
+      "M.E. Peskin, D.V. Schroeder, An Introduction to QFT (V-A contact theory of weak decays)"
+    ]
+  }
+}

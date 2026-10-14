@@ -1,0 +1,4 @@
+name: core_only
+tools:
+  sources: []          # empty toolkit; only the harness's core tools
+skills: []

@@ -1,0 +1,8 @@
+# The domain arm for the `derived` variant: the `llp` pipeline,
+# PythiaFromRunCard, and the eda symbolic tools for deriving the tree-level
+# Gamma(phi -> mu mu), served by toolbase from the forward-llp-derived loadout.
+name: tools_derived
+tools:
+  sources:
+    - toolbase: { loadout: forward-llp-derived }
+skills: []

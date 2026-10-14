@@ -1,0 +1,28 @@
+{
+  "part_a_width_gev": 11.915957872612209,
+  "part_a_width_formula": "g**2 * mV / (12*pi) * (1 + 2*mf**2/mV**2) * sqrt(1 - 4*mf**2/mV**2)",
+  "part_b_width_gev": 18.419815247250312,
+  "part_b_width_formula": "mV / (12*pi) * sqrt(1 - 4*mf**2/mV**2) * (gV**2 * (1 + 2*mf**2/mV**2) + gA**2 * (1 - 4*mf**2/mV**2))",
+  "_metadata": {
+    "generated_by": "ground_truth/derivation.py",
+    "parameters": {
+      "common": {
+        "mV_gev": 2150.0,
+        "mf_gev": 640.0
+      },
+      "part_a": {
+        "g": 0.47
+      },
+      "part_b": {
+        "gV": 0.52,
+        "gA": 0.36
+      }
+    },
+    "verification": "analytic formulas reproduced to <1e-10 by independent numeric computation with explicit polarization vectors and Dirac spinors",
+    "citations": [
+      "V.D. Barger, R.J.N. Phillips, Collider Physics, electroweak ch. (Z -> f fbar with massive fermions)",
+      "P. Langacker, Rev.Mod.Phys. 81 (2009) 1199, arXiv:0801.1345 (Z' -> f fbar partial widths)",
+      "PDG, Electroweak model and constraints on new physics review (massless limit)"
+    ]
+  }
+}

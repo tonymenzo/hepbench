@@ -1,0 +1,122 @@
+name: bare
+description: |
+  OUT-OF-THE-BOX. Everything the answer depends on is stated in the USER
+  PROMPT, and the sandbox ships one file: results/answer_schema.json, the
+  output contract. This is the closest variant to "open a harness and ask a
+  colleague for this analysis".
+
+  WHY EVERYTHING IS IN THE PROMPT. It is not only realism. What the agent was
+  given becomes a single reviewable artifact instead of several files in two
+  formats, and a prescription cannot hide in a config file. It also removes a
+  non-physics failure mode: not reading, or misparsing, a supplied .tex.
+
+  WHAT IS PINNED, and why each is necessary for truth.json to be the unique
+  answer:
+    the Lagrangian                fixes both widths and c*tau
+    the two width expressions     see AXES below
+    production topologies         P -> mu nu phi, V -> mu+ mu- phi. Names the
+                                  process; without it an agent can miss the
+                                  vector channel and with it the entire
+                                  high-mass reach
+    sqrt(s), generator, tune      the flux is a SIMULATION OUTPUT, not a fact.
+                                  Two generators, or two tunes, give different
+                                  forward strangeness and therefore different
+                                  N_sig
+    soft QCD + charmonium         charmonium is the ONLY source above
+                                  m_phi ~ 1.76 GeV, where the pseudoscalars
+                                  close. An agent running plain SoftQCD gets
+                                  zero yield at m_phi = 1.9 and 2.3 -- 8 of the
+                                  48 graded points -- and that is a generator
+                                  switch, not physics they can derive.
+                                  The word "prompt" is deliberately absent:
+                                  it reads as an instruction to run a
+                                  dedicated NRQCD onia sample, and that route
+                                  undercounts the forward J/psi flux by
+                                  1.32x. The recipe itself is not stated
+                                  either -- see WHAT IS WITHHELD
+    harvest at production         the LLP decay is BSM and absent from the
+                                  generator, so parents must be caught before
+                                  they decay
+    theta_max = 0.05 rad          NOT droppable. The volume subtends
+                                  0.92/112 = 8.2 mrad, so 10 mrad reads as
+                                  generous -- and loses 20% of the yield,
+                                  because the phi is not collinear with its
+                                  parent. Measured retention: 73.9% at
+                                  8.2 mrad, 80.4% at 10, 93.5% at 20,
+                                  100.000% at 50
+    sigma_inel, N_int             set the absolute normalization
+    the geometry pins             the apparatus
+    the two acceptance defs       arbitrary detector definitions
+    N* = 3                        defines the contour
+    the mass grid, the probes     where the answer is evaluated
+    the output contract           interface, held constant across variants
+
+  WHAT IS WITHHELD -- this is the work: which hadrons can radiate a phi (the
+  parent enumeration), B_hat and the rest-frame energy spectra, the
+  decay-in-flight production vertex, P_dec, the ray/cylinder intersection, the
+  acceptance algorithms, the g^2 reweighting, and how many events to generate.
+
+  ALSO WITHHELD, and worth its own note: the generator recipe for charmonium.
+  The reference uses ONE inclusive sample (SoftQCD with Onia switched on in the
+  same run). A dedicated NRQCD onia sample run alongside a separate soft-QCD
+  one is 1.32x low, and that is not a convention mismatch -- it is an
+  INCOMPLETE FLUX. Measured at 13.6 TeV / Monash, forward J/psi per inelastic
+  collision: inclusive 1.074e-3, dedicated-only 8.07e-4. Soft QCD with Onia OFF
+  still makes 2.48e-4 from string fragmentation, and 52 of 59 have no b-hadron
+  ancestor, so it is not feed-down -- it is a real production mechanism the
+  dedicated NRQCD run simply does not have. The combination is additive rather
+  than double-counted: 126 (onia) + 39 (soft) = 165 against 168 observed, so
+  the onia processes are not ALSO generated inside MPI and Pythia's "should not
+  combine softQCD processes with hard ones" warning does not bite.
+
+  So the task asks for the total forward charmonium flux and an agent that
+  delivers 76% of it has undercounted, which is gradeable physics rather than
+  a coin flip. That is why the prompt does NOT state the recipe: encoding it is
+  exactly the kind of domain practice the llp bundle should carry, and holding
+  it out of the prompt is what makes the tools arm's advantage real signal
+  instead of a common-mode offset that cancels. SoftQCD:all and
+  SoftQCD:inelastic are interchangeable here (kaons agree to 0.3%); the
+  load-bearing part is only that charmonium is in the same run.
+
+  NOT PINNED, deliberately: the in-volume midpoint convention the reference
+  uses to evaluate acceptance. It is worth <= 0.004 dex for the dimuon search
+  and is EXACTLY zero for the diphoton search (the photons follow the phi's own
+  line, so the decay position cancels algebraically). An agent that samples the
+  true decay point will be marginally more correct than the reference, by an
+  amount below its noise floor.
+
+  Also not pinned: pt_cut. It is the soft/hard stitching point in the reference
+  generator, but n_hard = 0 in every flux ever built, so nothing is stitched
+  and it has no effect.
+
+  PAIRS WITH EITHER ARM. MesonDecayToLLP takes `kappa` and `spectrum_spec`
+  as inputs and this variant withholds the files that would supply them, but
+  ProductionSpectrumTool computes the spectrum and the reduced branching
+  fraction from a parent name and a mass -- precisely what is withheld here.
+  So `bare` x `core_only` versus `bare` x `tools_defined` is the cleanest
+  tools-versus-no-tools contrast in the suite.
+
+axes:
+  spec: defined   # decay widths SUPPLIED, as in the `defined` variant
+  env:  bare      # no intermediate results, no cards, no workflow guidance
+
+# AXES: why the widths are supplied. Two reasons.
+#
+# It makes this a SINGLE-AXIS contrast. `bare` and `defined` differ only in
+# environment, so a bare-vs-defined delta is attributable to scaffolding alone.
+#
+# And the one-loop diphoton width is a single point of catastrophic failure
+# that is not what this variant measures. Below 2 m_mu = 0.2113 GeV the
+# diphoton channel is the ONLY one open, so a wrong loop function does not
+# degrade the low-mass region gracefully -- it zeroes or O(1)-scales 4 of the
+# 12 masses, 16 of the 48 graded points, on one derivation. The `derived`
+# variant is where width derivation is the object of study.
+
+user_prompt_file: ./prompts/user.md
+system_prompt_file: ./prompts/system.md
+
+sandbox:
+  # ONE file: the output contract. Interface scaffolding is held constant and
+  # complete across every variant -- it is not the variable under test, and an
+  # under-specified interface produces non-physics failures.
+  template_dir: ./sandbox/template

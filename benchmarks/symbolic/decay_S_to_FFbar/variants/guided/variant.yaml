@@ -1,0 +1,18 @@
+# benchmarks/symbolic/decay_S_to_FFbar/variants/guided/variant.yaml is a part of HEPBench.
+# Copyright (C) 2026 HEPBench authors (see AUTHORS for details).
+# HEPBench is licensed under the GNU GPL v3 or later, see LICENSE for details.
+
+name: guided
+description: |
+  Generic presentation: the three interaction Lagrangians are stated
+  explicitly with symbolic field content (no SM particle names), so the
+  task measures symbolic computation rather than particle-data recall.
+  An SM-skinned variant (same rubric, named particles) can be added
+  later as a paired recall-vs-computation axis.
+
+axes:
+  spec: full        # Lagrangians + conventions stated explicitly
+  env: bare         # empty sandbox; the deliverable is results/answer.json
+
+user_prompt_file: ./prompts/user.md
+system_prompt_file: ./prompts/system.md

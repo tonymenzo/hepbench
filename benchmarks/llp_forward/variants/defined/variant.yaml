@@ -1,0 +1,26 @@
+name: defined
+description: |
+  Same sandbox data products as `derived` (the template is shared),
+  but the prompts additionally STATE the phi -> mu mu width formula and
+  the c*tau convention, so no theory derivation is required. Isolates
+  the pipeline (flux convolution, decay-in-volume, contour extraction)
+  from the theory rung: the defined -> derived reach delta is the
+  derivation cost. Because the widths are supplied, no symbolic-derivation
+  tool is needed: pair this variant with the `tools_defined` loadout
+  (pipeline only, no eda), whereas `derived` pairs with `tools_derived`, which
+  adds the eda symbolic tools for the withheld width.
+
+axes:
+  spec: defined      # width formula + ctau convention supplied
+
+user_prompt_file: ./prompts/user.md
+# Shares derived's system prompt verbatim: `defined` differs from `derived`
+# ONLY in that the user prompt supplies the decay widths. Keeping the system
+# prompt identical makes the defined->derived delta a clean measure of the
+# theory-derivation cost.
+system_prompt_file: ../derived/prompts/system.md
+
+sandbox:
+  # Extends the derived sandbox verbatim — the variant only changes
+  # what the prompts say, never the graded data products.
+  template_dir: ../derived/sandbox/template

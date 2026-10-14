@@ -1,0 +1,10 @@
+{
+  "state": "finished",
+  "pid": 86209,
+  "host": "<host>",
+  "started_at": "2026-10-01T17:22:11+00:00",
+  "updated_at": "2026-10-01T17:26:47+00:00",
+  "finished_at": "2026-10-01T17:26:47+00:00",
+  "abort_reason": null,
+  "error": null
+}

@@ -1,0 +1,16 @@
+# benchmarks/symbolic/_shared/benchmark.yaml is a part of HEPBench.
+# Copyright (C) 2026 HEPBench authors (see AUTHORS for details).
+# HEPBench is licensed under the GNU GPL v3 or later, see LICENSE for details.
+
+# Assets shared by every task in the symbolic family. Each task declares
+# `extends: ../_shared` and inherits the harnesses, loadouts, checks and
+# defaults below; a task-local file of the same name shadows the shared one.
+# This directory is not a runnable benchmark: it has no rubric or variants.
+name: symbolic-shared
+version: "1.0.0"
+
+default_harness: orchestral/anthropic
+default_loadout: core_only
+default_variant: unguided
+
+checks: ./checks.py

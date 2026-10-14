@@ -1,0 +1,91 @@
+================================================================
+                 RUN  symbolic-decay_S_to_FFbar                 
+================================================================
+  run_id     2026-10-01T12-39-34_symbolic-decay_S_to_FFbar_claude-haiku-4-5-20251001_run
+  task       symbolic-decay_S_to_FFbark          10   (n per cell)
+  trials     10                      cells      1
+  budget     $0.00 spent — SUBSCRIPTION (no metered API spend)   $10.05 API-equivalent (estimated)
+  start      2026-10-01T12:39:34
+  wall       1h19m
+  versions   toolbench 0.10.0  claude_code 2.1.286
+  provenance git unknown   harness claude-code/default
+  integrity  CLEAN (10 trials scanned)
+================================================================
+
+
+================================================================
+         CELL  claude-haiku-4-5-20251001  ×  core_only          
+================================================================
+
+  THREE-VECTOR              (k=10)
+  ------------
+
+      Each row is an expectation over k iid trials of a per-trial
+      score M_j ∈ [0,1]. bar_k = E[mean], at_k = E[max], ^k = E[min].
+      See the accompanying manuscript for definitions and estimators.
+
+      reach         0.12         productivity     (rubric-weighted)
+      reach (eq-w)  0.18         depth            (equal-weight, no rubric)
+      pass@k        0.00         exploration      (best of k)
+      pass^k        0.00         trustworthiness  (worst of k)
+
+      pass criterion: a trial passes iff all stages pass
+
+  STAGES
+  ------
+
+      answer_present           10/10       1.00
+      a_order_of_magnitude     5/10       0.50
+      a_within_10pct           2/10       0.20
+      a_within_1pct            2/10       0.20
+      a_formula                2/10       0.20
+      b_order_of_magnitude     6/10       0.60
+      b_within_10pct           2/10       0.20
+      b_within_1pct            2/10       0.20
+      b_formula                2/10       0.20
+      c_order_of_magnitude     4/10       0.40
+      c_within_10pct           1/10       0.10
+      c_within_1pct            1/10       0.10
+      c_formula                0/10       0.00
+
+  TRIALS
+  ------
+
+      scores     0.04  0.04  0.04  0.04  0.12  0.16  0.40  0.40  0.44  0.58   (min 0.04  max 0.58  spread 0.54)
+      UX rating  7  8  7  7        (blind, 1-10)
+
+  FAILURES
+  --------
+
+      INCOMPLETE_AT_A_ORDER_OF_MAGNITUDE    5
+      INCOMPLETE_AT_A_WITHIN_10PCT          3
+      INCOMPLETE_AT_B_WITHIN_10PCT          2
+
+  COST
+  ----
+
+      cost      $0.00 charged (no metered spend)
+      wall      1h19m total      7m57s / trial
+      tokens    1,082,391 raw in  /  57,025 out          (per trial)
+                127 uncached  +  1,021,778 cache read  +  60,486 cache write
+                719,742 effective in          (uncached-equivalent)
+                83,398 opening request     (system prompt + tool schemas + task)
+                $1.0049 API-equivalent      $1.3675 without caching
+
+
+================================================================
+                           ARTIFACTS                            
+================================================================
+
+  manifest           <hepbench>/runs/campaigns/core_haiku/2026-10-01T12-39-34_symbolic-decay_S_to_FFbar_claude-haiku-4-5-20251001_run/manifest.json
+  summary (json)     <hepbench>/runs/campaigns/core_haiku/2026-10-01T12-39-34_symbolic-decay_S_to_FFbar_claude-haiku-4-5-20251001_run/summary.json
+  summary (txt)      <hepbench>/runs/campaigns/core_haiku/2026-10-01T12-39-34_symbolic-decay_S_to_FFbar_claude-haiku-4-5-20251001_run/summary.txt
+  trials (jsonl)     <hepbench>/runs/campaigns/core_haiku/2026-10-01T12-39-34_symbolic-decay_S_to_FFbar_claude-haiku-4-5-20251001_run/trials.jsonl
+  per-trial dirs     <hepbench>/runs/campaigns/core_haiku/2026-10-01T12-39-34_symbolic-decay_S_to_FFbar_claude-haiku-4-5-20251001_run/trials/
+  per-trial audit    <hepbench>/runs/campaigns/core_haiku/2026-10-01T12-39-34_symbolic-decay_S_to_FFbar_claude-haiku-4-5-20251001_run/trials/<id>/audit.txt  (+ audit.html)
+  three-vector plot  <hepbench>/runs/campaigns/core_haiku/2026-10-01T12-39-34_symbolic-decay_S_to_FFbar_claude-haiku-4-5-20251001_run/parallel_coords.png
+  k-dependence plot  <hepbench>/runs/campaigns/core_haiku/2026-10-01T12-39-34_symbolic-decay_S_to_FFbar_claude-haiku-4-5-20251001_run/k_sweep.png
+  per-stage k plot   <hepbench>/runs/campaigns/core_haiku/2026-10-01T12-39-34_symbolic-decay_S_to_FFbar_claude-haiku-4-5-20251001_run/per_stage_k.png
+  overview plot      <hepbench>/runs/campaigns/core_haiku/2026-10-01T12-39-34_symbolic-decay_S_to_FFbar_claude-haiku-4-5-20251001_run/overview.png
+
+================================================================

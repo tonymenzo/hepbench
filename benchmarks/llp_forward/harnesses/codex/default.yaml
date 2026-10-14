@@ -1,0 +1,21 @@
+# Codex CLI (`codex exec`) under the user's subscription.
+name: codex/default
+runtime:
+  name: codex
+  call_timeout_s: 3600                 # per MCP call, seconds
+  sandbox: workspace-write             # Codex's own sandbox; no network, and the benchmark tree is denied
+  reasoning_effort: medium
+  env:
+    CONDA_AUTO_ACTIVATE_BASE: "false"  # Codex uses a login shell; keep conda from replacing the inherited environment
+provider:
+  name: subscription                   # the CLI owns the model call
+  model: gpt-5.5                       # overridden by --model
+core:
+  builtin: true                        # Codex's own tools; MCP tools come from the loadout
+loop:
+  max_iterations: 150
+  max_format_retries: 2
+  continue_nudges: 0
+  max_rate_limit_retries: 3
+  ux_feedback: graded                  # two unscored post-trial turns: a critique of the served tools
+  audit_html: false

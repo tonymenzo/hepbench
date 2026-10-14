@@ -1,0 +1,84 @@
+================================================================
+                 RUN  symbolic-decay_V_to_FFbar                 
+================================================================
+  run_id     2026-10-01T12-36-24_symbolic-decay_V_to_FFbar_gpt-5.5_run
+  task       symbolic-decay_V_to_FFbark          10   (n per cell)
+  trials     10                      cells      1
+  budget     $0.00 spent — SUBSCRIPTION (no metered API spend)   $3.05 API-equivalent (estimated)
+  start      2026-10-01T12:36:24
+  wall       20m02s
+  versions   toolbench 0.10.0  codex 0.152.1
+  provenance git unknown   harness codex/default
+  integrity  CLEAN (10 trials scanned)
+================================================================
+
+
+================================================================
+                  CELL  gpt-5.5  ×  core_only                   
+================================================================
+
+  THREE-VECTOR              (k=10)
+  ------------
+
+      Each row is an expectation over k iid trials of a per-trial
+      score M_j ∈ [0,1]. bar_k = E[mean], at_k = E[max], ^k = E[min].
+      See the accompanying manuscript for definitions and estimators.
+
+      reach         1.00         productivity     (rubric-weighted)
+      reach (eq-w)  1.00         depth            (equal-weight, no rubric)
+      pass@k        1.00         exploration      (best of k)
+      pass^k        1.00         trustworthiness  (worst of k)
+
+      pass criterion: a trial passes iff all stages pass
+
+  STAGES
+  ------
+
+      answer_present           10/10       1.00
+      a_order_of_magnitude     10/10       1.00
+      a_within_10pct           10/10       1.00
+      a_within_1pct            10/10       1.00
+      a_formula                10/10       1.00
+      b_order_of_magnitude     10/10       1.00
+      b_within_10pct           10/10       1.00
+      b_within_1pct            10/10       1.00
+      b_formula                10/10       1.00
+
+  TRIALS
+  ------
+
+      scores     1.00  1.00  1.00  1.00  1.00  1.00  1.00  1.00  1.00  1.00   (min 1.00  max 1.00  spread 0.00)
+
+  FAILURES
+  --------
+
+      NONE    10
+
+  COST
+  ----
+
+      cost      $0.00 charged (no metered spend)
+      wall      20m02s total      2m00s / trial
+      tokens    135,362 raw in  /  5,577 out          (per trial)
+                15,656 uncached  +  119,706 cache read  +  0 cache write
+                27,628 effective in          (uncached-equivalent)
+                114,907 opening request     (system prompt + tool schemas + task)
+                $0.3055 API-equivalent      $0.8441 without caching
+
+
+================================================================
+                           ARTIFACTS                            
+================================================================
+
+  manifest           <hepbench>/runs/campaigns/core_gpt55/2026-10-01T12-36-24_symbolic-decay_V_to_FFbar_gpt-5.5_run/manifest.json
+  summary (json)     <hepbench>/runs/campaigns/core_gpt55/2026-10-01T12-36-24_symbolic-decay_V_to_FFbar_gpt-5.5_run/summary.json
+  summary (txt)      <hepbench>/runs/campaigns/core_gpt55/2026-10-01T12-36-24_symbolic-decay_V_to_FFbar_gpt-5.5_run/summary.txt
+  trials (jsonl)     <hepbench>/runs/campaigns/core_gpt55/2026-10-01T12-36-24_symbolic-decay_V_to_FFbar_gpt-5.5_run/trials.jsonl
+  per-trial dirs     <hepbench>/runs/campaigns/core_gpt55/2026-10-01T12-36-24_symbolic-decay_V_to_FFbar_gpt-5.5_run/trials/
+  per-trial audit    <hepbench>/runs/campaigns/core_gpt55/2026-10-01T12-36-24_symbolic-decay_V_to_FFbar_gpt-5.5_run/trials/<id>/audit.txt  (+ audit.html)
+  three-vector plot  <hepbench>/runs/campaigns/core_gpt55/2026-10-01T12-36-24_symbolic-decay_V_to_FFbar_gpt-5.5_run/parallel_coords.png
+  k-dependence plot  <hepbench>/runs/campaigns/core_gpt55/2026-10-01T12-36-24_symbolic-decay_V_to_FFbar_gpt-5.5_run/k_sweep.png
+  per-stage k plot   <hepbench>/runs/campaigns/core_gpt55/2026-10-01T12-36-24_symbolic-decay_V_to_FFbar_gpt-5.5_run/per_stage_k.png
+  overview plot      <hepbench>/runs/campaigns/core_gpt55/2026-10-01T12-36-24_symbolic-decay_V_to_FFbar_gpt-5.5_run/overview.png
+
+================================================================

@@ -1,0 +1,23 @@
+name: recipes
+description: |
+  The core_only cell of the `defined` campaign. Same widths-supplied task
+  as `defined` -- it shares defined's user prompt and sandbox verbatim --
+  but the system prompt swaps the tool-oriented block for an Environment +
+  Invocation-reference block: a generic, model-agnostic hint for how to
+  drive the simulation software (Pythia8) from Python, with the one
+  non-obvious gotcha (the binding-name import), framed as optional rather
+  than mandatory. Pair with the core_only loadout: it controls for tacit
+  invocation knowledge, so the tools_defined vs core_only comparison
+  measures the value of the domain tools, not "does the agent know how to
+  call Pythia." Only the system prompt differs from `defined`.
+
+axes:
+  spec:    defined     # decay widths supplied (same task as `defined`)
+  env:     scaffolded  # model card + spectra + Pythia cards + geometry given
+  recipes: given       # how-to-invoke-the-software hint supplied (core_only)
+
+user_prompt_file: ../defined/prompts/user.md
+system_prompt_file: ./prompts/system.md
+
+sandbox:
+  template_dir: ../derived/sandbox/template
