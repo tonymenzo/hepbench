@@ -1,0 +1,29 @@
+{
+  "part_a_width_gev": 109.51948309493523,
+  "part_a_width_formula": "sqrt((mF**2-(mf+mV)**2)*(mF**2-(mf-mV)**2))/(16*pi*mF**3) * g**2 * (mF**2 + mf**2 - 2*mV**2 + (mF**2-mf**2)**2/mV**2 - 6*mF*mf)",
+  "part_b_width_gev": 42.847094120552605,
+  "part_b_width_formula": "sqrt((mF**2-(mf+mV)**2)*(mF**2-(mf-mV)**2))/(16*pi*mF**3) * ((gL**2+gR**2)*(mF**2+mf**2-2*mV**2+(mF**2-mf**2)**2/mV**2)/2 - 6*mF*mf*gL*gR)",
+  "_metadata": {
+    "generated_by": "ground_truth/derivation.py",
+    "conventions": "../CONVENTIONS.md",
+    "parameters": {
+      "common": {
+        "mF_gev": 900.0,
+        "mf_gev": 180.0,
+        "mV_gev": 240.0
+      },
+      "part_a": {
+        "g": 0.74
+      },
+      "part_b": {
+        "gL": 0.58,
+        "gR": 0.29
+      }
+    },
+    "verification": "analytic formulas reproduced to <1e-9 by independent numeric computation with explicit Dirac spinors and massive-vector polarization vectors; reduces to the textbook t->bW width in the g_R=0, m_f=0 limit",
+    "citations": [
+      "A. Denner, Fortsch.Phys. 41 (1993) 307 (gauge-boson fermionic widths)",
+      "PDG, Top Quark review (born-level Gamma(t->bW) = (g^2/64pi)(m_t^3/m_W^2)(1-x)^2(1+2x))"
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "part_a_width_gev": 1.9848170214975707,
+  "part_a_width_formula": "mu**2 * sqrt(1 - 4*mchi**2/mS**2) / (32*pi*mS)",
+  "part_b_width_gev": 1.2442595485743093,
+  "part_b_width_formula": "mu**2 * sqrt((mS**2 - (m1 + m2)**2) * (mS**2 - (m1 - m2)**2)) / (16*pi*mS**3)",
+  "_metadata": {
+    "generated_by": "ground_truth/derivation.py",
+    "parameters": {
+      "part_a": {
+        "mu_gev": 480.0,
+        "mS_gev": 950.0,
+        "mchi_gev": 270.0
+      },
+      "part_b": {
+        "mu_gev": 315.0,
+        "mS_gev": 950.0,
+        "m1_gev": 350.0,
+        "m2_gev": 410.0
+      }
+    },
+    "verification": "analytic formulas reproduced to <1e-10 by independent numeric phase-space computation (_shared/dirac_numeric.py)",
+    "citations": [
+      "PDG, Prog. Theor. Exp. Phys. 2022, 083C01, Kinematics review, eq. 50.18 (two-body width incl. 1/S)",
+      "D. Griffiths, Introduction to Elementary Particles (2nd ed.), sec. 6.3 (ABC toy theory)",
+      "M.D. Schwartz, Quantum Field Theory and the Standard Model, ch. 5 (phi -> chi chi with symmetry factor)"
+    ]
+  }
+}

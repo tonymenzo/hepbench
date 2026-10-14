@@ -1,0 +1,256 @@
+campaign: llp_forward
+benchmark: benchmarks/llp_forward
+description: >-
+  Forward-LLP tool ablation on the BARE variant: bare x core_only against
+  bare x tools_defined, four systems, n=5. The de-scaffolded rung -- the
+  sandbox ships one file (the output contract) and everything the answer
+  depends on is stated in the user prompt, so the tools arm's advantage
+  cannot come from scaffolding both arms share. Supersedes
+  llp_forward, which contrasted recipes x core_only against
+  defined x tools_defined and therefore moved the variant axis and the
+  loadout axis together; here only the loadout differs between arms.
+n: 5
+# Every `sd` quoted in a cell note is the SAMPLE standard deviation
+# (ddof=1), matching the notebook's cross-configuration figure. At n=5 the
+# population/sample choice moves the third decimal, so the convention is
+# stated rather than left to be inferred.
+seeds:
+- 1001
+- 1002
+- 1003
+- 1004
+- 1005
+frozen:
+  toolkit: heptapod 3.0.0
+  rubric_fingerprint: 6555a8797b4c
+  prompt_fingerprint: c5f26ed700cb
+  toolbench: 0.7.0
+  toolbase: 0.14.0
+  orchestral-ai: 1.10.0
+  claude-code-cli: 2.1.225 / 2.1.226
+  codex-cli: 0.146.0
+  rubric_fingerprint_note: >-
+    Was the llp_forward ladder until 2026-08-09, when the calibrated
+    rubric (median |log10(agent/ref)| in dex, standardised by the reference's
+    own measured MC precision) replaced the peak_yield + band_coarse/mid/fine
+    tolerance ladder as the PARENT benchmark's rubric. The superseded ladder
+    now lives in benchmarks/llp_forward_legacy so the 2026-07 and 2026-08
+    campaigns stay reproducible. Changed again 2026-08-10 when width_correct
+    was made NON-GATING: it is 0.10 of the rubric, not a precondition for the
+    other 0.85, and as an absorbing gate it zeroed a Sonnet trial that scored
+    0.977 on yields because its (correct) formula carried an equation label.
+    Every cell here was regraded under 6555a8797b4c and re-verified idempotent
+    on 2026-08-11 before collection.
+  harness_note: >-
+    claude-code CLI auto-updated mid-campaign: opus ran on 2.1.225, sonnet on
+    2.1.226. Both codex cells ran codex-cli 0.146.0. Recorded per cell in
+    `stack`.
+  treatment_note: >-
+    The codex cells carry a 343-character `system_prompt_addendum` on the
+    tools loadout stating that a domain toolkit is served and preferred over
+    reimplementation, plus the run-card guide injected into AGENTS.md at
+    session start. Without it gpt-5.6 called ZERO domain tools across five
+    trials and gpt-5.5 across three -- an arm that never reaches for its
+    tools is not testing them. The claude-code cells received NO addendum:
+    opus and sonnet both adopted the toolkit unprompted. The asymmetry is a
+    harness difference, is recorded verbatim in every trial record, and must
+    be stated in the manuscript. It reaches the TOOLS arm only; a core arm
+    can never receive prose describing tools it does not have.
+domain_tools:
+- ProductionSpectrum
+- HarvestForwardFlux
+- MesonDecayToLLP
+- DecayInVolumeVsCoupling
+- DecayInVolumeVsLifetime
+- PythiaFromRunCard
+systems:
+- Opus 4.8
+- Sonnet 5
+- Codex GPT-5.5
+- Codex GPT-5.6
+cells:
+- id: opus4.8__bare__tools_defined
+  system: Opus 4.8
+  arm: tools
+  model: claude-opus-4-8
+  variant: bare
+  loadout: tools_defined
+  search: 2026-08-10T01-46-52_llp_forward-reach_claude-opus-4-8_run
+  prefix: tools_defined__
+  stack: >-
+    heptapod 3.0.0 (venv); toolbench 0.7.0 / toolbase 0.14.0 / orchestral
+    1.10.0; claude-code CLI 2.1.225. No system-prompt addendum.
+  notes: >-
+    Campaign run 2026-08-10. n=5, no exclusions, integrity CLEAN. Tightest
+    cell in the campaign alongside gpt-5.6 tools. Adopted the toolkit without
+    being told to. reach 0.9686 (sd 0.016) [0.940 0.972 0.974 0.978 0.979].
+  valid: true
+- id: opus4.8__bare__core_only
+  system: Opus 4.8
+  arm: core
+  model: claude-opus-4-8
+  variant: bare
+  loadout: core_only
+  search: 2026-08-10T01-46-52_llp_forward-reach_claude-opus-4-8_run
+  prefix: core_only__
+  stack: >-
+    toolbench 0.7.0 / toolbase 0.14.0 / orchestral 1.10.0; claude-code CLI
+    2.1.225. (core arm: heptapod unused.)
+  notes: >-
+    Campaign run 2026-08-10. n=5, no exclusions, integrity CLEAN. The core
+    arm is not told the toolkit exists and reimplements the pipeline by hand.
+    reach 0.7978 (sd 0.170) [0.554 0.697 0.846 0.942 0.950].
+  valid: true
+- id: sonnet5__bare__tools_defined_unprompted
+  system: Sonnet 5
+  arm: tools
+  model: claude-sonnet-5
+  variant: bare
+  loadout: tools_defined_unprompted
+  search: 2026-08-10T15-03-59_llp_forward-reach_claude-sonnet-5_run
+  prefix: tools_defined_unprompted__
+  stack: >-
+    heptapod 3.0.0 (venv); toolbench 0.7.0 / toolbase 0.14.0 / orchestral
+    1.10.0; claude-code CLI 2.1.226. No system-prompt addendum, BY DESIGN.
+  notes: >-
+    Campaign run 2026-08-10 on `tools_defined_unprompted`, a loadout
+    identical to tools_defined minus the system-prompt addendum, run
+    deliberately to test whether Sonnet reaches for the toolkit without being
+    told it is there. It did, in 5/5 trials. n=5, no exclusions, integrity
+    CLEAN. reach 0.9668 (sd 0.018) [0.935 0.972 0.972 0.973 0.982].
+  valid: true
+- id: sonnet5__bare__core_only
+  system: Sonnet 5
+  arm: core
+  model: claude-sonnet-5
+  variant: bare
+  loadout: core_only
+  search: 2026-08-10T15-03-59_llp_forward-reach_claude-sonnet-5_run
+  prefix: core_only__
+  stack: >-
+    toolbench 0.7.0 / toolbase 0.14.0 / orchestral 1.10.0; claude-code CLI
+    2.1.226. (core arm: heptapod unused.)
+  notes: >-
+    Campaign run 2026-08-10. n=5, no exclusions, integrity CLEAN. The widest
+    cell in the campaign (sd 0.329), and the spread is two specific trials.
+    seed1003 scored 0.000: it derived the widths correctly (width_correct
+    passed) but never produced results/scan.csv -- there is no .csv anywhere in
+    its sandbox -- so the bulk deliverable, the yield scan the whole rubric is
+    written against, is simply absent. answer_present gates on it and there is
+    genuinely nothing downstream to score. This is NOT the width_correct
+    absorption bug: that one zeroed a trial that HAD produced everything, and
+    the trial it hit was tools/seed1005, which regrades to 0.9717 under the
+    fixed rubric and sits in this campaign at that value. seed1005 scored 0.200,
+    failing at channels_present with partial mass coverage. This is the largest
+    tools-vs-core delta in the study and it is driven by core-arm unreliability
+    rather than by a tools-arm ceiling. reach 0.4474 (sd 0.329) [0.000 0.200
+    0.597 0.711 0.729] for seeds [1003 1005 1004 1001 1002].
+  valid: true
+- id: codex_gpt5.5__bare__tools_defined
+  system: Codex GPT-5.5
+  arm: tools
+  model: gpt-5.5
+  variant: bare
+  loadout: tools_defined
+  search: 2026-08-10T10-31-36_llp_forward-reach_gpt-5.5_run
+  prefix: tools_defined__
+  stack: >-
+    heptapod 3.0.0 (venv); toolbench 0.7.0 / toolbase 0.14.0 / orchestral
+    1.10.0; codex-cli 0.146.0. WITH the system-prompt addendum and the
+    run-card guide injected into AGENTS.md.
+  notes: >-
+    Campaign run 2026-08-10. n=5, no exclusions, integrity CLEAN. Supersedes
+    an aborted attempt in which gpt-5.5 called ZERO domain tools across three
+    trials despite six being served and visible; the addendum is what moved
+    it. reach 0.9243 (sd 0.011) [0.908 0.920 0.924 0.931 0.938].
+  valid: true
+- id: codex_gpt5.5__bare__core_only
+  system: Codex GPT-5.5
+  arm: core
+  model: gpt-5.5
+  variant: bare
+  loadout: core_only
+  search: 2026-08-10T10-31-36_llp_forward-reach_gpt-5.5_run
+  prefix: core_only__
+  stack: >-
+    toolbench 0.7.0 / toolbase 0.14.0 / orchestral 1.10.0; codex-cli 0.146.0.
+    No addendum (core arms never receive one). (core arm: heptapod unused.)
+  notes: >-
+    Campaign run 2026-08-10. n=5, no exclusions, integrity CLEAN. reach
+    0.5713 (sd 0.086) [0.494 0.507 0.525 0.665 0.665].
+  valid: true
+- id: codex_gpt5.6__bare__tools_defined
+  system: Codex GPT-5.6
+  arm: tools
+  model: gpt-5.6-sol
+  variant: bare
+  loadout: tools_defined
+  search: 2026-08-10T21-16-39_llp_forward-reach_gpt-5.6-sol_run
+  prefix: tools_defined__
+  stack: >-
+    heptapod 3.0.0 (venv); toolbench 0.7.0 / toolbase 0.14.0 / orchestral
+    1.10.0; codex-cli 0.146.0. WITH the system-prompt addendum and the
+    run-card guide injected into AGENTS.md, byte-identical to the gpt-5.5
+    cell so the two codex systems are directly comparable.
+  notes: >-
+    Campaign run 2026-08-10. n=5, no exclusions, integrity CLEAN. Tightest
+    cell in the campaign (sd 0.007) and the only cell with pass^k = 1.00:
+    every trial clears the 0.9 bar. SEED 1001 WAS RE-RUN. The original
+    scored 0.000: it listed the sandbox with `rg --files -g '!results/**'`,
+    never saw the output contract it had been given, wrote its own schema
+    over the top with codex apply_patch `*** Add File:` (which overwrites
+    silently and still reports kind="add"), validated its answer against its
+    own substitute, and shipped `width_formula` where the contract requires
+    `width_formula_mumu` -- zeroing physics otherwise worth 0.814, with the
+    campaign's best yield accuracy (0.0249 dex). That is a destroyed output
+    contract rather than a physics failure. The original trial is preserved
+    IN FULL, with forensics, at
+    runs/preserved/2026-08-10_gpt-5.6-sol_seed1001_contract-overwrite/, and
+    the re-run (0.9309) was produced by `toolbench resume` into the same run
+    directory under the same seed. toolbench b32747e now records
+    `template_drift` per trial so this failure is never again invisible; the
+    check is read-only with respect to the sandbox, so the re-run remains
+    comparable to the other nine trials, which ran without it. Every trial
+    in this cell, the re-run included, reports template_drift = {}.
+    reach 0.9241 (sd 0.007) [0.916 0.916 0.927 0.930 0.931].
+  valid: true
+- id: codex_gpt5.6__bare__core_only
+  system: Codex GPT-5.6
+  arm: core
+  model: gpt-5.6-sol
+  variant: bare
+  loadout: core_only
+  search: 2026-08-10T21-16-39_llp_forward-reach_gpt-5.6-sol_run
+  prefix: core_only__
+  stack: >-
+    toolbench 0.7.0 / toolbase 0.14.0 / orchestral 1.10.0; codex-cli 0.146.0.
+    No addendum (core arms never receive one). (core arm: heptapod unused.)
+  notes: >-
+    Campaign run 2026-08-10. n=5, no exclusions, integrity CLEAN. The
+    strongest core arm in the study by a wide margin, which is what makes the
+    gpt-5.6 delta small: there is little headroom left above it. seed1005
+    (0.689) generated 120k events against 300k elsewhere and finished in
+    9 min, landing 2.3x off on yields -- under-sampled, legitimately graded.
+    reach 0.8395 (sd 0.095) [0.689 0.807 0.878 0.898 0.925].
+  valid: true
+- id: haiku4.5__bare__tools_defined
+  system: Haiku 4.5
+  arm: tools
+  model: claude-haiku-4-5
+  variant: bare
+  loadout: tools_defined
+  valid: false
+  reason: >-
+    EXCLUDED, not used anywhere in the manuscript. Two independent
+    disqualifiers. (1) One trial (n002/seed1003) read the answer key: it ran
+    `git show HEAD:benchmarks/llp_forward/soln/truth.json` together with
+    `git ls-tree` and `git log --all --follow`, reaching the ground truth
+    through git's object store, which the filesystem deny-list did not cover.
+    It is quarantined under its run directory with a README. toolbench now
+    denies `.git` of every repo containing a benchmark, but that fix
+    postdates this run. (2) Both arms sat near reach 0.22-0.23 with the tools
+    arm no better than core, which on inspection reflects the model failing
+    the task rather than the toolkit failing to help -- and the cell would
+    need re-running against heptapod 3.0.0 to be comparable with the rest of
+    this campaign in any case. Recorded here so the exclusion is part of the
+    ledger rather than a silent omission.

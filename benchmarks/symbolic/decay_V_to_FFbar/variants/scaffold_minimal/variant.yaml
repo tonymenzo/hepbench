@@ -1,0 +1,22 @@
+# benchmarks/symbolic/decay_V_to_FFbar/variants/scaffold_minimal/variant.yaml is a part of HEPBench.
+# Copyright (C) 2026 HEPBench authors (see AUTHORS for details).
+# HEPBench is licensed under the GNU GPL v3 or later, see LICENSE for details.
+
+name: scaffold_minimal
+description: |
+  Lean presentation: the same physics, parameters, and conventions as
+  `guided` (so ground truth and grading are unchanged), but the
+  pedagogical scaffolding is removed -- no "compute the EXACT result"
+  instruction, no "not order-of-magnitude" warning, no example formula,
+  no worked output schema or convention hints. Only the minimal grading
+  interface (field names, symbol names, units) remains. Measures whether
+  the model defaults to an exact tree-level computation and clean JSON
+  delivery without being told to; the guided->scaffold_minimal reach
+  delta is the specification cost.
+
+axes:
+  spec: lean        # pedagogical scaffolding removed; physics still pinned
+  env: bare
+
+user_prompt_file: ./prompts/user.md
+system_prompt_file: ./prompts/system.md

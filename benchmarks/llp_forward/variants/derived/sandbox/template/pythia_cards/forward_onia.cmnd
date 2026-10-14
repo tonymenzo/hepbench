@@ -1,0 +1,43 @@
+! forward_onia.cmnd -- part of HEPBench (GPL v3).
+!
+! OPTIONAL, INDEPENDENTLY-NORMALIZED charmonium sample for the vector channels
+! J/psi, psi(2S) -> mu+ mu- phi. NOT part of the graded reference flux.
+!
+! Rationale: J/psi is the dominant HIGH-MASS producer (composition study) but is
+!  (i) null-by-rate for the LHC-forward reach, and
+!  (ii) subject to a large forward-quarkonium modeling systematic.
+! Charmonium production uses the dedicated Onia processes (color-singlet +
+! color-octet, NRQCD). These are HARD processes, so they must NOT be mixed into
+! the SoftQCD run (Pythia: "should not combine softQCD processes with hard
+! ones"); this card runs them alone and its yield is normalized by its OWN
+! sigmaGen, then added to the forward_flux.cmnd sample. Forward (low-pT) prompt
+! quarkonium is IR-sensitive: treat the absolute rate as uncertain.
+! Settings verified against OniaProcesses.xml.
+
+Tune:pp = 14
+Beams:idA = 2212
+Beams:idB = 2212
+Beams:frameType = 1
+Beams:eCM = 13600.                ! [PUBLIC_PIN: sqrt(s)]
+
+Charmonium:all = on               ! prompt J/psi, psi(2S), chi_c (NRQCD)
+PhaseSpace:pTHatMin = 0.5         ! tame the onia IR divergence at pThat -> 0
+
+! Harvest the charmonia at production (made stable). Light/open-flavour parents
+! also listed so the same harvester works unchanged; they are ~absent here.
+321:mayDecay = off
+411:mayDecay = off
+431:mayDecay = off
+113:mayDecay = off
+223:mayDecay = off
+333:mayDecay = off
+443:mayDecay = off                ! J/psi
+100443:mayDecay = off             ! psi(2S)
+
+Print:quiet = on
+Next:numberCount = 0
+Init:showChangedSettings = off
+Init:showChangedParticleData = off
+Init:showProcesses = off
+Init:showMultipartonInteractions = off
+Check:event = off

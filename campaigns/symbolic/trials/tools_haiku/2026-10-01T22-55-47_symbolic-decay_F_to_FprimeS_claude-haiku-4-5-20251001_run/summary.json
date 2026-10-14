@@ -1,0 +1,247 @@
+{
+  "cells": [
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "condition": "tools_eda",
+      "n": 10,
+      "mean_score": 0.879,
+      "score_ci95": [
+        0.679,
+        1.0
+      ],
+      "reach_bar_k": 0.879,
+      "reach_bar_k_ci95": [
+        0.658,
+        1.0
+      ],
+      "reach_bar_k_uniform": 0.8889,
+      "reach_bar_k_uniform_ci95": [
+        0.6778,
+        1.0
+      ],
+      "reach_at_k_uniform": 1.0,
+      "reach_caret_k_uniform": 0.0,
+      "pass_at_k": 1.0,
+      "pass_caret_k": 0.0,
+      "pass_at_1": 0.8,
+      "metric_correlations": {
+        "labels": [
+          "reach_bar_k",
+          "pass_at_k",
+          "pass_caret_k"
+        ],
+        "matrix": [
+          [
+            1.0,
+            null,
+            0.4287
+          ],
+          [
+            null,
+            1.0,
+            null
+          ],
+          [
+            0.4287,
+            null,
+            1.0
+          ]
+        ],
+        "n_bootstrap": 500
+      },
+      "k": 10,
+      "mean_cost_usd": 0.0,
+      "mean_estimated_api_equivalent_cost_usd": 0.569105,
+      "mean_wall_clock_s": 188.7,
+      "mean_tokens": {
+        "initial_input": 57742,
+        "input": 83,
+        "output": 18869,
+        "cache_read": 475062,
+        "cache_creation": 32039
+      },
+      "mean_tool_calls": 9.8,
+      "mean_tool_errors": 3.2,
+      "tool_calls_by_name": {
+        "ComputeDecayRate": 65,
+        "Write": 20,
+        "Bash": 8,
+        "Read": 5
+      },
+      "stages": {
+        "answer_present": 0.9,
+        "a_order_of_magnitude": 0.9,
+        "a_within_10pct": 0.9,
+        "a_within_1pct": 0.9,
+        "a_formula": 0.9,
+        "b_order_of_magnitude": 0.9,
+        "b_within_10pct": 0.9,
+        "b_within_1pct": 0.9,
+        "b_formula": 0.8
+      },
+      "stage_display": {
+        "answer_present": {
+          "continuous": false,
+          "credit_mean": 0.9,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "a_order_of_magnitude": {
+          "continuous": false,
+          "credit_mean": 0.9,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "a_within_10pct": {
+          "continuous": false,
+          "credit_mean": 0.9,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "a_within_1pct": {
+          "continuous": false,
+          "credit_mean": 0.9,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "a_formula": {
+          "continuous": false,
+          "credit_mean": 0.9,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "b_order_of_magnitude": {
+          "continuous": false,
+          "credit_mean": 0.9,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "b_within_10pct": {
+          "continuous": false,
+          "credit_mean": 0.9,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "b_within_1pct": {
+          "continuous": false,
+          "credit_mean": 0.9,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "b_formula": {
+          "continuous": false,
+          "credit_mean": 0.8,
+          "distance_mean": null,
+          "distance_label": null
+        }
+      },
+      "failure_modes": {
+        "NONE": 8,
+        "INCOMPLETE_AT_ANSWER_PRESENT": 1,
+        "INCOMPLETE_AT_B_FORMULA": 1
+      },
+      "n_excluded": 0,
+      "excluded_failure_modes": {},
+      "trial_scores": [
+        0.0,
+        0.79,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "pass_threshold": null,
+      "retries": {
+        "rate_limit": 0,
+        "transient": 0,
+        "nudges": 0
+      },
+      "tool_usage": {
+        "per_tool": {
+          "ComputeDecayRate": 65
+        },
+        "per_tool_errors": {
+          "ComputeDecayRate": 32
+        },
+        "total_calls": 65,
+        "total_errors": 32,
+        "adopted_trials": 10,
+        "adopted_mcp": 10,
+        "adopted_script": 0,
+        "n_trials": 10
+      },
+      "ux_ratings": [
+        7,
+        7,
+        8,
+        8,
+        8,
+        7,
+        8
+      ]
+    }
+  ],
+  "paired_deltas": [],
+  "n_total_trials": 10,
+  "n_excluded_trials": 0,
+  "excluded_failure_modes": {},
+  "run_id": "2026-10-01T22-55-47_symbolic-decay_F_to_FprimeS_claude-haiku-4-5-20251001_run",
+  "k": 10,
+  "pass_criterion": "all_stages",
+  "reach_weights": {
+    "stage_order": [
+      "answer_present",
+      "a_order_of_magnitude",
+      "a_within_10pct",
+      "a_within_1pct",
+      "a_formula",
+      "b_order_of_magnitude",
+      "b_within_10pct",
+      "b_within_1pct",
+      "b_formula"
+    ],
+    "w": [
+      0.04,
+      0.06,
+      0.09,
+      0.12,
+      0.21,
+      0.06,
+      0.09,
+      0.12,
+      0.21
+    ],
+    "pass_threshold": null
+  },
+  "total_spent_usd": 0.0,
+  "subscription_harnesses": [
+    "claude-code/default"
+  ],
+  "estimated_api_equivalent_cost_usd": 5.691046,
+  "estimated_cost_basis": null,
+  "aborted_by_budget": false,
+  "aborted_by_session_limit": false,
+  "session_limit": {
+    "aborted": false,
+    "excluded_trials": 0,
+    "not_attempted": 0
+  },
+  "integrity": {
+    "scanned": 10,
+    "flagged": {}
+  },
+  "provenance": {
+    "git_sha": "unknown",
+    "versions": {
+      "toolbench": "0.11.0",
+      "claude_code": "2.1.287"
+    },
+    "harnesses": [
+      "claude-code/default"
+    ]
+  }
+}

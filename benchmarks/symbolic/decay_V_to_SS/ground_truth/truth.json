@@ -1,0 +1,29 @@
+{
+  "part_a_width_gev": 0.9668097975501307,
+  "part_a_width_formula": "g**2 * ((mV**2-(m1+m2)**2)*(mV**2-(m1-m2)**2))**(3/2) / (48*pi*mV**5)",
+  "part_b_width_gev": 0.8404636216535508,
+  "part_b_width_formula": "g**2 * (mV**2 - m1**2)**3 / (48*pi*mV**5)",
+  "_metadata": {
+    "generated_by": "ground_truth/derivation.py",
+    "conventions": "../CONVENTIONS.md",
+    "parameters": {
+      "part_a": {
+        "g": 0.85,
+        "mV_gev": 500.0,
+        "m1_gev": 120.0,
+        "m2_gev": 210.0
+      },
+      "part_b": {
+        "g": 0.62,
+        "mV_gev": 500.0,
+        "m1_gev": 180.0,
+        "m2_gev": 0.0
+      }
+    },
+    "verification": "analytic formulas reproduced to <1e-9 by independent numeric computation with explicit polarization vectors",
+    "citations": [
+      "M.D. Schwartz, Quantum Field Theory and the Standard Model, scalar-QED vertex i g (p1-p2)_mu",
+      "J.J. Sakurai, Currents and Mesons (rho -> pi pi, p-wave vector-to-two-scalar rate)"
+    ]
+  }
+}

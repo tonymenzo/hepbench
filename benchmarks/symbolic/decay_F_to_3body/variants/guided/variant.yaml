@@ -1,0 +1,18 @@
+# benchmarks/symbolic/decay_F_to_3body/variants/guided/variant.yaml is a part of HEPBench.
+# Copyright (C) 2026 HEPBench authors (see AUTHORS for details).
+# HEPBench is licensed under the GNU GPL v3 or later, see LICENSE for details.
+
+name: guided
+description: |
+  Generic presentation. The Lagrangians are stated with explicit
+  mediator couplings (NOT in Fermi form), so recalling
+  G_F^2 m^5/(192 pi^3) only helps if the coupling matching to the
+  stated normalization is done correctly — that matching is what the
+  upper rungs grade.
+
+axes:
+  spec: full
+  env: bare
+
+user_prompt_file: ./prompts/user.md
+system_prompt_file: ./prompts/system.md

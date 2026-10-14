@@ -1,0 +1,17 @@
+# benchmarks/symbolic/decay_V_to_FFbar/variants/guided/variant.yaml is a part of HEPBench.
+# Copyright (C) 2026 HEPBench authors (see AUTHORS for details).
+# HEPBench is licensed under the GNU GPL v3 or later, see LICENSE for details.
+
+name: guided
+description: |
+  Generic presentation (no SM particle names). The fermion mass is a
+  sizeable fraction of m_V, so the (1 + 2x) and (1 - 4x) massive-
+  fermion factors are numerically significant — the massless Z'-width
+  formula alone does not clear the 10% rung.
+
+axes:
+  spec: full
+  env: bare
+
+user_prompt_file: ./prompts/user.md
+system_prompt_file: ./prompts/system.md

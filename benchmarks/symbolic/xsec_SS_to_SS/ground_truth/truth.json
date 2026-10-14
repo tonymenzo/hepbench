@@ -1,0 +1,29 @@
+{
+  "part_a_xsec_pb": 88.92958931828066,
+  "part_a_xsec_formula": "lam**2 / (32*pi*s)",
+  "part_b_xsec_pb": 24.76042487670996,
+  "part_b_xsec_formula": "lam**2 / (32*pi*s) * sqrt((s - 4*mchi**2) / (s - 4*mphi**2))",
+  "_metadata": {
+    "generated_by": "ground_truth/derivation.py",
+    "parameters": {
+      "part_a": {
+        "lambda": 2.3,
+        "mphi_gev": 75.0,
+        "sqrt_s_gev": 480.0
+      },
+      "part_b": {
+        "lambda12": 1.7,
+        "mphi_gev": 75.0,
+        "mchi_gev": 210.0,
+        "sqrt_s_gev": 480.0
+      }
+    },
+    "units": "values in pb (1 GeV^-2 = 3.893793721e8 pb); formulas in natural units (GeV^-2)",
+    "verification": "analytic formulas reproduced to <1e-10 by independent numeric angular integration (_shared/dirac_numeric.py)",
+    "citations": [
+      "M.E. Peskin, D.V. Schroeder, An Introduction to QFT, eq. (4.84) (c.m. dsigma/dOmega) and sec. 4.6 (-i lambda rule for phi^4)",
+      "M. Srednicki, Quantum Field Theory, ch. 11 (2->2 master formulas)",
+      "PDG, Kinematics review (identical-particle 1/2; (hbar c)^2 conversion)"
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+name: orchestral/litellm
+runtime:
+  name: orchestral
+  version: ">=1.3"
+provider:
+  name: litellm           # routes via the LiteLLM proxy (LITELLM_HOST / LITELLM_API_KEY)
+  max_tokens: 8192
+  # A LiteLLM proxy may have response-level caching on, which would hand
+  # every trial of a cell the same completion -- k trials stop being
+  # independent samples and pass@k / pass^k collapse into reach. This
+  # appends a per-trial nonce to defeat it. Not needed on direct
+  # providers (their prompt/KV caches don't affect sampling).
+  cache_bust: true
+# Anti-oracle tool policy (see benchmarks/symbolic/README.md):
+#  - WebSearchTool removed: every formula here is published, so the web
+#    is an oracle.
+#  - RunCommandTool removed: a shell is the natural way to `cat`/`find`
+#    the ground truth, and the tasks never need one. The filesystem
+#    tools (Read/Find/FileSearch) are jailed to the sandbox by
+#    orchestral; RunPythonTool is kept for legitimate computation (its
+#    open() is a residual read leak, caught post-hoc by
+#    scripts/audit_oracle_access.py).
+core:
+  tools: [WriteFileTool, ReadFileTool, EditFileTool,
+          FindFilesTool, FileSearchTool, RunPythonTool,
+          TodoRead, TodoWrite]
+loop:
+  max_iterations: 60
+  # Raised from 2: gpt-oss-class models emit malformed tool-call JSON
+  # often enough that 2 resumes were exhausted on 3 of 14 sweep
+  # benchmarks, losing the whole trial. The crash is nondeterministic
+  # and a resume costs ~$0.005 against a trial that otherwise scores 0.
+  # Kept uniform across the family: an arm with fewer retries would
+  # show a lower reach for loop-policy reasons, not capability ones.
+  max_format_retries: 5
+  continue_nudges: 0

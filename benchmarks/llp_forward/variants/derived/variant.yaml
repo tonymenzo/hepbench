@@ -1,0 +1,27 @@
+name: derived
+description: |
+  The primary benchmark: full sandbox data products (model card with the
+  production kappa tables and the parent-rest-frame LLP energy spectra,
+  the validated Pythia run cards, the geometry, and the answer schema),
+  but the phi decay WIDTHS are WITHHELD -- the agent must derive
+  Gamma(phi -> mu mu) and Gamma(phi -> gamma gamma) from the Lagrangian
+  before it can set the lifetime and propagate anything. The agent
+  generates the forward flux with the provided Pythia cards, decays it to
+  phi across all channels, and reports N_sig on the declared point set.
+  The defined -> derived reach delta isolates the theory-derivation cost.
+
+  System prompt is TOOL-ORIENTED (prefer the domain tools, chain generate
+  -> harvest -> decay -> propagate); pair with the tools_derived loadout. The
+  `recipes` variant is the same task with a how-to-invoke-the-software
+  system prompt for the core_only arm.
+
+axes:
+  spec: derived     # decay widths withheld (derive from the Lagrangian)
+  env: scaffolded    # model card + spectra + Pythia cards + geometry given;
+                     # the flux GENERATION and pipeline are the task
+
+user_prompt_file: ./prompts/user.md
+system_prompt_file: ./prompts/system.md
+
+sandbox:
+  template_dir: ./sandbox/template

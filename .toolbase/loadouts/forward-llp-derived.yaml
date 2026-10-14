@@ -1,0 +1,21 @@
+# forward-llp-derived — benchmarks/llp_forward, the `derived` variant (widths withheld).
+#
+# Serves what forward-llp-defined serves, plus the `eda` bundle: exact symbolic
+# amplitudes (FeynCalc) for the tree-level Gamma(phi -> mu mu) the agent must
+# derive. Requires `wolframscript_path` in the heptapod configuration. `nda` is
+# excluded: a dimensional estimate drops the phase-space factors the width is
+# graded on.
+#
+# Oracle policy, as for every benchmark loadout: no literature, particle-data,
+# or web bundles.
+toolkits:
+  heptapod:
+    bundles: [llp, eda]
+    tools:
+      enabled: [PythiaFromRunCard]   # from the pythia bundle
+      disabled:
+        - VisualizeDiagrams
+        - RunWolframScriptBatch
+        - SimplifyResultBatch
+versions:
+  heptapod: 3.0.0

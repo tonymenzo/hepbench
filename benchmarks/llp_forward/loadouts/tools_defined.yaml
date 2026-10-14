@@ -1,0 +1,26 @@
+# The domain arm for the variants that supply the widths: the `llp` pipeline
+# and PythiaFromRunCard, served by toolbase from the forward-llp-defined
+# loadout. The `derived` variant pairs with tools_derived instead.
+name: tools_defined
+tools:
+  sources:
+    - toolbase: { loadout: forward-llp-defined }
+
+# The addendum states that a toolkit exists and is the intended path. It names
+# no tool, no order, and no physics. It lives on the loadout, so the core arm
+# never sees it, and it is recorded verbatim in every trial record.
+system_prompt_addendum: |
+  This workspace is equipped with a domain toolkit, served over MCP alongside
+  your built-in tools. Prefer it to writing your own implementation of the
+  same step: read the available tool descriptions before deciding how to carry
+  out a stage, and use a tool where one covers what you need. Where no tool
+  fits, implement the step yourself as usual.
+
+# The run-card guide is part of the domain arm. It is a copy of HEPTAPOD's
+# skills/pythia_forward_run_cards/SKILL.md, because a toolbench loadout
+# delivers skills from a file; tests/test_skill_parity.py asserts the copy
+# matches the pinned toolkit version.
+skills:
+  - name: pythia_forward_run_cards
+    file: ./skills/pythia_forward_run_cards.md
+    mode: on_demand

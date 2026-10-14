@@ -1,0 +1,136 @@
+# benchmarks/symbolic/xsec_SS_to_SS/benchmark.yaml is a part of HEPBench.
+# Copyright (C) 2026 HEPBench authors (see AUTHORS for details).
+# HEPBench is licensed under the GNU GPL v3 or later, see LICENSE for details.
+
+name: symbolic-xsec_SS_to_SS
+version: "1.0.0"
+description: |
+  Tree-level 2 -> 2 scalar scattering from quartic contact terms:
+  (a) phi phi -> phi phi from L = -(lambda/4!) phi^4 (vertex
+  combinatorics + identical-particle 1/2; sigma = lambda^2/(32 pi s)
+  with no mass dependence), (b) phi phi -> chi chi from
+  L = -(lambda12/4) phi^2 chi^2 (|p_f|/|p_i| threshold factor).
+  Numeric answers in PICOBARNS (units conversion is part of the task);
+  formulas in natural units. Ground truth derived and verified in
+  ground_truth/derivation.py (P&S eq. (4.84) + sec. 4.6; Srednicki
+  ch. 11).
+
+default_harness: orchestral/anthropic
+default_loadout: core_only
+default_variant: unguided
+
+ground_truth:
+  dir: ./ground_truth
+
+checks: ../_shared/checks.py
+
+artifacts:
+  keep_full: [".json", ".py", ".md", ".wl", ".txt"]
+  keep_root: ["todos.md"]
+
+rubric:
+  type: stagewise
+  # Stage independence: `answer_present` is a real prerequisite and gates
+  # (no file -> nothing else is assessable). Every other stage here grades a
+  # SEPARATE quantity or a separate rung of a nested tolerance ladder, so
+  # none of them presuppose the one before -- part (b) being right does not
+  # depend on part (a)'s formula. They are therefore non-gating: a miss
+  # costs its own weight and nothing else. The ladder stays self-consistent
+  # without absorption, since a value within 1% is necessarily within 10%
+  # and within half a decade.
+  stages:
+    - id: answer_present
+      description: results/answer.json exists with all four answer fields.
+      weight: 0.04
+      checks:
+        - json_with_keys:
+            file: results/answer.json
+            required_keys: [part_a_xsec_pb, part_a_xsec_formula,
+                            part_b_xsec_pb, part_b_xsec_formula]
+
+    # ----- part (a): phi^4 contact, identical particles -----
+    - id: a_order_of_magnitude
+      gating: false
+      description: Part (a) cross section within half a decade.
+      weight: 0.06
+      checks:
+        - answer_value:
+            file: results/answer.json
+            field: part_a_xsec_pb
+            reference: ground_truth/truth.json
+            log10_tol: 0.5
+    - id: a_within_10pct
+      gating: false
+      description: Part (a) cross section within 10%.
+      weight: 0.09
+      checks:
+        - answer_value:
+            file: results/answer.json
+            field: part_a_xsec_pb
+            reference: ground_truth/truth.json
+            rel_tol: 0.10
+    - id: a_within_1pct
+      gating: false
+      description: Part (a) cross section within 1% (combinatorics + 1/2).
+      weight: 0.12
+      checks:
+        - answer_value:
+            file: results/answer.json
+            field: part_a_xsec_pb
+            reference: ground_truth/truth.json
+            rel_tol: 0.01
+    - id: a_formula
+      gating: false
+      description: Part (a) closed form (GeV^-2) matches at sampled (lam, s).
+      weight: 0.21
+      checks:
+        - answer_formula:
+            file: results/answer.json
+            field: part_a_xsec_formula
+            reference: ground_truth/truth.json
+            symbols: {lam: [0.1, 6.0], s: [100000.0, 4000000.0],
+                      mphi: [10.0, 150.0]}
+
+    # ----- part (b): phi phi -> chi chi, threshold factor -----
+    - id: b_order_of_magnitude
+      gating: false
+      description: Part (b) cross section within half a decade.
+      weight: 0.06
+      checks:
+        - answer_value:
+            file: results/answer.json
+            field: part_b_xsec_pb
+            reference: ground_truth/truth.json
+            log10_tol: 0.5
+    - id: b_within_10pct
+      gating: false
+      description: Part (b) cross section within 10%.
+      weight: 0.09
+      checks:
+        - answer_value:
+            file: results/answer.json
+            field: part_b_xsec_pb
+            reference: ground_truth/truth.json
+            rel_tol: 0.10
+    - id: b_within_1pct
+      gating: false
+      description: Part (b) cross section within 1%.
+      weight: 0.12
+      checks:
+        - answer_value:
+            file: results/answer.json
+            field: part_b_xsec_pb
+            reference: ground_truth/truth.json
+            rel_tol: 0.01
+    - id: b_formula
+      gating: false
+      description: Part (b) closed form (GeV^-2) matches at sampled points.
+      weight: 0.21
+      checks:
+        - answer_formula:
+            file: results/answer.json
+            field: part_b_xsec_formula
+            reference: ground_truth/truth.json
+            symbols: {lam: [0.1, 6.0], s: [400000.0, 4000000.0],
+                      mphi: [10.0, 150.0], mchi: [10.0, 300.0]}
+            constraints: ["s - 4*mchi**2", "s - 4*mphi**2"]

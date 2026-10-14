@@ -1,0 +1,110 @@
+% Generated from retained scan records; original table styling preserved.
+% Requires booktabs and float (loaded) and colortbl for \cellcolor:
+% add \usepackage{colortbl} to the preamble (or load xcolor with the [table] option).
+% Shading = |log10(median/reference)|: <0.02 dex (<5%), 0.02-0.05 (5-12%), 0.05-0.15 (12-41%), >=0.15 (>41%).
+% Dark-red range = trial-to-trial spread larger than a factor of 2 (max/min > 2).
+\definecolor{llpA}{RGB}{214,236,214}
+\definecolor{llpB}{RGB}{252,244,196}
+\definecolor{llpC}{RGB}{252,215,170}
+\definecolor{llpD}{RGB}{244,176,170}
+\definecolor{llpSpread}{RGB}{160,0,0}
+\providecommand{\llpkey}{{\setlength{\fboxsep}{1.5pt}\colorbox{llpA}{$<5\%$}\,\colorbox{llpB}{$5$--$12\%$}\,\colorbox{llpC}{$12$--$41\%$}\,\colorbox{llpD}{$>41\%$}}}
+
+\clearpage
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{3pt}
+\caption{Peak signal yield of the reference calculation, $N_{\rm sig}^{\rm ref}$, and ratio of the submitted peak yield to the reference, for the domain (D) and core (C) arm of each system. Each entry gives the median \TM{over trials with a positive peak}, with the minimum and maximum below it. \TM{A superscript gives the contributing count when fewer than five trials qualify.} Companion to \cref{fig:llp_yields}. Cell shading gives the deviation of the median from the reference: \protect\llpkey. A range in dark red marks a trial-to-trial spread larger than a factor of two.}
+\label{tab:llp_yields}
+\begin{tabular}{rc*{8}{c}}
+\toprule
+& & \multicolumn{8}{c}{peak $N_{\rm sig}$, agent / reference} \\
+\cmidrule(lr){3-10}
+$m_\phi$ & $N_{\rm sig}^{\rm ref}$ & \multicolumn{2}{c}{Opus~4.8} & \multicolumn{2}{c}{Sonnet~5} & \multicolumn{2}{c}{GPT-5.5} & \multicolumn{2}{c}{GPT-5.6} \\
+\cmidrule(lr){3-4}\cmidrule(lr){5-6}\cmidrule(lr){7-8}\cmidrule(lr){9-10}
+[GeV] & & D & C & D & C & D & C & D & C \\
+\midrule
+0.06 & $1.26\times10^{9}$ & \cellcolor{llpA}$1.00$ & \cellcolor{llpA}$0.99$ & \cellcolor{llpA}$0.99$ & \cellcolor{llpA}$1.00^{(3)}$ & \cellcolor{llpA}$0.99$ & \cellcolor{llpD}$0.50$ & \cellcolor{llpA}$0.98$ & \cellcolor{llpB}$0.95$ \\
+ &  & \cellcolor{llpA}{\scriptsize$[0.98,\,1.01]$} & \cellcolor{llpA}{\color{llpSpread}{\scriptsize$[0.99,\,56]$}} & \cellcolor{llpA}{\scriptsize$[0.89,\,1.00]$} & \cellcolor{llpA}{\color{llpSpread}{\scriptsize$[0.18,\,1.33]$}} & \cellcolor{llpA}{\scriptsize$[0.98,\,1.01]$} & \cellcolor{llpD}{\color{llpSpread}{\scriptsize$[0.0047,\,22]$}} & \cellcolor{llpA}{\scriptsize$[0.96,\,1.00]$} & \cellcolor{llpB}{\color{llpSpread}{\scriptsize$[0.62,\,1.54]$}} \\[2pt]
+0.12 & $3.99\times10^{7}$ & \cellcolor{llpA}$1.00$ & \cellcolor{llpA}$0.97$ & \cellcolor{llpA}$1.00$ & \cellcolor{llpA}$0.97^{(3)}$ & \cellcolor{llpA}$0.97$ & \cellcolor{llpD}$0.48$ & \cellcolor{llpB}$0.95$ & \cellcolor{llpA}$0.97$ \\
+ &  & \cellcolor{llpA}{\scriptsize$[0.96,\,1.00]$} & \cellcolor{llpA}{\color{llpSpread}{\scriptsize$[0.94,\,55]$}} & \cellcolor{llpA}{\scriptsize$[0.97,\,1.01]$} & \cellcolor{llpA}{\color{llpSpread}{\scriptsize$[0.12,\,1.38]$}} & \cellcolor{llpA}{\scriptsize$[0.97,\,0.97]$} & \cellcolor{llpD}{\color{llpSpread}{\scriptsize$[0.019,\,21]$}} & \cellcolor{llpB}{\scriptsize$[0.94,\,0.98]$} & \cellcolor{llpA}{\color{llpSpread}{\scriptsize$[0.56,\,1.54]$}} \\[2pt]
+0.18 & $2.86\times10^{6}$ & \cellcolor{llpA}$1.00$ & \cellcolor{llpB}$0.95$ & \cellcolor{llpA}$0.99$ & \cellcolor{llpB}$0.93^{(3)}$ & \cellcolor{llpB}$0.95$ & \cellcolor{llpD}$0.53$ & \cellcolor{llpA}$0.96$ & \cellcolor{llpB}$0.91$ \\
+ &  & \cellcolor{llpA}{\scriptsize$[0.96,\,1.01]$} & \cellcolor{llpB}{\color{llpSpread}{\scriptsize$[0.91,\,53]$}} & \cellcolor{llpA}{\scriptsize$[0.91,\,1.00]$} & \cellcolor{llpB}{\color{llpSpread}{\scriptsize$[0.12,\,1.45]$}} & \cellcolor{llpB}{\scriptsize$[0.95,\,0.96]$} & \cellcolor{llpD}{\color{llpSpread}{\scriptsize$[0.050,\,24]$}} & \cellcolor{llpA}{\scriptsize$[0.93,\,0.97]$} & \cellcolor{llpB}{\color{llpSpread}{\scriptsize$[0.53,\,1.50]$}} \\[2pt]
+0.205 & $9.10\times10^{5}$ & \cellcolor{llpA}$0.99$ & \cellcolor{llpB}$0.94$ & \cellcolor{llpA}$1.00$ & \cellcolor{llpB}$0.91^{(3)}$ & \cellcolor{llpA}$0.96$ & \cellcolor{llpD}$0.45$ & \cellcolor{llpB}$0.94$ & \cellcolor{llpC}$0.87$ \\
+ &  & \cellcolor{llpA}{\scriptsize$[0.95,\,1.01]$} & \cellcolor{llpB}{\color{llpSpread}{\scriptsize$[0.90,\,51]$}} & \cellcolor{llpA}{\scriptsize$[0.98,\,1.00]$} & \cellcolor{llpB}{\color{llpSpread}{\scriptsize$[0.12,\,1.53]$}} & \cellcolor{llpA}{\scriptsize$[0.94,\,0.96]$} & \cellcolor{llpD}{\color{llpSpread}{\scriptsize$[0.061,\,26]$}} & \cellcolor{llpB}{\scriptsize$[0.93,\,0.95]$} & \cellcolor{llpC}{\color{llpSpread}{\scriptsize$[0.53,\,1.47]$}} \\[2pt]
+0.23 & $17.1$ & \cellcolor{llpA}$1.00$ & \cellcolor{llpA}$1.01$ & \cellcolor{llpA}$0.99$ & \cellcolor{llpB}$0.93^{(3)}$ & \cellcolor{llpA}$1.00$ & \cellcolor{llpD}$0.53$ & \cellcolor{llpA}$1.00$ & \cellcolor{llpA}$1.04$ \\
+ &  & \cellcolor{llpA}{\scriptsize$[0.99,\,1.01]$} & \cellcolor{llpA}{\color{llpSpread}{\scriptsize$[0.92,\,50]$}} & \cellcolor{llpA}{\scriptsize$[0.98,\,0.99]$} & \cellcolor{llpB}{\color{llpSpread}{\scriptsize$[0.15,\,1.74]$}} & \cellcolor{llpA}{\scriptsize$[1.00,\,1.01]$} & \cellcolor{llpD}{\color{llpSpread}{\scriptsize$[0.083,\,29]$}} & \cellcolor{llpA}{\scriptsize$[0.98,\,1.01]$} & \cellcolor{llpA}{\color{llpSpread}{\scriptsize$[0.63,\,1.59]$}} \\[2pt]
+0.28 & $0.900$ & \cellcolor{llpA}$1.00$ & \cellcolor{llpA}$1.00$ & \cellcolor{llpA}$0.99$ & \cellcolor{llpC}$0.73^{(3)}$ & \cellcolor{llpA}$1.01$ & \cellcolor{llpD}$0.51$ & \cellcolor{llpA}$1.00$ & \cellcolor{llpA}$0.97$ \\
+ &  & \cellcolor{llpA}{\scriptsize$[0.98,\,1.02]$} & \cellcolor{llpA}{\color{llpSpread}{\scriptsize$[0.76,\,39]$}} & \cellcolor{llpA}{\scriptsize$[0.93,\,1.00]$} & \cellcolor{llpC}{\color{llpSpread}{\scriptsize$[0.26,\,2.42]$}} & \cellcolor{llpA}{\scriptsize$[0.99,\,1.02]$} & \cellcolor{llpD}{\color{llpSpread}{\scriptsize$[0.087,\,36]$}} & \cellcolor{llpA}{\scriptsize$[0.98,\,1.02]$} & \cellcolor{llpA}{\color{llpSpread}{\scriptsize$[0.60,\,1.52]$}} \\[2pt]
+0.34 & $0.129$ & \cellcolor{llpA}$1.04$ & \cellcolor{llpB}$1.05$ & \cellcolor{llpA}$0.99$ & \cellcolor{llpD}$0.45^{(3)}$ & \cellcolor{llpB}$1.05$ & \cellcolor{llpD}$0.33$ & \cellcolor{llpA}$1.01$ & \cellcolor{llpC}$1.16$ \\
+ &  & \cellcolor{llpA}{\scriptsize$[0.98,\,1.05]$} & \cellcolor{llpB}{\color{llpSpread}{\scriptsize$[0.31,\,9.54]$}} & \cellcolor{llpA}{\scriptsize$[0.95,\,1.01]$} & \cellcolor{llpD}{\color{llpSpread}{\scriptsize$[0.17,\,4.18]$}} & \cellcolor{llpB}{\scriptsize$[0.95,\,1.10]$} & \cellcolor{llpD}{\color{llpSpread}{\scriptsize$[0.031,\,18]$}} & \cellcolor{llpA}{\scriptsize$[0.96,\,1.07]$} & \cellcolor{llpC}{\color{llpSpread}{\scriptsize$[0.64,\,2.27]$}} \\[2pt]
+0.42 & $4.81\times10^{-2}$ & \cellcolor{llpB}$1.06$ & \cellcolor{llpA}$1.00$ & \cellcolor{llpA}$0.99$ & \cellcolor{llpD}$0.35^{(3)}$ & \cellcolor{llpB}$1.05$ & \cellcolor{llpD}$0.12$ & \cellcolor{llpA}$1.04$ & \cellcolor{llpC}$1.13$ \\
+ &  & \cellcolor{llpB}{\scriptsize$[0.99,\,1.07]$} & \cellcolor{llpA}{\color{llpSpread}{\scriptsize$[0.21,\,6.92]$}} & \cellcolor{llpA}{\scriptsize$[0.95,\,1.03]$} & \cellcolor{llpD}{\color{llpSpread}{\scriptsize$[0.079,\,4.66]$}} & \cellcolor{llpB}{\scriptsize$[0.95,\,1.14]$} & \cellcolor{llpD}{\color{llpSpread}{\scriptsize$[0.0071,\,0.71]$}} & \cellcolor{llpA}{\scriptsize$[0.97,\,1.11]$} & \cellcolor{llpC}{\color{llpSpread}{\scriptsize$[0.77,\,1.73]$}} \\[2pt]
+0.7 & $7.20\times10^{-3}$ & \cellcolor{llpB}$1.07$ & \cellcolor{llpA}$1.01$ & \cellcolor{llpA}$1.01$ & \cellcolor{llpD}$0.28^{(3)}$ & \cellcolor{llpA}$1.04$ & \cellcolor{llpD}$0.03$ & \cellcolor{llpA}$1.05$ & \cellcolor{llpB}$1.08$ \\
+ &  & \cellcolor{llpB}{\scriptsize$[0.99,\,1.07]$} & \cellcolor{llpA}{\color{llpSpread}{\scriptsize$[0.20,\,2.84]$}} & \cellcolor{llpA}{\scriptsize$[0.95,\,1.03]$} & \cellcolor{llpD}{\color{llpSpread}{\scriptsize$[0.054,\,4.89]$}} & \cellcolor{llpA}{\scriptsize$[0.96,\,1.14]$} & \cellcolor{llpD}{\color{llpSpread}{\scriptsize$[0.0040,\,0.73]$}} & \cellcolor{llpA}{\scriptsize$[0.97,\,1.12]$} & \cellcolor{llpB}{\color{llpSpread}{\scriptsize$[0.47,\,1.84]$}} \\[2pt]
+1.2 & $4.46\times10^{-4}$ & \cellcolor{llpA}$1.04$ & \cellcolor{llpB}$0.93$ & \cellcolor{llpA}$0.98$ & \cellcolor{llpD}$0.33^{(3)}$ & \cellcolor{llpA}$1.04$ & \cellcolor{llpD}$0.16$ & \cellcolor{llpA}$1.01$ & \cellcolor{llpA}$1.01$ \\
+ &  & \cellcolor{llpA}{\scriptsize$[0.98,\,1.08]$} & \cellcolor{llpB}{\color{llpSpread}{\scriptsize$[0.36,\,2.32]$}} & \cellcolor{llpA}{\scriptsize$[0.94,\,1.02]$} & \cellcolor{llpD}{\color{llpSpread}{\scriptsize$[0.047,\,4.51]$}} & \cellcolor{llpA}{\scriptsize$[0.98,\,1.12]$} & \cellcolor{llpD}{\color{llpSpread}{\scriptsize$[0.011,\,1.92]$}} & \cellcolor{llpA}{\scriptsize$[0.91,\,1.08]$} & \cellcolor{llpA}{\color{llpSpread}{\scriptsize$[0.39,\,1.71]$}} \\[2pt]
+1.9 & $1.05\times10^{-5}$ & \cellcolor{llpA}$1.01$ & \cellcolor{llpC}$0.76$ & \cellcolor{llpB}$0.93$ & \cellcolor{llpD}$0.52^{(3)}$ & \cellcolor{llpB}$1.09$ & \cellcolor{llpD}$0.25$ & \cellcolor{llpA}$1.01$ & \cellcolor{llpC}$0.81$ \\
+ &  & \cellcolor{llpA}{\scriptsize$[0.97,\,1.15]$} & \cellcolor{llpC}{\scriptsize$[0.76,\,1.26]$} & \cellcolor{llpB}{\scriptsize$[0.85,\,1.08]$} & \cellcolor{llpD}{\color{llpSpread}{\scriptsize$[0.027,\,3.73]$}} & \cellcolor{llpB}{\scriptsize$[1.03,\,1.12]$} & \cellcolor{llpD}{\color{llpSpread}{\scriptsize$[0.030,\,9.21]$}} & \cellcolor{llpA}{\scriptsize$[0.80,\,1.10]$} & \cellcolor{llpC}{\color{llpSpread}{\scriptsize$[0.24,\,1.75]$}} \\[2pt]
+2.3 & $1.07\times10^{-6}$ & \cellcolor{llpA}$0.98$ & \cellcolor{llpC}$0.75$ & \cellcolor{llpB}$0.91$ & \cellcolor{llpD}$0.45^{(3)}$ & \cellcolor{llpB}$1.06$ & \cellcolor{llpB}$0.94$ & \cellcolor{llpA}$1.00$ & \cellcolor{llpC}$0.79$ \\
+ &  & \cellcolor{llpA}{\scriptsize$[0.95,\,1.14]$} & \cellcolor{llpC}{\scriptsize$[0.74,\,0.81]$} & \cellcolor{llpB}{\scriptsize$[0.85,\,1.06]$} & \cellcolor{llpD}{\color{llpSpread}{\scriptsize$[0.0097,\,3.67]$}} & \cellcolor{llpB}{\scriptsize$[1.01,\,1.08]$} & \cellcolor{llpB}{\color{llpSpread}{\scriptsize$[0.028,\,19]$}} & \cellcolor{llpA}{\scriptsize$[0.78,\,1.04]$} & \cellcolor{llpC}{\color{llpSpread}{\scriptsize$[0.23,\,1.69]$}} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\clearpage
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\caption{Boundaries of the sensitivity region in the coupling $g$ at each scalar mass, for the reference and for the domain and core arm of each system. Each entry gives the median over trials, with the minimum and maximum below it. A superscript gives the number of trials that returned a boundary when fewer than five did; a single-trial entry has no range. The lower, production-limited edge is given in units of $10^{-6}$ and the upper, lifetime-limited edge in units of $10^{-3}$. Companion to \cref{fig:llp_contour}. Cell shading gives the deviation of the median from the reference boundary: \protect\llpkey. A range in dark red marks a trial-to-trial spread larger than a factor of two.}
+\label{tab:llp_contour}
+\begin{tabular}{ll*{5}{c}}
+\toprule
+& & \multicolumn{5}{c}{$m_\phi$ [GeV]} \\
+\cmidrule(lr){3-7}
+System & Arm & 0.06 & 0.12 & 0.18 & 0.205 & 0.23 \\
+\midrule
+\multicolumn{7}{l}{\textit{Lower edge, $g/10^{-6}$}} \\
+\midrule
+\multicolumn{2}{l}{Reference} & $8.62$ & $5.33$ & $4.35$ & $4.11$ & $0.511$ \\[2pt]
+Opus~4.8 & domain & \cellcolor{llpA}$8.62$ & \cellcolor{llpA}$5.33$ & \cellcolor{llpA}$4.38$ & \cellcolor{llpA}$4.10$ & \cellcolor{llpA}$0.511$ \\
+ &  & \cellcolor{llpA}{\scriptsize$[8.57,\,10.6]$} & \cellcolor{llpA}{\scriptsize$[5.31,\,7.02]$} & \cellcolor{llpA}{\scriptsize$[4.33,\,5.92]$} & \cellcolor{llpA}{\scriptsize$[4.09,\,5.66]$} & \cellcolor{llpA}{\scriptsize$[0.510,\,0.512]$} \\[2pt]
+ & core & \cellcolor{llpC}$10.3^{(3)}$ & \cellcolor{llpC}$6.68$ & \cellcolor{llpC}$5.60$ & \cellcolor{llpC}$5.36$ & \cellcolor{llpA}$0.509$ \\
+ &  & \cellcolor{llpC}{\color{llpSpread}{\scriptsize$[5.41,\,11.7]$}} & \cellcolor{llpC}{\color{llpSpread}{\scriptsize$[3.55,\,7.58]$}} & \cellcolor{llpC}{\color{llpSpread}{\scriptsize$[2.98,\,6.47]$}} & \cellcolor{llpC}{\color{llpSpread}{\scriptsize$[2.85,\,6.08]$}} & \cellcolor{llpA}{\color{llpSpread}{\scriptsize$[0.235,\,0.598]$}} \\[2pt]
+Sonnet~5 & domain & \cellcolor{llpA}$8.49$ & \cellcolor{llpA}$5.26$ & \cellcolor{llpA}$4.26$ & \cellcolor{llpA}$4.07$ & \cellcolor{llpA}$0.511$ \\
+ &  & \cellcolor{llpA}{\scriptsize$[7.55,\,8.59]$} & \cellcolor{llpA}{\scriptsize$[5.03,\,5.35]$} & \cellcolor{llpA}{\scriptsize$[3.74,\,4.35]$} & \cellcolor{llpA}{\scriptsize$[3.55,\,4.09]$} & \cellcolor{llpA}{\scriptsize$[0.485,\,0.511]$} \\[2pt]
+ & core & \cellcolor{llpC}$10.1^{(3)}$ & \cellcolor{llpC}$6.55^{(3)}$ & \cellcolor{llpC}$5.45^{(3)}$ & \cellcolor{llpC}$5.22^{(3)}$ & \cellcolor{llpB}$0.472^{(2)}$ \\
+ &  & \cellcolor{llpC}{\scriptsize$[9.39,\,17.5]$} & \cellcolor{llpC}{\color{llpSpread}{\scriptsize$[6.15,\,12.8]$}} & \cellcolor{llpC}{\color{llpSpread}{\scriptsize$[5.15,\,11.2]$}} & \cellcolor{llpC}{\color{llpSpread}{\scriptsize$[4.90,\,10.7]$}} & \cellcolor{llpB}{\scriptsize$[0.438,\,0.505]$} \\[2pt]
+GPT-5.5 & domain & \cellcolor{llpC}$10.6$ & \cellcolor{llpC}$6.95$ & \cellcolor{llpC}$5.90$ & \cellcolor{llpC}$5.66$ & \cellcolor{llpA}$0.509$ \\
+ &  & \cellcolor{llpC}{\scriptsize$[10.6,\,10.7]$} & \cellcolor{llpC}{\scriptsize$[6.92,\,7.07]$} & \cellcolor{llpC}{\scriptsize$[5.85,\,5.90]$} & \cellcolor{llpC}{\scriptsize$[5.62,\,5.67]$} & \cellcolor{llpA}{\scriptsize$[0.507,\,0.510]$} \\[2pt]
+ & core & \cellcolor{llpA}$8.51^{(1)}$ & \cellcolor{llpC}$6.35^{(3)}$ & \cellcolor{llpD}$6.31$ & \cellcolor{llpD}$6.82$ & \cellcolor{llpD}$0.359^{(3)}$ \\
+ &  & \cellcolor{llpA} & \cellcolor{llpC}{\scriptsize$[5.62,\,11.2]$} & \cellcolor{llpD}{\color{llpSpread}{\scriptsize$[4.42,\,12.4]$}} & \cellcolor{llpD}{\color{llpSpread}{\scriptsize$[4.06,\,10.6]$}} & \cellcolor{llpD}{\color{llpSpread}{\scriptsize$[0.264,\,0.683]$}} \\[2pt]
+GPT-5.6 & domain & \cellcolor{llpC}$10.7$ & \cellcolor{llpC}$7.01$ & \cellcolor{llpC}$5.92$ & \cellcolor{llpC}$5.68$ & \cellcolor{llpA}$0.509$ \\
+ &  & \cellcolor{llpC}{\scriptsize$[10.6,\,10.7]$} & \cellcolor{llpC}{\scriptsize$[6.95,\,7.07]$} & \cellcolor{llpC}{\scriptsize$[5.90,\,5.93]$} & \cellcolor{llpC}{\scriptsize$[5.65,\,5.69]$} & \cellcolor{llpA}{\scriptsize$[0.506,\,0.513]$} \\[2pt]
+ & core & \cellcolor{llpC}$10.3$ & \cellcolor{llpC}$6.50$ & \cellcolor{llpC}$5.67$ & \cellcolor{llpC}$5.33$ & \cellcolor{llpA}$0.514$ \\
+ &  & \cellcolor{llpC}{\scriptsize$[9.47,\,15.6]$} & \cellcolor{llpC}{\scriptsize$[6.07,\,10.9]$} & \cellcolor{llpC}{\scriptsize$[5.04,\,9.45]$} & \cellcolor{llpC}{\scriptsize$[4.80,\,9.02]$} & \cellcolor{llpA}{\scriptsize$[0.425,\,0.691]$} \\
+\midrule
+\multicolumn{7}{l}{\textit{Upper edge, $g/10^{-3}$}} \\
+\midrule
+\multicolumn{2}{l}{Reference} & $107$ & $21.6$ & $7.29$ & $4.67$ & $0.00619$ \\[2pt]
+Opus~4.8 & domain & \cellcolor{llpC}$87.6$ & \cellcolor{llpB}$19.6$ & \cellcolor{llpB}$6.55$ & \cellcolor{llpB}$4.28$ & \cellcolor{llpA}$0.00617$ \\
+ &  & \cellcolor{llpC}{\scriptsize$[83.1,\,89.1]$} & \cellcolor{llpB}{\scriptsize$[17.7,\,21.5]$} & \cellcolor{llpB}{\scriptsize$[6.30,\,7.45]$} & \cellcolor{llpB}{\scriptsize$[4.16,\,5.30]$} & \cellcolor{llpA}{\scriptsize$[0.00613,\,0.00634]$} \\[2pt]
+ & core & \cellcolor{llpB}$102^{(3)}$ & \cellcolor{llpB}$23.3$ & \cellcolor{llpB}$7.88$ & \cellcolor{llpA}$4.83$ & \cellcolor{llpA}$0.00618$ \\
+ &  & \cellcolor{llpB}{\scriptsize$[96.4,\,122]$} & \cellcolor{llpB}{\scriptsize$[21.2,\,28.1]$} & \cellcolor{llpB}{\scriptsize$[7.34,\,10.0]$} & \cellcolor{llpA}{\scriptsize$[4.59,\,6.29]$} & \cellcolor{llpA}{\color{llpSpread}{\scriptsize$[0.00588,\,0.0178]$}} \\[2pt]
+Sonnet~5 & domain & \cellcolor{llpC}$94.1$ & \cellcolor{llpC}$18.9$ & \cellcolor{llpB}$6.63$ & \cellcolor{llpB}$4.25$ & \cellcolor{llpA}$0.00619$ \\
+ &  & \cellcolor{llpC}{\scriptsize$[88.3,\,126]$} & \cellcolor{llpC}{\scriptsize$[17.8,\,24.3]$} & \cellcolor{llpB}{\scriptsize$[6.22,\,7.52]$} & \cellcolor{llpB}{\scriptsize$[3.98,\,5.47]$} & \cellcolor{llpA}{\scriptsize$[0.00614,\,0.00659]$} \\[2pt]
+ & core & \cellcolor{llpB}$99.1^{(3)}$ & \cellcolor{llpA}$21.4^{(3)}$ & \cellcolor{llpA}$7.25^{(3)}$ & \cellcolor{llpA}$4.68^{(3)}$ & \cellcolor{llpB}$0.00664^{(2)}$ \\
+ &  & \cellcolor{llpB}{\scriptsize$[76.8,\,104]$} & \cellcolor{llpA}{\scriptsize$[19.1,\,21.8]$} & \cellcolor{llpA}{\scriptsize$[5.83,\,7.94]$} & \cellcolor{llpA}{\scriptsize$[4.01,\,4.96]$} & \cellcolor{llpB}{\scriptsize$[0.00572,\,0.00755]$} \\[2pt]
+GPT-5.5 & domain & \cellcolor{llpC}$87.9$ & \cellcolor{llpC}$18.4$ & \cellcolor{llpC}$6.22$ & \cellcolor{llpA}$4.53$ & \cellcolor{llpA}$0.00631$ \\
+ &  & \cellcolor{llpC}{\scriptsize$[85.4,\,88.7]$} & \cellcolor{llpC}{\scriptsize$[18.1,\,24.7]$} & \cellcolor{llpC}{\scriptsize$[5.94,\,6.93]$} & \cellcolor{llpA}{\scriptsize$[4.22,\,4.61]$} & \cellcolor{llpA}{\scriptsize$[0.00614,\,0.00663]$} \\[2pt]
+ & core & \cellcolor{llpC}$84.1^{(1)}$ & \cellcolor{llpD}$8.36^{(3)}$ & \cellcolor{llpC}$5.53$ & \cellcolor{llpC}$3.55$ & \cellcolor{llpC}$0.00531^{(3)}$ \\
+ &  & \cellcolor{llpC} & \cellcolor{llpD}{\color{llpSpread}{\scriptsize$[7.88,\,16.8]$}} & \cellcolor{llpC}{\color{llpSpread}{\scriptsize$[2.42,\,7.15]$}} & \cellcolor{llpC}{\color{llpSpread}{\scriptsize$[1.56,\,5.01]$}} & \cellcolor{llpC}{\scriptsize$[0.00487,\,0.00555]$} \\[2pt]
+GPT-5.6 & domain & \cellcolor{llpC}$87.3$ & \cellcolor{llpC}$17.7$ & \cellcolor{llpC}$6.25$ & \cellcolor{llpC}$4.02$ & \cellcolor{llpA}$0.00624$ \\
+ &  & \cellcolor{llpC}{\scriptsize$[84.1,\,91.3]$} & \cellcolor{llpC}{\scriptsize$[17.2,\,19.9]$} & \cellcolor{llpC}{\scriptsize$[5.86,\,7.37]$} & \cellcolor{llpC}{\scriptsize$[3.89,\,5.20]$} & \cellcolor{llpA}{\scriptsize$[0.00607,\,0.00646]$} \\[2pt]
+ & core & \cellcolor{llpB}$99.4$ & \cellcolor{llpC}$18.5$ & \cellcolor{llpB}$6.81$ & \cellcolor{llpA}$4.74$ & \cellcolor{llpA}$0.00627$ \\
+ &  & \cellcolor{llpB}{\scriptsize$[84.7,\,111]$} & \cellcolor{llpC}{\scriptsize$[18.0,\,21.3]$} & \cellcolor{llpB}{\scriptsize$[6.29,\,8.15]$} & \cellcolor{llpA}{\scriptsize$[4.20,\,5.25]$} & \cellcolor{llpA}{\scriptsize$[0.00572,\,0.00716]$} \\
+\bottomrule
+\end{tabular}
+\end{table}

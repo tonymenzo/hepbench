@@ -1,0 +1,129 @@
+# claude-code/opus-4-8 — CAMPAIGN-PINNED harness for the forward-LLP publication run.
+#
+# One harness per (runtime x model) so a campaign cell is named by its harness
+# rather than by a --models flag at the command line. The model then lives in
+# the manifest as configuration rather than as an invocation detail, and two
+# cells cannot silently differ in anything but the axis under test: these files
+# are identical to their sibling except for `provider.model`.
+#
+# Generated from benchmarks/llp_forward/harnesses/claude-code/default.yaml; edit that file and regenerate rather than drifting them
+# apart by hand.
+
+# claude-code — drives the trial via the Claude Code CLI (`claude -p`) under the
+# user's subscription. MCP toolkit comes from the loadout.
+# Full settable/hardcoded key reference: toolbench/harness_templates/claude-code.yaml
+name: claude-code/sonnet-5
+runtime:
+  name: claude_code
+  call_timeout_s: 3600  # per-MCP-call timeout (seconds)
+  disallowed_tools: [WebSearch, WebFetch, Monitor, ScheduleWakeup]  # --disallowedTools; withheld from this arm (Monitor/ScheduleWakeup: no async pause/resume in a single-shot trial)
+  sandbox: true              # confine the Bash tool (macOS Seatbelt) to the sandbox and deny-read the ground truth
+  # sandbox_deny: [${HEPTAPOD_HOME}]  # extra paths to deny-read (e.g. the tool source), on top of the benchmark tree
+  # Optional claude CLI flags — uncomment to set:
+  # effort: high                    # --effort: low|medium|high|xhigh|max
+  # fallback_model: claude-sonnet-5 # --fallback-model when the model is overloaded
+  # max_budget_usd: 5               # --max-budget-usd: per-session spend cap
+  # add_dir: [../shared]            # --add-dir: extra dirs the tools may access
+  env:
+    ENABLE_TOOL_SEARCH: "false" # eager-load MCP tools; no ToolSearch deferral
+    # any var here is set on the claude subprocess, e.g.:
+    # MAX_THINKING_TOKENS: "31999"          # extended-thinking token budget
+    # CLAUDE_CODE_MAX_OUTPUT_TOKENS: "8192" # per-response output-token cap
+# CLI runtimes drive their own model process, so provider is just {name, model};
+# per-request settings (e.g. output-token cap) live under runtime.env above.
+provider:
+  name: subscription  # in-process llm unused; the claude CLI owns the model call
+  model: claude-sonnet-5  # --model default; --models CLI arg overrides
+core:
+  builtin: true  # Claude Code ships its own core tools; MCP toolkit from loadout
+loop:
+  max_iterations: 150
+  max_format_retries: 2
+  continue_nudges: 0
+  max_rate_limit_retries: 3
+  # post-completion agent UX critique of the served tools, written to
+  # ux_feedback.md + trial.json. false | true | graded. `graded` first shows the
+  # agent its score + per-stage pass/fail (no evidence, so no answer leak) so it
+  # can audit its run before critiquing. --ux-feedback/--no-ux-feedback toggles
+  # the turn (cannot switch graded on).
+  ux_feedback: graded
+  audit_html: false # also emit an HTML twin of each trial's text audit log
+
+# Optional post-hoc LLM-as-judge (advisory second opinion; the deterministic rule
+# grade ALWAYS stays the headline score, so the run stays reproducible). Uncomment
+# to attach an Opus judge to every trial (`rule+llm`). It is routed through a
+# SUBSCRIPTION CLI, never an API harness (orchestral/*), so it stays off API
+# billing per the subscription-only rule. The judge reads each stage's answer
+# artifact against soln/truth.json: it is most meaningful on `width_correct`
+# (formula/probe equivalence, e.g. catching a Higgs-normalized or partial-vs-total
+# width) and advisory-only on the numeric band stages, where the rule root-finder
+# is authoritative. `artifact_chars` is raised so the whole reference
+# (soln/truth.json ~15 KB, incl. the per-mass band data at byte ~10 KB) fits the
+# judge's read window rather than a head slice. Cheating detection is separate and
+# always on (the transcript oracle auditor). The same block also parameterizes
+# `toolbench regrade --run-id <run> --judge rule+llm` on a finished run.
+# judge:
+#   kind: rule+llm
+#   harness: claude-code/default   # judge route: subscription CLI, not an API harness
+#   model: claude-sonnet-5
+#   artifact_chars: 20000
+#   max_tokens: 1024
+# claude-code — drives the trial via the Claude Code CLI (`claude -p`) under the
+# user's subscription. MCP toolkit comes from the loadout.
+# Full settable/hardcoded key reference: toolbench/harness_templates/claude-code.yaml
+name: claude-code/sonnet-5
+runtime:
+  name: claude_code
+  call_timeout_s: 3600  # per-MCP-call timeout (seconds)
+  disallowed_tools: [WebSearch, WebFetch, Monitor, ScheduleWakeup]  # --disallowedTools; withheld from this arm (Monitor/ScheduleWakeup: no async pause/resume in a single-shot trial)
+  sandbox: true              # confine the Bash tool (macOS Seatbelt) to the sandbox and deny-read the ground truth
+  # sandbox_deny: [${HEPTAPOD_HOME}]  # extra paths to deny-read (e.g. the tool source), on top of the benchmark tree
+  # Optional claude CLI flags — uncomment to set:
+  # effort: high                    # --effort: low|medium|high|xhigh|max
+  # fallback_model: claude-sonnet-5 # --fallback-model when the model is overloaded
+  # max_budget_usd: 5               # --max-budget-usd: per-session spend cap
+  # add_dir: [../shared]            # --add-dir: extra dirs the tools may access
+  env:
+    ENABLE_TOOL_SEARCH: "false" # eager-load MCP tools; no ToolSearch deferral
+    # any var here is set on the claude subprocess, e.g.:
+    # MAX_THINKING_TOKENS: "31999"          # extended-thinking token budget
+    # CLAUDE_CODE_MAX_OUTPUT_TOKENS: "8192" # per-response output-token cap
+# CLI runtimes drive their own model process, so provider is just {name, model};
+# per-request settings (e.g. output-token cap) live under runtime.env above.
+provider:
+  name: subscription  # in-process llm unused; the claude CLI owns the model call
+  model: claude-sonnet-5  # --model default; --models CLI arg overrides
+core:
+  builtin: true  # Claude Code ships its own core tools; MCP toolkit from loadout
+loop:
+  max_iterations: 150
+  max_format_retries: 2
+  continue_nudges: 0
+  max_rate_limit_retries: 3
+  # post-completion agent UX critique of the served tools, written to
+  # ux_feedback.md + trial.json. false | true | graded. `graded` first shows the
+  # agent its score + per-stage pass/fail (no evidence, so no answer leak) so it
+  # can audit its run before critiquing. --ux-feedback/--no-ux-feedback toggles
+  # the turn (cannot switch graded on).
+  ux_feedback: graded
+  audit_html: false # also emit an HTML twin of each trial's text audit log
+
+# Optional post-hoc LLM-as-judge (advisory second opinion; the deterministic rule
+# grade ALWAYS stays the headline score, so the run stays reproducible). Uncomment
+# to attach an Opus judge to every trial (`rule+llm`). It is routed through a
+# SUBSCRIPTION CLI, never an API harness (orchestral/*), so it stays off API
+# billing per the subscription-only rule. The judge reads each stage's answer
+# artifact against soln/truth.json: it is most meaningful on `width_correct`
+# (formula/probe equivalence, e.g. catching a Higgs-normalized or partial-vs-total
+# width) and advisory-only on the numeric band stages, where the rule root-finder
+# is authoritative. `artifact_chars` is raised so the whole reference
+# (soln/truth.json ~15 KB, incl. the per-mass band data at byte ~10 KB) fits the
+# judge's read window rather than a head slice. Cheating detection is separate and
+# always on (the transcript oracle auditor). The same block also parameterizes
+# `toolbench regrade --run-id <run> --judge rule+llm` on a finished run.
+# judge:
+#   kind: rule+llm
+#   harness: claude-code/default   # judge route: subscription CLI, not an API harness
+#   model: claude-sonnet-5
+#   artifact_chars: 20000
+#   max_tokens: 1024

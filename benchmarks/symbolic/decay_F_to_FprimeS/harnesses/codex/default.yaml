@@ -1,0 +1,61 @@
+# codex — drives the trial with the OpenAI Codex CLI (`codex exec --json`) under
+# the user's logged-in ChatGPT subscription. The MCP toolkit comes from the
+# loadout; the model is selected explicitly by Toolbench via `--models`.
+name: codex/default
+runtime:
+  # Shells out to `codex exec --json`; resumable via `codex exec resume <id>`
+  # across the runner's format-crash / nudge loop.
+  name: codex
+  # Per-MCP-tool-call timeout (s) for `toolbase serve --call-timeout` (see above).
+  call_timeout_s: 3600
+  # Codex's own shell-command sandbox (workspace-write|read-only|
+  # danger-full-access). MCP tools run unsandboxed in the toolbase server, so
+  # heavy MadGraph/Pythia/Delphes are unaffected regardless.
+  #
+  # ANTI-ORACLE — ALREADY CLOSED HERE, by two codex-native mechanisms. Do NOT
+  # paste the claude-code harness's `sandbox: true` / `disallowed_tools:` block
+  # into this file: `disallowed_tools` is not read on the codex path at all, and
+  # `sandbox` here is a MODE STRING, so `true` would reach codex as the literal
+  # mode `True`. Both would be theatre over protection that already holds.
+  #
+  # The answer key. The runner passes `protected_paths` -- the whole benchmark
+  # directory, the toolbase tree, and the git object stores, which hold a second
+  # copy the working tree alone would miss -- and the runtime turns them into a
+  # codex permissions profile:
+  #   default_permissions="toolbench_benchmark"
+  #   permissions.toolbench_benchmark.extends=":workspace"
+  #   permissions.toolbench_benchmark.filesystem={"<path>"="deny", ...}
+  # so ground_truth/, derivation.py and checks.py are unreadable. Automatic,
+  # with no harness key anyone can forget.
+  #
+  # The published formula. `workspace-write` carries NO network, which covers
+  # the web-search route the orchestral harnesses drop WebSearchTool for.
+  # Verified against codex-cli 0.152.1: `curl https://example.com` inside a
+  # trial returns 000 with exit 6, host unresolvable. Changing this to
+  # `danger-full-access` would re-open BOTH -- the runtime then grants
+  # `network.enabled=true` and root write -- so it must not be used for a
+  # graded run.
+  sandbox: workspace-write
+  # Explicit benchmark condition; never inherit the user Codex config.
+  reasoning_effort: medium
+provider:
+  # Credential-free placeholder: the in-process llm is never called (the codex
+  # CLI owns the model call). The model is supplied by `--models`; personal Codex config is ignored.
+  name: subscription
+core:
+  # Codex ships its own shell/file tools; the MCP toolkit comes from the loadout.
+  builtin: true
+loop:
+  # Two UNSCORED turns per trial: a blind usability rating, then
+  # the grade is revealed and an informed critique collected. Matches
+  # the claude-code harness so per-trial tokens stay comparable.
+  ux_feedback: graded
+  # Raised from 2: gpt-oss-class models emit malformed tool-call JSON
+  # often enough that 2 resumes were exhausted on 3 of 14 sweep
+  # benchmarks, losing the whole trial. The crash is nondeterministic
+  # and a resume costs ~$0.005 against a trial that otherwise scores 0.
+  # Kept uniform across the family: an arm with fewer retries would
+  # show a lower reach for loop-policy reasons, not capability ones.
+  max_format_retries: 5
+  continue_nudges: 0
+  max_rate_limit_retries: 3

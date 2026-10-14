@@ -1,0 +1,17 @@
+# benchmarks/symbolic/decay_S_to_SpV/variants/guided/variant.yaml is a part of HEPBench.
+# Copyright (C) 2026 HEPBench authors (see AUTHORS for details).
+# HEPBench is licensed under the GNU GPL v3 or later, see LICENSE for details.
+
+name: guided
+description: |
+  Generic presentation: the interaction Lagrangian is stated explicitly
+  with symbolic field content (no SM particle names), pinning conventions
+  per CONVENTIONS.md so the task measures symbolic computation rather than
+  particle-data recall.
+
+axes:
+  spec: full
+  env: bare
+
+user_prompt_file: ./prompts/user.md
+system_prompt_file: ./prompts/system.md

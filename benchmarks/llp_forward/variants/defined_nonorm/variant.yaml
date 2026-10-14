@@ -1,0 +1,44 @@
+name: defined_nonorm
+description: |
+  The NORMALIZATION ABLATION, tools arm. Task-identical to `defined` -- same
+  user prompt, same widths supplied, same system prompt -- and the sandbox
+  ships the same data products (kappa.csv, spectra, both Pythia cards,
+  geometry, answer schema). One thing is withheld: the PROCEDURE for turning
+  generated events into a yield.
+
+  Removed from `reference.tex` and from the Pythia-card comments:
+    - "the harvested parent flux is weighted per inelastic collision using
+      sigma_inel, and the final yield is scaled to N_int primary interactions"
+    - "run as SEPARATE samples ... normalized by its OWN generated cross
+      section ... and the two are then combined"
+    - the forward harvest acceptance theta_max = 0.05 rad and its rationale
+    - "made stable and harvested at their PRODUCTION momenta"
+  Every pinned VALUE survives (sigma_inel = 80 mb, N_int = 2.7e18, N* = 3,
+  sqrt(s) = 13.6 TeV, the 12-point mass grid, the probe points, the parent
+  endpoints), so the task stays well-posed and the rubric grades unchanged.
+  The Pythia cards' functional settings are byte-identical to `derived`'s --
+  only the explanatory comments were stripped.
+
+  WHY: this is precisely the contract HarvestForwardFlux encapsulates. In the
+  2026-07 campaign the measured tools advantage was "encapsulated acceptance/
+  normalization conventions the bare agent misses by ~0.3 dex" -- then those
+  conventions were written out in the shared reference, and the tools-vs-core
+  delta collapsed (+0.031 for gpt-5.5, +0.064 for opus, 2026-08). Withholding
+  the procedure while keeping the numbers restores the axis the toolkit
+  actually sells, without making the task ill-defined.
+
+  Pair with `tools_defined`; the core arm is `recipes_nonorm`.
+
+axes:
+  spec: defined      # decay widths supplied (same as `defined`)
+  env: scaffolded    # model card + spectra + Pythia cards + geometry given
+  norm: withheld     # flux-normalization / harvest procedure NOT given
+
+# Shares `defined`'s user prompt verbatim: the ablation lives entirely in the
+# sandbox, so the ask the agent reads is identical to the `defined` cell and
+# the defined -> defined_nonorm delta is attributable to the convention alone.
+user_prompt_file: ../defined/prompts/user.md
+system_prompt_file: ../derived/prompts/system.md
+
+sandbox:
+  template_dir: ./sandbox/template

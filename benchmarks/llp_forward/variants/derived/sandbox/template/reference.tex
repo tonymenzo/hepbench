@@ -1,0 +1,145 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,booktabs}
+\begin{document}
+
+\begin{center}
+{\large\bfseries Study reference: forward-LLP setup and provided data}
+\end{center}
+
+\author{Tony Menzo}
+
+\noindent
+This reference collects the fixed inputs for the forward sensitivity study
+defined in the task. The physics model is stated in the task prompt, and the
+decays are to be derived from it. Everything here is the part of the setup that
+is \emph{not} derived: the toy experimental configuration and the provided
+production data. All values are synthetic and are to be used exactly as given.
+
+\section*{Experimental configuration}
+
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Quantity & Value & Role \\
+\midrule
+Beam & $pp$, $\sqrt{s} = 13.6$~TeV & set in \texttt{pythia\_cards/} \\
+$\sigma_{\mathrm{inel}}$ & $80.0$~mb & flux weight per inelastic collision \\
+$N_{\mathrm{int}}$ & $2.7\times10^{18}$ & number of primary interactions \\
+Sensitivity rule & $N_{\mathrm{sig}} = 3$, zero background & defines the reach \\
+Geometry & \texttt{geometry/geometry.yaml} & decay volume, detector plane, acceptance \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent
+The normalization is the pair $(\sigma_{\mathrm{inel}}, N_{\mathrm{int}})$: the
+harvested parent flux is weighted per inelastic collision using
+$\sigma_{\mathrm{inel}}$, and the final yield is scaled to $N_{\mathrm{int}}$
+primary interactions. Two searches are defined, a two-track dimuon search and a
+collinear diphoton search, with acceptances specified in the geometry file. Each
+mass is evaluated under the search whose decay channel is open there.
+
+\section*{Forward flux generation}
+
+The forward parent flux is generated with two Pythia cards in
+\texttt{pythia\_cards/}, run as \emph{separate} samples because their process
+types cannot be combined in a single run:
+\begin{itemize}
+\item \texttt{forward\_flux.cmnd} --- soft inelastic QCD, which produces the
+  light mesons and open charm ($K$, $D$, $D_s$, $\rho$, $\omega$, $\phi(1020)$).
+  Its generated cross section is the inelastic cross section
+  $\sigma_{\mathrm{inel}}$.
+\item \texttt{forward\_onia.cmnd} --- prompt charmonium ($J/\psi$, $\psi(2S)$)
+  through NRQCD, a hard process that must be generated on its own and normalized
+  by its own generated cross section.
+\end{itemize}
+In both samples the listed parents are made stable and harvested at their
+production momenta, within a forward angular acceptance $\theta < \theta_{\max}$
+about the beam axis with
+\[
+\theta_{\max} = 0.05~\mathrm{rad}.
+\]
+This is the acceptance with which the forward flux is defined; it is wider than
+the downstream detector solid angle, which the geometry file applies exactly, so
+the reported yields do not depend on the precise value above the detector
+opening. Each sample is weighted to a per-inelastic-collision flux using its own
+generated cross section, and the two are then combined.
+
+\section*{Provided production}
+
+Production of $\phi$ is provided as a data product; the production matrix
+elements are not to be re-derived. For each open channel, per parent meson:
+\begin{itemize}
+\item \texttt{production/kappa.csv} --- the $g^2$-stripped branching
+  $\kappa = \mathrm{Br}(\text{parent}\to\cdots\,\phi)$ at $g=1$, per
+  $(\text{parent}, m_\phi)$. A parent contributes $\phi$ with per-collision
+  weight $w_{\text{parent}}\,\kappa\,g^2$, where $w_{\text{parent}}$ is its
+  weight in the forward flux.
+\item \texttt{spectra/spectrum\_$\langle$parent$\rangle$\_m$\langle m_\phi\rangle$.csv}
+  --- the $\phi$ energy spectrum in the parent rest frame, tabulated as
+  $(x, \mathrm{pdf})$ with $x = 2E_\phi^\star/m_{\text{parent}}$ (shape only).
+  To place one $\phi$: draw $x$ from this distribution, take the $\phi$
+  direction isotropic in the parent rest frame, and boost to the lab with the
+  parent momentum.
+\end{itemize}
+
+\section*{Production channels and accessible mass range}
+
+The scalar is radiated from a parent meson only below the endpoint of the
+$(\phi + X)$ phase space, where $X$ collects the other final-state particles,
+\[
+m_\phi \;<\; m_{\text{parent}} - \sum_{i\,\in\,X} m_i .
+\]
+For the two production topologies, with the neutrino taken massless, this is
+\[
+M \to \mu\,\nu\,\phi:\quad m_\phi < m_M - m_\mu ,
+\qquad
+V \to \mu^+\mu^-\phi:\quad m_\phi < m_V - 2 m_\mu .
+\]
+The resulting per-parent endpoints are:
+
+\begin{center}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Parent & Topology & $m_{\text{parent}}$ [GeV] & $m_\phi$ endpoint [GeV] \\
+\midrule
+$K$          & $M\to\mu\nu\phi$ & $0.494$ & $0.388$ \\
+$D$          & $M\to\mu\nu\phi$ & $1.870$ & $1.764$ \\
+$D_s$        & $M\to\mu\nu\phi$ & $1.968$ & $1.863$ \\
+$\rho$       & $V\to\mu\mu\phi$ & $0.775$ & $0.564$ \\
+$\omega$     & $V\to\mu\mu\phi$ & $0.783$ & $0.571$ \\
+$\phi(1020)$ & $V\to\mu\mu\phi$ & $1.019$ & $0.808$ \\
+$J/\psi$     & $V\to\mu\mu\phi$ & $3.097$ & $2.886$ \\
+$\psi(2S)$   & $V\to\mu\mu\phi$ & $3.686$ & $3.475$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent
+The accessible range extends up to the heaviest parent's endpoint. The study is
+evaluated on the pinned mass grid [GeV]
+\[
+0.06,\ 0.12,\ 0.18,\ 0.205,\ 0.23,\ 0.28,\ 0.34,\ 0.42,\ 0.70,\ 1.20,\ 1.90,\ 2.30,
+\]
+and the rows present in \texttt{kappa.csv} are exactly the channels open at each
+mass.
+
+\section*{Probe points}
+
+Report the following scalar probes:
+
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Field & Probe point & Quantity \\
+\midrule
+\texttt{width\_probe\_gev} & $m_\phi=0.30,\ g=4.2\times10^{-4}$ & $\Gamma(\phi\to\mu\mu)$ [GeV] \\
+\texttt{width\_gg\_probe\_gev} & $m_\phi=0.12,\ g=1.0\times10^{-3}$ & $\Gamma(\phi\to\gamma\gamma)$ [GeV] \\
+\texttt{ctau\_probe\_m[0]} & $m_\phi=0.30,\ g=3.7\times10^{-6}$ & $c\tau$ [m] (total width) \\
+\texttt{ctau\_probe\_m[1]} & $m_\phi=0.30,\ g=1.11\times10^{-5}$ & $c\tau$ [m] (total width) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\end{document}

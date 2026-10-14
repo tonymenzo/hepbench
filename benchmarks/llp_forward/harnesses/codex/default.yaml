@@ -1,0 +1,51 @@
+# Codex subscription twin of claude-code/default. Runtime-neutral loop and
+# audit settings are kept aligned; Claude-only flags are intentionally omitted.
+name: codex/default
+runtime:
+  name: codex
+  call_timeout_s: 3600
+  sandbox: workspace-write
+  reasoning_effort: medium
+  # Put the agent in the SAME interpreter the claude-code harness gets.
+  #
+  # Codex runs model shell commands through `/bin/zsh -lc` -- a LOGIN shell, so
+  # ~/.zshrc re-runs `conda init`, which auto-activates BASE and clobbers the
+  # hepbench PATH toolbench passes down (env = dict(os.environ)). The agent then
+  # lands in miniconda3/bin/python 3.13 (no pythia8) instead of
+  # envs/hepbench/bin/python 3.12 (pythia8 present). claude-code's Bash tool does
+  # NOT use a login shell, so it was unaffected -- an asymmetry that handicapped
+  # only the codex core_only arm, which must import pythia8 directly (the tools
+  # arm reaches Pythia over MCP from toolbase's own venv and never noticed).
+  #
+  # Disabling base auto-activation leaves the inherited PATH intact. Verified:
+  # python -> envs/hepbench/bin/python 3.12.12 and `import pythia8` succeeds.
+  # Setting PATH/CONDA_PREFIX here does NOT work -- conda init overrides them --
+  # and `shell_environment_policy.inherit=all` cannot be injected from a harness.
+  env:
+    CONDA_AUTO_ACTIVATE_BASE: "false"
+provider:
+  name: subscription
+  model: gpt-5.5
+core:
+  builtin: true
+loop:
+  max_iterations: 150
+  max_format_retries: 2
+  continue_nudges: 0
+  max_rate_limit_retries: 3
+  ux_feedback: graded
+  audit_html: false
+
+# Optional post-hoc LLM-as-judge (advisory; the deterministic rule grade stays the
+# headline score). Uncomment to attach a second opinion on every trial (`rule+llm`).
+# Routing a codex run's judge through claude-code/default gives a CROSS-PROVIDER
+# check (Opus judges the GPT run) and stays on subscription, not API billing. Most
+# meaningful on `width_correct`; advisory on the numeric band stages. `artifact_chars`
+# is raised so the whole soln/truth.json reference fits the judge's read window.
+# The same block parameterizes `toolbench regrade --run-id <run> --judge rule+llm`.
+# judge:
+#   kind: rule+llm
+#   harness: claude-code/default   # subscription CLI judge route (cross-provider), not API
+#   model: claude-opus-4-8
+#   artifact_chars: 20000
+#   max_tokens: 1024

@@ -1,0 +1,22 @@
+# symbolic-eda — the exact-symbolic arm of benchmarks/symbolic.
+#
+# Serves two tools and nothing else. Each takes a diagram (particle labels,
+# spins, masses, vertex type and coupling) and optional values, generates the
+# FeynCalc, runs it, and returns the closed form together with its number in
+# one call. The ablation is `unguided x core_only` against `unguided x
+# tools_eda`, so the arm adds only the capability under test.
+#
+# No `bundles:` key: toolbase takes the union of `bundles` and `tools.enabled`,
+# so listing the eda bundle would serve all of it. Excluded on purpose:
+# LookupTheory, a knowledge base that carries the method for these tasks, and
+# RunWolframScript, which lets an agent hand-write FeynCalc and so cannot be
+# separated from the generator by the reach delta.
+#
+# Oracle policy, as for every benchmark loadout: no literature, particle-data,
+# or web bundles. The tasks are graded against a committed reference.
+toolkits:
+  heptapod:
+    tools:
+      enabled: [ComputeDecayRate, ComputeCrossSection]
+versions:
+  heptapod: 3.0.0

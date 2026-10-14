@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Virtual envs and caches
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Run output (toolbench writes runs/ under the cwd)
+runs/
+
+# Environment files and local runtime state
+.env
+.orchestral/
+
+# Toolkit tarballs
+/heptapod-*.tar.gz
+
+# Per-trial campaign evidence: distributed as release assets, extracted here
+campaigns/*/trials/*/*/trials/
+
+# benchmarks/llp_forward/soln: the solution is tracked, its construction trail is not
+benchmarks/llp_forward/soln/reference/*.ipynb
+benchmarks/llp_forward/soln/reference/figures/
+benchmarks/llp_forward/soln/reference/out/*_200k.json
+benchmarks/llp_forward/soln/reference/out/*_prefold.json
+benchmarks/llp_forward/soln/reference/out/*_k40untruncated.json
+benchmarks/llp_forward/soln/reference/out/fine_contour_a.json
+benchmarks/llp_forward/soln/reference/flux/
+benchmarks/llp_forward/soln/figs/*.png
+benchmarks/llp_forward/soln/leptonic_ground_truth.pdf
+benchmarks/llp_forward/soln/depr/
+
+# LaTeX build artifacts inside sandbox templates
+benchmarks/*/variants/*/sandbox/template/*.aux
+benchmarks/*/variants/*/sandbox/template/*.log
+
+# Machine-local toolbase overlay
+/.toolbase/loadouts/*.local.yaml

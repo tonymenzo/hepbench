@@ -1,0 +1,18 @@
+# benchmarks/symbolic/composite_toy_model/variants/guided/variant.yaml is a part of HEPBench.
+# Copyright (C) 2026 HEPBench authors (see AUTHORS for details).
+# HEPBench is licensed under the GNU GPL v3 or later, see LICENSE for details.
+
+name: guided
+description: |
+  Generic presentation of the composite task: one toy Lagrangian, nine
+  numeric deliverables (widths, BRs, lifetime, annihilation cross
+  section). The internal-consistency stage grades the agent's own
+  numbers against each other, separating bookkeeping discipline from
+  per-quantity accuracy.
+
+axes:
+  spec: full
+  env: bare
+
+user_prompt_file: ./prompts/user.md
+system_prompt_file: ./prompts/system.md

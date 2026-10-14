@@ -1,0 +1,11 @@
+# tools_defined without the system_prompt_addendum: the same tools and skill,
+# never advertised. Measures whether a model reaches for a toolkit it was not
+# told about.
+name: tools_defined_unprompted
+tools:
+  sources:
+    - toolbase: { loadout: forward-llp-defined }
+skills:
+  - name: pythia_forward_run_cards
+    file: ./skills/pythia_forward_run_cards.md
+    mode: on_demand

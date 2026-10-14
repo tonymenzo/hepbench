@@ -1,0 +1,16 @@
+# benchmarks/symbolic/decay_S_to_SS/variants/guided/variant.yaml is a part of HEPBench.
+# Copyright (C) 2026 HEPBench authors (see AUTHORS for details).
+# HEPBench is licensed under the GNU GPL v3 or later, see LICENSE for details.
+
+name: guided
+description: |
+  Generic presentation (no SM particle names). Part (a) probes the
+  identical-particle symmetry factor; part (b) the general Kallen
+  two-body phase space with a dimensionful trilinear coupling.
+
+axes:
+  spec: full
+  env: bare
+
+user_prompt_file: ./prompts/user.md
+system_prompt_file: ./prompts/system.md

@@ -1,0 +1,17 @@
+# benchmarks/symbolic/decay_F_to_FprimeS/variants/guided/variant.yaml is a part of HEPBench.
+# Copyright (C) 2026 HEPBench authors (see AUTHORS for details).
+# HEPBench is licensed under the GNU GPL v3 or later, see LICENSE for details.
+
+name: guided
+description: |
+  Generic presentation (no SM particle names). Part (b)'s chiral
+  interference term has the opposite sign to the scalar -> f1 f2bar
+  case (decay to a fermion, not an antifermion) — a conventions probe
+  that recall alone tends to get wrong.
+
+axes:
+  spec: full
+  env: bare
+
+user_prompt_file: ./prompts/user.md
+system_prompt_file: ./prompts/system.md

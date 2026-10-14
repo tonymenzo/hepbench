@@ -1,0 +1,16 @@
+# benchmarks/symbolic/xsec_SS_to_SS/variants/guided/variant.yaml is a part of HEPBench.
+# Copyright (C) 2026 HEPBench authors (see AUTHORS for details).
+# HEPBench is licensed under the GNU GPL v3 or later, see LICENSE for details.
+
+name: guided
+description: |
+  Generic presentation. Probes quartic-vertex combinatorics, the
+  identical-particle factor in total cross sections, the |p_f|/|p_i|
+  flux ratio, and GeV^-2 -> pb units conversion.
+
+axes:
+  spec: full
+  env: bare
+
+user_prompt_file: ./prompts/user.md
+system_prompt_file: ./prompts/system.md

@@ -1,0 +1,29 @@
+# Closed-book arm: no execution tools at all. The model must derive the
+# widths and do the arithmetic in-context (raw token generation); file
+# tools exist only so it can deposit results/answer.json. Run with
+#   --harness orchestral/litellm_closed --loadouts core_only
+name: orchestral/litellm_closed
+runtime:
+  name: orchestral
+  version: ">=1.3"
+provider:
+  name: litellm           # routes via the LiteLLM proxy
+  max_tokens: 16384
+  # A LiteLLM proxy may have response-level caching on, which would hand
+  # every trial of a cell the same completion -- k trials stop being
+  # independent samples and pass@k / pass^k collapse into reach. This
+  # appends a per-trial nonce to defeat it. Not needed on direct
+  # providers (their prompt/KV caches don't affect sampling).
+  cache_bust: true
+core:
+  tools: [WriteFileTool, ReadFileTool, TodoRead, TodoWrite]
+loop:
+  max_iterations: 20
+  # Raised from 2: gpt-oss-class models emit malformed tool-call JSON
+  # often enough that 2 resumes were exhausted on 3 of 14 sweep
+  # benchmarks, losing the whole trial. The crash is nondeterministic
+  # and a resume costs ~$0.005 against a trial that otherwise scores 0.
+  # Kept uniform across the family: an arm with fewer retries would
+  # show a lower reach for loop-policy reasons, not capability ones.
+  max_format_retries: 5
+  continue_nudges: 0

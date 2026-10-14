@@ -1,0 +1,89 @@
+================================================================
+                RUN  symbolic-decay_F_to_FprimeS                
+================================================================
+  run_id     2026-10-01T12-27-04_symbolic-decay_F_to_FprimeS_claude-haiku-4-5-20251001_run
+  task       symbolic-decay_F_to_FprimeSk          10   (n per cell)
+  trials     10                      cells      1
+  budget     $0.00 spent — SUBSCRIPTION (no metered API spend)   $8.19 API-equivalent (estimated)
+  start      2026-10-01T12:27:04
+  wall       55m33s
+  versions   toolbench 0.10.0  claude_code 2.1.286
+  provenance git unknown   harness claude-code/default
+  integrity  CLEAN (10 trials scanned)
+================================================================
+
+
+================================================================
+         CELL  claude-haiku-4-5-20251001  ×  core_only          
+================================================================
+
+  THREE-VECTOR              (k=10)
+  ------------
+
+      Each row is an expectation over k iid trials of a per-trial
+      score M_j ∈ [0,1]. bar_k = E[mean], at_k = E[max], ^k = E[min].
+      See the accompanying manuscript for definitions and estimators.
+
+      reach         0.29         productivity     (rubric-weighted)
+      reach (eq-w)  0.39         depth            (equal-weight, no rubric)
+      pass@k        0.00         exploration      (best of k)
+      pass^k        0.00         trustworthiness  (worst of k)
+
+      pass criterion: a trial passes iff all stages pass
+
+  STAGES
+  ------
+
+      answer_present           10/10       1.00
+      a_order_of_magnitude     9/10       0.90
+      a_within_10pct           5/10       0.50
+      a_within_1pct            5/10       0.50
+      a_formula                4/10       0.40
+      b_order_of_magnitude     6/10       0.60
+      b_within_10pct           3/10       0.30
+      b_within_1pct            0/10       0.00
+      b_formula                0/10       0.00
+
+  TRIALS
+  ------
+
+      scores     0.04  0.10  0.16  0.25  0.25  0.46  0.52  0.52  0.58  0.58   (min 0.04  max 0.58  spread 0.54)
+      UX rating  8  8  8  9  9  7        (blind, 1-10)
+
+  FAILURES
+  --------
+
+      INCOMPLETE_AT_A_WITHIN_10PCT          4
+      INCOMPLETE_AT_B_ORDER_OF_MAGNITUDE    2
+      INCOMPLETE_AT_B_WITHIN_10PCT          2
+      INCOMPLETE_AT_A_FORMULA               1
+      INCOMPLETE_AT_A_ORDER_OF_MAGNITUDE    1
+
+  COST
+  ----
+
+      cost      $0.00 charged (no metered spend)
+      wall      55m33s total      5m33s / trial
+      tokens    1,059,010 raw in  /  40,891 out          (per trial)
+                120 uncached  +  1,003,622 cache read  +  55,268 cache write
+                614,692 effective in          (uncached-equivalent)
+                79,884 opening request     (system prompt + tool schemas + task)
+                $0.8191 API-equivalent      $1.2635 without caching
+
+
+================================================================
+                           ARTIFACTS                            
+================================================================
+
+  manifest           <hepbench>/runs/campaigns/core_haiku/2026-10-01T12-27-04_symbolic-decay_F_to_FprimeS_claude-haiku-4-5-20251001_run/manifest.json
+  summary (json)     <hepbench>/runs/campaigns/core_haiku/2026-10-01T12-27-04_symbolic-decay_F_to_FprimeS_claude-haiku-4-5-20251001_run/summary.json
+  summary (txt)      <hepbench>/runs/campaigns/core_haiku/2026-10-01T12-27-04_symbolic-decay_F_to_FprimeS_claude-haiku-4-5-20251001_run/summary.txt
+  trials (jsonl)     <hepbench>/runs/campaigns/core_haiku/2026-10-01T12-27-04_symbolic-decay_F_to_FprimeS_claude-haiku-4-5-20251001_run/trials.jsonl
+  per-trial dirs     <hepbench>/runs/campaigns/core_haiku/2026-10-01T12-27-04_symbolic-decay_F_to_FprimeS_claude-haiku-4-5-20251001_run/trials/
+  per-trial audit    <hepbench>/runs/campaigns/core_haiku/2026-10-01T12-27-04_symbolic-decay_F_to_FprimeS_claude-haiku-4-5-20251001_run/trials/<id>/audit.txt  (+ audit.html)
+  three-vector plot  <hepbench>/runs/campaigns/core_haiku/2026-10-01T12-27-04_symbolic-decay_F_to_FprimeS_claude-haiku-4-5-20251001_run/parallel_coords.png
+  k-dependence plot  <hepbench>/runs/campaigns/core_haiku/2026-10-01T12-27-04_symbolic-decay_F_to_FprimeS_claude-haiku-4-5-20251001_run/k_sweep.png
+  per-stage k plot   <hepbench>/runs/campaigns/core_haiku/2026-10-01T12-27-04_symbolic-decay_F_to_FprimeS_claude-haiku-4-5-20251001_run/per_stage_k.png
+  overview plot      <hepbench>/runs/campaigns/core_haiku/2026-10-01T12-27-04_symbolic-decay_F_to_FprimeS_claude-haiku-4-5-20251001_run/overview.png
+
+================================================================

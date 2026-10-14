@@ -1,0 +1,247 @@
+# benchmarks/llp_forward/benchmark.yaml is a part of HEPBench.
+# Copyright (C) 2026 HEPBench authors (see AUTHORS for details).
+# HEPBench is licensed under the GNU GPL v3 or later, see LICENSE for details.
+
+name: llp_forward-reach
+version: "1.0.0"
+description: |
+  Muon-philic scalar LLP reach study (collider-forward, full spectrum).
+  From a pinned model card, the agent GENERATES the forward meson flux
+  with the provided Pythia cards, harvests it (per-collision normalized),
+  decays it to the scalar across every open channel -- pseudoscalar
+  M -> mu nu phi (pi/K/D/Ds) and vector V -> mu mu phi (rho/omega/phi/
+  J/psi/psi2S) -- derives the phi -> mu mu (tree) and phi -> gamma gamma
+  (one-loop) widths, propagates through a decay-in-flight / z_prod decay
+  volume, and reports N_sig at a declared set of (search, m_phi, g)
+  points spanning the gamma gamma lobe, the dimuon wedge, and the charm/
+  J-psi high-mass frontier. All pins are declared toy values.
+
+  GRADING is by CALIBRATED DISTANCE: a symbolic/value width check, then a
+  median |log10(agent/reference)| in dex on the yields and separately on each
+  reach-contour edge, standardised by the reference's own measured
+  Monte-Carlo precision rather than by a chosen tolerance. See
+  benchmarks/llp_forward/soln/notes/accuracy_metric.tex.
+
+  THE SUPERSEDED TOLERANCE LADDER (peak_yield + band_coarse/mid/fine) now
+  lives in benchmarks/llp_forward_legacy, which inherits everything else from
+  here. It is retained so the 2026-07 campaign and the 2026-08-09 pilot stay
+  reproducible; it must not grade new work. Running THIS benchmark is what
+  gets you the live rubric -- which is the point of the move, since the
+  arrangement was previously inverted and grading the parent silently gave
+  the old ladder.
+
+# Canonical cells: recipes+core_only (bare agent, told how to invoke the
+# software) vs derived+tools_derived (the heptapod pipeline tools). The system
+# prompt is loadout-appropriate per variant -- recipes carries the
+# how-to-invoke-Pythia block, derived is tool-oriented -- so the core_only
+# arm is not disadvantaged by tacit invocation knowledge.
+default_harness: claude-code/default
+default_loadout: tools_defined
+default_variant: defined
+
+# Family-level invariants (constant across variants): rubric, ground
+# truth, checks -- what keeps cross-variant reach deltas comparable.
+ground_truth:
+  dir: ./soln
+
+checks: ./checks/checks.py
+
+# What sandbox cleanup preserves for `toolbench regrade`. The yield-table
+# grading is content-based over answer.json; the loose flux-presence gate
+# accepts common Pythia/flux outputs, so keep those text/data types.
+# .jsonl event streams are truncated (grading never reads them).
+artifacts:
+  keep_full: [".json", ".csv", ".npz", ".npy", ".py", ".pdf", ".png",
+              ".yaml", ".md", ".tex", ".txt", ".cmnd", ".log"]
+  # The flux / LLP-record .jsonl files ARE the analysis inputs: reproducing a
+  # yield (or auditing a normalization) needs the events DecayInVolume actually
+  # scanned. 200 records truncated them to uselessness; 20000 preserves enough
+  # to reconstruct a yield sum to ~1% while bounding disk (~3 MB/file). Grading
+  # itself only reads results/*.{json,csv} (kept full), so this is for ANALYSIS.
+  truncate:
+    - { ext: ".jsonl", max_records: 20000 }
+  keep_root: ["todos.md", "report.tex"]
+
+# Stagewise rubric (prefix-product; weights sum to 1.0). Structural +
+# Pythia-presence gates, then a symbolic/value width check, then a
+# log-space coarse->fine tolerance ladder on the declared N_sig points.
+# Every correctness check reads results/answer.json; the only disk-
+# touching check is the loose Pythia-output glob (loadout-robust).
+rubric:
+  type: stagewise
+  pass_threshold: 0.9
+  stages:
+    # ---- completion gates: plumbing, scored 0, they only gate ----
+    - id: answer_present
+      description: results/answer.json holds the probes AND results/scan.csv holds the scans.
+      weight: 0.0
+      gating: true
+      checks:
+        - json_with_keys:
+            file: results/answer.json
+            required_keys: [width_formula_mumu, width_probe_gev,
+                            width_gg_probe_gev, ctau_probe_m]
+        - llp_scan_present:
+            scan_file: results/scan.csv
+
+    - id: pythia_ran
+      description: >
+        A forward-flux artifact exists. NON-GATING here: it is satisfied for
+        free in every scaffolded variant by the .cmnd cards we ship, so as a
+        gate it only ever fired on file-NAMING in the bare variant, where no
+        cards are supplied. It reports, it does not zero a trial.
+      weight: 0.0
+      gating: false
+      checks:
+        - glob_present:
+            patterns: ["*.cmnd", "*events*", "*flux*", "*.hepmc*", "*.lhe*",
+                       "*parent*", "*pythia*", "*.npz"]
+            min_matches: 1
+
+    # ---- theory rung (unchanged from the parent) ----
+    - id: width_correct
+      description: derived widths and lifetime, formula + probe values.
+      weight: 0.10
+      # NON-GATING. A stage is gating by default unless `continuous`, so this
+      # one silently absorbed everything after it: a trial that got the widths
+      # wrong scored zero on the yield scan and both contour edges no matter
+      # how good they were. That is not what the weights say -- the widths are
+      # 0.10 of the rubric, not a precondition for the other 0.85.
+      #
+      # It bit hard on 2026-08-10: a Sonnet trial wrote a CORRECT formula with
+      # an equation label ("Gamma(phi->mu+mu-) = ..."), which the character
+      # check rejected on the `->`, and its 0.977 yield_distance, 0.984 lower
+      # edge and 0.890 upper edge were all zeroed. Reported 0.0; 0.87 without
+      # the absorption. The parser now strips such a label, but the absorption
+      # was the larger error and is what is fixed here.
+      #
+      # `answer_present` remains gating, correctly: with no answer.json or
+      # scan.csv there is genuinely nothing downstream to score.
+      gating: false
+      checks:
+        - llp_formula:
+            file: results/answer.json
+            field: width_formula_mumu
+            reference: soln/truth.json
+            symbols: {g: [1.0e-7, 1.0e-3], m_phi: [0.24, 1.8],
+                      m_mu: [0.09, 0.115]}
+            constraints: ["m_phi - 2*m_mu"]
+            n_points: 10
+            rel_tol: 1.0e-6
+        - llp_value:
+            file: results/answer.json
+            field: width_probe_gev
+            reference: soln/truth.json
+            rel_tol: 0.01
+        - llp_value:
+            file: results/answer.json
+            field: width_gg_probe_gev
+            reference: soln/truth.json
+            rel_tol: 0.05
+        - llp_ctau_pair:
+            file: results/answer.json
+            field: ctau_probe_m
+            reference: soln/truth.json
+            rel_tol: 0.05
+            ratio_tol: 0.01
+
+    # ---- coverage: reported as credit, never as accuracy ----
+    - id: channels_present
+      continuous: true
+      description: fraction of reference-reached (search, mass) points carrying any yield.
+      weight: 0.10
+      checks:
+        - llp_channel_coverage:
+            scan_file: results/scan.csv
+            reference: soln/truth.json
+            min_fraction: 1.0
+            max_mass: 0.70
+
+    # ---- ACCURACY: calibrated distances ----
+    - id: yield_distance
+      continuous: true
+      description: >
+        Yield accuracy at the reference's OWN declared (search, m_phi, g)
+        points, the agent's scan interpolated in log-log onto those couplings.
+        48 graded points, no grid dependence. NOT compared against
+        `_per_mass.peak`: that is the max of the reference's internal 400-point
+        scan at a coupling the declared set never samples, and comparing it to
+        the max of an agent's own grid measured the mismatch rather than the
+        physics (~0.48 dex for cells whose band edges agree to 0.005-0.03 dex).
+        The PRIMARY accuracy stage.
+      weight: 0.40
+      checks:
+        - llp_yield_distance:
+            scan_file: results/scan.csv
+            reference: soln/truth.json
+            # MEASURED 2026-08-07 from two independent same-size reference
+            # builds (soln/reference/, seeds 1000/2000, 200k events each,
+            # same pipeline): pair difference / sqrt(2). This supersedes both
+            # earlier values -- 0.0075 (cross-pipeline, invalid) and 0.09
+            # (calibrated off agent noise, which rewards sloppiness).
+            #
+            # TODO per-point sigma. The measured precision is strongly
+            # mass-dependent -- 0.0017 dex in the gamma-gamma lobe rising to
+            # 0.111 dex at m=2.3, where only J/psi and psi(2S) supply the phi.
+            # A single scalar over-penalises the low-mass points and
+            # under-penalises the high-mass ones. The mean is used here as an
+            # interim; see soln/reference/reference.ipynb section 3.
+            sigma: 0.00188
+            z_crit: 3.0
+
+    - id: contour_lower
+      continuous: true
+      weight: 0.15
+      description: >
+        Reach-contour accuracy at the WEAK-coupling boundary, which is
+        production-limited: below it too few LLPs are made, and those that are
+        live long enough to fly through the volume undecayed. Graded separately
+        from the upper edge -- they are different physics and respond
+        differently to method. On the 2026-08 campaign a single trial sat at
+        0.0028 dex here and 0.066 at the other edge, a factor 19; pooling them
+        turned a bimodal distribution into a misleading unimodal one.
+      checks:
+        - llp_contour_distance:
+            scan_file: results/scan.csv
+            reference: soln/truth.json
+            edge: lower
+            sigma: 0.002
+            z_crit: 3.0
+
+    - id: contour_upper
+      continuous: true
+      weight: 0.15
+      description: >
+        Reach-contour accuracy at the STRONG-coupling boundary, which is
+        lifetime-limited: above it c*tau ~ 1/g^2 is short enough that the LLP
+        decays before reaching the volume. This edge is set by parents decaying
+        just upstream of the absorber -- a thin sliver of the parent
+        decay-length distribution -- so it is the sample-starved observable and
+        needs the finest decay-length sampling. Weighted below the lower edge
+        for that reason.
+      checks:
+        - llp_contour_distance:
+            scan_file: results/scan.csv
+            reference: soln/truth.json
+            edge: upper
+            sigma: 0.002
+            z_crit: 3.0
+
+    - id: no_spurious_reach
+      continuous: true
+      description: no invented exclusion where the reference has none.
+      weight: 0.05
+      checks:
+        - llp_no_spurious_reach:
+            scan_file: results/scan.csv
+            reference: soln/truth.json
+            min_fraction: 1.0
+
+    - id: reach_plot
+      continuous: true
+      gating: false
+      description: the requested figure exists and carries filled regions.
+      weight: 0.05
+      checks:
+        - llp_reach_plot:
+            file: results/reach.pdf

@@ -1,0 +1,138 @@
+{
+  "flux": {
+    "a": {
+      "bytes": 344789592,
+      "created_utc": "2026-08-09T00:09:15Z",
+      "file": "parent_flux_a.npz",
+      "generator": "soln/code/generate_parent_flux.py",
+      "git_sha": "b72ccf6fa213a16785ae1978f0c16aa1b3d340f4",
+      "n_hard": 0,
+      "n_soft": 2000000,
+      "pt_cut": 1.0,
+      "seed": 1000,
+      "sha256": "7a14109a2c8c91a9f17883574772911f3aab70c874513d5c60b343f6e9e02a04",
+      "theta_max": 0.05,
+      "wall_s": 1692.6
+    },
+    "b": {
+      "bytes": 344856312,
+      "created_utc": "2026-08-09T00:09:24Z",
+      "file": "parent_flux_b.npz",
+      "generator": "soln/code/generate_parent_flux.py",
+      "git_sha": "b72ccf6fa213a16785ae1978f0c16aa1b3d340f4",
+      "n_hard": 0,
+      "n_soft": 2000000,
+      "pt_cut": 1.0,
+      "seed": 2000,
+      "sha256": "b6a77a6e171406e61652292f2b6ef893fd5fab3cac7e1950b23c5e6643e6087c",
+      "theta_max": 0.05,
+      "wall_s": 1702.1
+    }
+  },
+  "sigma": {
+    "band_hi": {
+      "max": 0.0143,
+      "mean": 0.00531,
+      "n": 5
+    },
+    "band_lo": {
+      "max": 0.00064,
+      "mean": 0.00035,
+      "n": 5
+    },
+    "note": "pair difference of two independent same-size builds is sqrt(2)*sigma; no sample-size deconvolution needed",
+    "peak": {
+      "max": 0.00821,
+      "mean": 0.00266,
+      "n": 12
+    },
+    "points": [
+      {
+        "g_hi_dex": 0.0143,
+        "g_lo_dex": 0.00012,
+        "peak_dex": 0.0008,
+        "point": "gg@0.06"
+      },
+      {
+        "g_hi_dex": 0.00637,
+        "g_lo_dex": 9e-05,
+        "peak_dex": 0.00086,
+        "point": "gg@0.12"
+      },
+      {
+        "g_hi_dex": 0.00277,
+        "g_lo_dex": 0.00064,
+        "peak_dex": 0.00095,
+        "point": "gg@0.18"
+      },
+      {
+        "g_hi_dex": 0.00176,
+        "g_lo_dex": 0.00062,
+        "peak_dex": 0.00099,
+        "point": "gg@0.205"
+      },
+      {
+        "g_hi_dex": 0.00134,
+        "g_lo_dex": 0.00028,
+        "peak_dex": 0.00123,
+        "point": "mumu@0.23"
+      },
+      {
+        "peak_dex": 0.00231,
+        "point": "mumu@0.28"
+      },
+      {
+        "peak_dex": 0.0061,
+        "point": "mumu@0.34"
+      },
+      {
+        "peak_dex": 0.00821,
+        "point": "mumu@0.42"
+      },
+      {
+        "peak_dex": 0.00087,
+        "point": "mumu@0.7"
+      },
+      {
+        "peak_dex": 0.00172,
+        "point": "mumu@1.2"
+      },
+      {
+        "peak_dex": 0.00233,
+        "point": "mumu@1.9"
+      },
+      {
+        "peak_dex": 0.00555,
+        "point": "mumu@2.3"
+      }
+    ],
+    "sigma_band": 0.002,
+    "sigma_peak": 0.00188,
+    "tags": [
+      "a",
+      "b"
+    ]
+  },
+  "truth": {
+    "a": {
+      "created_utc": "2026-08-09T00:27:22Z",
+      "file": "truth_a.json",
+      "flux_sha256": "7a14109a2c8c91a9f17883574772911f3aab70c874513d5c60b343f6e9e02a04",
+      "from_flux": "parent_flux_a.npz",
+      "generator": "soln/depr/derivation.py",
+      "git_sha": "b72ccf6fa213a16785ae1978f0c16aa1b3d340f4",
+      "sha256": "4412a1c703b316a855dd669bc10b06a431b2dcefd6910c11560f594fbd281e90",
+      "wall_s": 1009.5
+    },
+    "b": {
+      "created_utc": "2026-08-09T00:27:23Z",
+      "file": "truth_b.json",
+      "flux_sha256": "b6a77a6e171406e61652292f2b6ef893fd5fab3cac7e1950b23c5e6643e6087c",
+      "from_flux": "parent_flux_b.npz",
+      "generator": "soln/depr/derivation.py",
+      "git_sha": "b72ccf6fa213a16785ae1978f0c16aa1b3d340f4",
+      "sha256": "09a01425272e8e48ff6c6cb2e37bc32b4d77363ff6716915a6727701921985cb",
+      "wall_s": 1010.8
+    }
+  }
+}

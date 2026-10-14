@@ -1,0 +1,69 @@
+# HEPBench environment — the benchmark-running workhorse.
+#
+#   conda env create -f environment.yml        # run from the repo root
+#   conda activate hepbench
+#   python scripts/fix_pythia_env.py           # REQUIRED — see "Pythia" below
+#
+# Deliberately minimal: toolkit-level Python dependencies (pymupdf,
+# uproot, pyhepmc, ...) do NOT belong here — toolbase
+# installs each toolkit into its own venv under ~/.toolbase/cache/
+# with the deps its toolkit.yaml bundles declare. This env carries
+# only (a) the framework stack, (b) the toolchain the external HEP
+# *binaries* link against, and (c) Pythia, which is the one genuine
+# exception (below):
+#
+#   * PYTHIA is an exception to the "toolkits own their deps" rule,
+#     because the `core_only` arm has no toolkit and must generate its
+#     own flux from the ambient env. It has to be there, and it has to
+#     be the SAME VERSION the reference flux was built with (8.317), or
+#     the tools-vs-no-tools comparison carries a generator-version
+#     confound on top of the scaffolding effect it is meant to isolate.
+#
+#     This cannot be expressed declaratively here. ROOT's `root_base`
+#     hard-depends on conda-forge `pythia8`, which tops out at 8.312 and
+#     fights the 8.317 `pythia8mc` wheel over
+#     $CONDA_PREFIX/share/Pythia8/xmldoc — whichever lands second wins
+#     and the loser aborts in Pythia::checkVersion. So conda WILL pull
+#     8.312 in via ROOT on every `env create`, and the fix is a
+#     post-create step: `python scripts/fix_pythia_env.py` (idempotent;
+#     `--check` reports state without changing anything). Read that
+#     script's docstring before touching Pythia in this env.
+#
+#   * root / fortran-compiler / make are not Python deps — Delphes and
+#     Prospino binaries built on this machine are rpath-linked against
+#     THIS env's ROOT and libgfortran, whichever process invokes them
+#     (including toolbase toolkit hosts).
+#
+# The pip level pulls the released agentic stack via this repo's own
+# dependency chain (toolbench[toolbase] -> toolbase>=0.3.0 ->
+# orchestral-ai>=1.6.3; the floors matter: older toolbase can't
+# sandbox-scope served tools, older orchestral crashes on LiteLLM-proxy
+# usage blocks).
+#
+# NOT covered here (external software, machine-specific paths):
+#   * MadGraph (MG5_PATH), FeynRules/wolframscript if used
+#   * Prospino 2.1 source tree — build with THIS env's gfortran
+#     (Fortran .mod files bind to their compiler; PROSPINO_PATH)
+#   * Delphes — clone + `make` with THIS env's ROOT on PATH (DELPHES_DIR)
+#   * toolkits: `tb install toolkits.yaml` (this repo's import file;
+#     assumes sibling checkouts), then `tb config set` the per-machine
+#     paths (the committed .toolbase/ carries profiles + editable
+#     pins, not machine paths)
+#   * .env: provider keys (ANTHROPIC_API_KEY / LITELLM_HOST /
+#     LITELLM_API_KEY) and the path variables above
+#   * caveat: hep_bsm_demo's legacy `python:` bridge loadouts
+#     (tools_essential/tools_full) import heptapod tools IN-PROCESS and
+#     would need heptapod's deps in this env — the toolbase-served arms
+#     (tools_full_tb, tools_cb, tools_hep) need nothing extra here.
+name: hepbench
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - root                # toolchain for the Delphes binary (build + runtime libs)
+  - fortran-compiler    # toolchain for the Prospino binary (build + libgfortran)
+  - make
+  - pip
+  - pip:
+      - -e .            # hepbench -> toolbench[toolbase] -> the released stack
+      - pytest>=7.4     # this repo's own test suite

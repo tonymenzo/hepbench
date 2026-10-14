@@ -1,0 +1,134 @@
+# benchmarks/symbolic/decay_S_to_SS/benchmark.yaml is a part of HEPBench.
+# Copyright (C) 2026 HEPBench authors (see AUTHORS for details).
+# HEPBench is licensed under the GNU GPL v3 or later, see LICENSE for details.
+
+name: symbolic-decay_S_to_SS
+version: "1.0.0"
+description: |
+  Tree-level two-body widths of a generic real scalar into scalar
+  pairs: (a) L = -(mu/2) phi chi^2 with IDENTICAL final-state scalars
+  (the symmetry factor is the trap), (b) L = -mu phi chi_1 chi_2 with
+  distinct unequal-mass scalars (Kallen phase space). Exact numeric
+  widths (GeV) + closed-form formulas in results/answer.json, graded on
+  a tolerance ladder + formula sampling. Ground truth derived and
+  verified in ground_truth/derivation.py (PDG Kinematics review eq.
+  50.18; Griffiths ABC theory sec. 6.3).
+
+default_harness: orchestral/anthropic
+default_loadout: core_only
+default_variant: unguided
+
+ground_truth:
+  dir: ./ground_truth
+
+checks: ../_shared/checks.py
+
+artifacts:
+  keep_full: [".json", ".py", ".md", ".wl", ".txt"]
+  keep_root: ["todos.md"]
+
+rubric:
+  type: stagewise
+  # Stage independence: `answer_present` is a real prerequisite and gates
+  # (no file -> nothing else is assessable). Every other stage here grades a
+  # SEPARATE quantity or a separate rung of a nested tolerance ladder, so
+  # none of them presuppose the one before -- part (b) being right does not
+  # depend on part (a)'s formula. They are therefore non-gating: a miss
+  # costs its own weight and nothing else. The ladder stays self-consistent
+  # without absorption, since a value within 1% is necessarily within 10%
+  # and within half a decade.
+  stages:
+    - id: answer_present
+      description: results/answer.json exists with all four answer fields.
+      weight: 0.04
+      checks:
+        - json_with_keys:
+            file: results/answer.json
+            required_keys: [part_a_width_gev, part_a_width_formula,
+                            part_b_width_gev, part_b_width_formula]
+
+    # ----- part (a): identical scalars, symmetry factor -----
+    - id: a_order_of_magnitude
+      gating: false
+      description: Part (a) width within half a decade (NDA-passable rung).
+      weight: 0.06
+      checks:
+        - answer_value:
+            file: results/answer.json
+            field: part_a_width_gev
+            reference: ground_truth/truth.json
+            log10_tol: 0.5
+    - id: a_within_10pct
+      gating: false
+      description: Part (a) width within 10%.
+      weight: 0.09
+      checks:
+        - answer_value:
+            file: results/answer.json
+            field: part_a_width_gev
+            reference: ground_truth/truth.json
+            rel_tol: 0.10
+    - id: a_within_1pct
+      gating: false
+      description: Part (a) width within 1% (catches a missed factor of 2).
+      weight: 0.12
+      checks:
+        - answer_value:
+            file: results/answer.json
+            field: part_a_width_gev
+            reference: ground_truth/truth.json
+            rel_tol: 0.01
+    - id: a_formula
+      gating: false
+      description: Part (a) closed form matches at sampled (mu, mS, mchi).
+      weight: 0.21
+      checks:
+        - answer_formula:
+            file: results/answer.json
+            field: part_a_width_formula
+            reference: ground_truth/truth.json
+            symbols: {mu: [50.0, 1000.0], mS: [600.0, 3000.0],
+                      mchi: [1.0, 250.0]}
+
+    # ----- part (b): distinct unequal-mass scalars -----
+    - id: b_order_of_magnitude
+      gating: false
+      description: Part (b) width within half a decade.
+      weight: 0.06
+      checks:
+        - answer_value:
+            file: results/answer.json
+            field: part_b_width_gev
+            reference: ground_truth/truth.json
+            log10_tol: 0.5
+    - id: b_within_10pct
+      gating: false
+      description: Part (b) width within 10%.
+      weight: 0.09
+      checks:
+        - answer_value:
+            file: results/answer.json
+            field: part_b_width_gev
+            reference: ground_truth/truth.json
+            rel_tol: 0.10
+    - id: b_within_1pct
+      gating: false
+      description: Part (b) width within 1%.
+      weight: 0.12
+      checks:
+        - answer_value:
+            file: results/answer.json
+            field: part_b_width_gev
+            reference: ground_truth/truth.json
+            rel_tol: 0.01
+    - id: b_formula
+      gating: false
+      description: Part (b) closed form matches at sampled (mu, mS, m1, m2).
+      weight: 0.21
+      checks:
+        - answer_formula:
+            file: results/answer.json
+            field: part_b_width_formula
+            reference: ground_truth/truth.json
+            symbols: {mu: [50.0, 1000.0], mS: [1200.0, 4000.0],
+                      m1: [10.0, 500.0], m2: [10.0, 500.0]}

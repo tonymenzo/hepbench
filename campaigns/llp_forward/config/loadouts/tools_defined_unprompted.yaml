@@ -1,0 +1,22 @@
+# UNPROMPTED TWIN of tools_defined: identical tools and skill, but NO
+# system_prompt_addendum. The bundle is present and never advertised, so this
+# arm measures whether a model reaches for a toolkit it was not told about.
+#
+# A separate loadout rather than an edit to tools_defined, so both conditions
+# stay runnable and every trial records which one it had. The opus 2026-08-10
+# campaign predates the addendum and is therefore comparable to THIS loadout.
+
+# Pipeline-only LLP toolset: heptapod's `forward-llp-defined` loadout (the llp
+# pipeline + PythiaFromRunCard, NO symbolic-amplitude tools) served via
+# toolbase. Pair with the `defined` variant, where the decay widths are
+# supplied so no derivation is needed. The `derived` variant (widths withheld)
+# instead pairs with `tools_derived`, which adds the eda symbolic tools for the
+# width derivation. Reached over MCP by claude-code or in process by orchestral.
+name: tools_defined_unprompted
+tools:
+  sources:
+    - toolbase: { loadout: forward-llp-defined }
+skills:
+  - name: pythia_forward_run_cards
+    file: ./skills/pythia_forward_run_cards.md
+    mode: on_demand

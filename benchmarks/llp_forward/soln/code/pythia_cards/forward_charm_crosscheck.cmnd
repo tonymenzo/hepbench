@@ -1,0 +1,41 @@
+! forward_charm_crosscheck.cmnd -- part of HEPBench (GPL v3).
+!
+! OPTIONAL cross-check, NOT part of the reference flux. Hard 2->2 ccbar/bbbar
+! production (codes 121,122,...) with pTHatMin = 1 GeV makes CENTRAL, high-pT
+! heavy flavour, which lies OUTSIDE the forward acceptance: in the reference
+! run this sample yields ~zero forward parents (theta < 50 mrad), so the
+! ground-truth flux is generated from forward_flux.cmnd alone (n_hard = 0).
+!
+! Kept only to document/verify that forward charm comes from the SOFT sample's
+! low-pT tail, not from hard ccbar. If ever stitched with forward_flux.cmnd,
+! split at pTHat = 1 GeV (soft keeps pTHat < 1, this keeps pTHat > 1) to avoid
+! double counting. Settings verified against QCDHardProcesses.xml.
+
+Tune:pp = 14
+Beams:idA = 2212
+Beams:idB = 2212
+Beams:frameType = 1
+Beams:eCM = 13600.                ! [PUBLIC_PIN: sqrt(s)]
+
+HardQCD:hardccbar = on            ! codes 121,122
+HardQCD:hardbbbar = on            ! codes 123,124
+PhaseSpace:pTHatMin = 1.0
+Onia:all = on
+
+! Same stable-parent set as forward_flux.cmnd (harvest at production).
+321:mayDecay = off                ! K+-
+411:mayDecay = off                ! D+-
+431:mayDecay = off                ! Ds+-
+113:mayDecay = off                ! rho0
+223:mayDecay = off                ! omega
+333:mayDecay = off                ! phi(1020)
+443:mayDecay = off                ! J/psi
+100443:mayDecay = off             ! psi(2S)
+
+Print:quiet = on
+Next:numberCount = 0
+Init:showChangedSettings = off
+Init:showChangedParticleData = off
+Init:showProcesses = off
+Init:showMultipartonInteractions = off
+Check:event = off

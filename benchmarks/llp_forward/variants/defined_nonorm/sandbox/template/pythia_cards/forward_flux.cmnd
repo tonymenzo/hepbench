@@ -1,0 +1,36 @@
+! forward_flux.cmnd -- part of HEPBench (GPL v3).
+!
+! Forward parent-flux run card for the llp_forward family.
+! pp @ 13.6 TeV, SOFT-QCD INELASTIC only. The BSM emissions
+!   pseudoscalar  M -> mu nu phi      (K, D, Ds)
+!   vector        V -> mu+ mu- phi    (rho0, omega, phi(1020); J/psi, psi(2S))
+! are applied DOWNSTREAM in the LLP-production step. Pythia never sees
+! phi (it is BSM).
+
+Tune:pp = 14                      ! Monash 2013 min-bias/UE tune
+Beams:idA = 2212
+Beams:idB = 2212
+Beams:frameType = 1               ! collider frame
+Beams:eCM = 13600.                ! 13.6 TeV   [PUBLIC_PIN: sqrt(s)]
+
+SoftQCD:inelastic = on            ! codes 101,103,104,105,106 (no elastic)
+
+! LLP parent species kept as final-state particles.
+211:mayDecay = off                ! pi+-  (only for m_phi < 0.034 GeV lobe)
+321:mayDecay = off                ! K+-
+411:mayDecay = off                ! D+-
+431:mayDecay = off                ! Ds+-
+113:mayDecay = off                ! rho0
+223:mayDecay = off                ! omega
+333:mayDecay = off                ! phi(1020)
+443:mayDecay = off                ! J/psi   (needs forward_onia.cmnd)
+100443:mayDecay = off             ! psi(2S) (needs forward_onia.cmnd)
+
+! Quiet / bookkeeping.
+Print:quiet = on
+Next:numberCount = 0
+Init:showChangedSettings = off
+Init:showChangedParticleData = off
+Init:showProcesses = off
+Init:showMultipartonInteractions = off
+Check:event = off

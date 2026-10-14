@@ -1,0 +1,211 @@
+# benchmarks/symbolic/composite_toy_model/benchmark.yaml is a part of HEPBench.
+# Copyright (C) 2026 HEPBench authors (see AUTHORS for details).
+# HEPBench is licensed under the GNU GPL v3 or later, see LICENSE for details.
+
+name: symbolic-composite_toy_model
+version: "1.0.0"
+description: |
+  The composite of the symbolic family: one toy Lagrangian (heavy
+  scalar coupled to two fermion species and a light scalar), full
+  phenomenological profile requested at once — three partial widths,
+  total width, branching ratios, lifetime in seconds (natural-units
+  conversion), and an s-channel annihilation cross section in pb.
+  Measures sustained multi-quantity orchestration plus internal
+  consistency (BRs sum to one, lifetime matches total width, partials
+  sum to total), which single-quantity tasks cannot. Values only (no
+  formula fields). Ground truth derived and verified in
+  ground_truth/derivation.py.
+
+default_harness: orchestral/anthropic
+default_loadout: core_only
+default_variant: unguided
+
+ground_truth:
+  dir: ./ground_truth
+
+checks: ../_shared/checks.py
+
+artifacts:
+  keep_full: [".json", ".py", ".md", ".wl", ".txt"]
+  keep_root: ["todos.md"]
+
+rubric:
+  type: stagewise
+  # Stage independence: `answer_present` is a real prerequisite and gates
+  # (no file -> nothing else is assessable). Every other stage here grades a
+  # SEPARATE quantity or a separate rung of a nested tolerance ladder, so
+  # none of them presuppose the one before -- part (b) being right does not
+  # depend on part (a)'s formula. They are therefore non-gating: a miss
+  # costs its own weight and nothing else. The ladder stays self-consistent
+  # without absorption, since a value within 1% is necessarily within 10%
+  # and within half a decade.
+  stages:
+    - id: answer_present
+      description: results/answer.json exists with all nine answer fields.
+      weight: 0.04
+      checks:
+        - json_with_keys:
+            file: results/answer.json
+            required_keys: [width_psi1_gev, width_psi2_gev,
+                            width_chichi_gev, width_total_gev,
+                            br_psi1, br_psi2, br_chichi,
+                            lifetime_s, xsec_pb]
+
+    # ----- partial widths -----
+    - id: w1_order_of_magnitude
+      gating: false
+      description: Gamma(Phi -> psi1 psibar1) within half a decade.
+      weight: 0.03
+      checks:
+        - answer_value: {file: results/answer.json, field: width_psi1_gev,
+                         reference: ground_truth/truth.json, log10_tol: 0.5}
+    - id: w1_within_10pct
+      gating: false
+      description: Gamma(Phi -> psi1 psibar1) within 10%.
+      weight: 0.04
+      checks:
+        - answer_value: {file: results/answer.json, field: width_psi1_gev,
+                         reference: ground_truth/truth.json, rel_tol: 0.10}
+    - id: w1_within_1pct
+      gating: false
+      description: Gamma(Phi -> psi1 psibar1) within 1%.
+      weight: 0.05
+      checks:
+        - answer_value: {file: results/answer.json, field: width_psi1_gev,
+                         reference: ground_truth/truth.json, rel_tol: 0.01}
+
+    - id: w2_order_of_magnitude
+      gating: false
+      description: Gamma(Phi -> psi2 psibar2) within half a decade.
+      weight: 0.03
+      checks:
+        - answer_value: {file: results/answer.json, field: width_psi2_gev,
+                         reference: ground_truth/truth.json, log10_tol: 0.5}
+    - id: w2_within_10pct
+      gating: false
+      description: Gamma(Phi -> psi2 psibar2) within 10%.
+      weight: 0.04
+      checks:
+        - answer_value: {file: results/answer.json, field: width_psi2_gev,
+                         reference: ground_truth/truth.json, rel_tol: 0.10}
+    - id: w2_within_1pct
+      gating: false
+      description: Gamma(Phi -> psi2 psibar2) within 1%.
+      weight: 0.05
+      checks:
+        - answer_value: {file: results/answer.json, field: width_psi2_gev,
+                         reference: ground_truth/truth.json, rel_tol: 0.01}
+
+    - id: wchi_order_of_magnitude
+      gating: false
+      description: Gamma(Phi -> chi chi) within half a decade.
+      weight: 0.03
+      checks:
+        - answer_value: {file: results/answer.json, field: width_chichi_gev,
+                         reference: ground_truth/truth.json, log10_tol: 0.5}
+    - id: wchi_within_10pct
+      gating: false
+      description: Gamma(Phi -> chi chi) within 10%.
+      weight: 0.04
+      checks:
+        - answer_value: {file: results/answer.json, field: width_chichi_gev,
+                         reference: ground_truth/truth.json, rel_tol: 0.10}
+    - id: wchi_within_1pct
+      gating: false
+      description: Gamma(Phi -> chi chi) within 1% (symmetry factor rung).
+      weight: 0.05
+      checks:
+        - answer_value: {file: results/answer.json, field: width_chichi_gev,
+                         reference: ground_truth/truth.json, rel_tol: 0.01}
+
+    # ----- total width, BRs, lifetime -----
+    - id: wtot_within_10pct
+      gating: false
+      description: Total width within 10%.
+      weight: 0.04
+      checks:
+        - answer_value: {file: results/answer.json, field: width_total_gev,
+                         reference: ground_truth/truth.json, rel_tol: 0.10}
+    - id: wtot_within_1pct
+      gating: false
+      description: Total width within 1%.
+      weight: 0.05
+      checks:
+        - answer_value: {file: results/answer.json, field: width_total_gev,
+                         reference: ground_truth/truth.json, rel_tol: 0.01}
+
+    - id: branching_ratios
+      gating: false
+      description: All three branching ratios within 2%.
+      weight: 0.12
+      checks:
+        - answer_value: {file: results/answer.json, field: br_psi1,
+                         reference: ground_truth/truth.json, rel_tol: 0.02}
+        - answer_value: {file: results/answer.json, field: br_psi2,
+                         reference: ground_truth/truth.json, rel_tol: 0.02}
+        - answer_value: {file: results/answer.json, field: br_chichi,
+                         reference: ground_truth/truth.json, rel_tol: 0.02}
+
+    - id: lifetime_within_10pct
+      gating: false
+      description: Lifetime (s) within 10% (natural-units conversion).
+      weight: 0.05
+      checks:
+        - answer_value: {file: results/answer.json, field: lifetime_s,
+                         reference: ground_truth/truth.json, rel_tol: 0.10}
+    - id: lifetime_within_1pct
+      gating: false
+      description: Lifetime (s) within 1%.
+      weight: 0.05
+      checks:
+        - answer_value: {file: results/answer.json, field: lifetime_s,
+                         reference: ground_truth/truth.json, rel_tol: 0.01}
+
+    # ----- annihilation cross section -----
+    - id: xsec_order_of_magnitude
+      gating: false
+      description: sigma(psi2 psibar2 -> psi1 psibar1) within half a decade.
+      weight: 0.05
+      checks:
+        - answer_value: {file: results/answer.json, field: xsec_pb,
+                         reference: ground_truth/truth.json, log10_tol: 0.5}
+    - id: xsec_within_10pct
+      gating: false
+      description: Cross section within 10%.
+      weight: 0.08
+      checks:
+        - answer_value: {file: results/answer.json, field: xsec_pb,
+                         reference: ground_truth/truth.json, rel_tol: 0.10}
+    - id: xsec_within_1pct
+      gating: false
+      description: Cross section within 1% (beta_f^3 threshold law rung).
+      weight: 0.10
+      checks:
+        - answer_value: {file: results/answer.json, field: xsec_pb,
+                         reference: ground_truth/truth.json, rel_tol: 0.01}
+
+    # ----- internal consistency (graded on the agent's own numbers) -----
+    - id: internal_consistency
+      gating: false
+      description: >
+        BRs sum to 1, partial widths sum to the quoted total, and
+        lifetime * total width = hbar — consistency of the agent's own
+        answer, independent of its accuracy.
+      weight: 0.06
+      checks:
+        - answer_consistency:
+            file: results/answer.json
+            expr: "br_psi1 + br_psi2 + br_chichi"
+            equals: 1.0
+            rel_tol: 0.01
+        - answer_consistency:
+            file: results/answer.json
+            expr: "(width_psi1_gev + width_psi2_gev + width_chichi_gev)
+                   / width_total_gev"
+            equals: 1.0
+            rel_tol: 0.01
+        - answer_consistency:
+            file: results/answer.json
+            expr: "lifetime_s * width_total_gev"
+            equals: 6.582119569e-25
+            rel_tol: 0.01

@@ -1,0 +1,16 @@
+# forward-llp-defined — benchmarks/llp_forward, variants that supply the widths.
+#
+# Serves the `llp` pipeline (HarvestForwardFlux -> MesonDecayToLLP ->
+# DecayInVolumeVs{Coupling,Lifetime}, with ProductionSpectrum) and
+# PythiaFromRunCard for flux generation. No symbolic tools: the widths are
+# given in the prompt, so there is nothing to derive.
+#
+# Oracle policy, as for every benchmark loadout: no literature, particle-data,
+# or web bundles. The task is graded against a committed reference.
+toolkits:
+  heptapod:
+    bundles: [llp]
+    tools:
+      enabled: [PythiaFromRunCard]   # from the pythia bundle
+versions:
+  heptapod: 3.0.0

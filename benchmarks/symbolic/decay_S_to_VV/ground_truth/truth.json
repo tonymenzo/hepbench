@@ -1,0 +1,28 @@
+{
+  "part_a_width_gev": 121.29029103418922,
+  "part_a_width_formula": "g**2 * sqrt(1 - 4*mV**2/mS**2) / (32*pi*mS) * (12 - 4*mS**2/mV**2 + mS**4/mV**4)",
+  "part_b_width_gev": 11.885133513029855,
+  "part_b_width_formula": "sqrt((mS**2-(m1+m2)**2)*(mS**2-(m1-m2)**2))/(16*pi*mS**3) * g**2 * (2 + (mS**2 - m1**2 - m2**2)**2/(4*m1**2*m2**2))",
+  "_metadata": {
+    "generated_by": "ground_truth/derivation.py",
+    "conventions": "../CONVENTIONS.md",
+    "parameters": {
+      "part_a": {
+        "g_gev": 130.0,
+        "mS_gev": 400.0,
+        "mV_gev": 90.0
+      },
+      "part_b": {
+        "g_gev": 110.0,
+        "mS_gev": 400.0,
+        "m1_gev": 90.0,
+        "m2_gev": 150.0
+      }
+    },
+    "verification": "analytic formulas reproduced to <1e-9 by independent numeric computation with explicit massive-vector polarization vectors",
+    "citations": [
+      "A. Djouadi, Phys.Rept. 457 (2008), arXiv:hep-ph/0503172, sec. 2.2 (H -> VV, the 1 - 4x + 12x^2 factor)",
+      "J.F. Gunion, H.E. Haber, G. Kane, S. Dawson, The Higgs Hunter's Guide, ch. 2"
+    ]
+  }
+}

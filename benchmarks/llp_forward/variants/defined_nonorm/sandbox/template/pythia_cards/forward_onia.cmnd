@@ -1,0 +1,32 @@
+! forward_onia.cmnd -- part of HEPBench (GPL v3).
+!
+! Charmonium sample for the vector channels J/psi, psi(2S) -> mu+ mu- phi.
+! Charmonium production uses the dedicated Onia processes (color-singlet +
+! color-octet, NRQCD).
+
+Tune:pp = 14
+Beams:idA = 2212
+Beams:idB = 2212
+Beams:frameType = 1
+Beams:eCM = 13600.                ! [PUBLIC_PIN: sqrt(s)]
+
+Charmonium:all = on               ! prompt J/psi, psi(2S), chi_c (NRQCD)
+PhaseSpace:pTHatMin = 0.5         ! tame the onia IR divergence at pThat -> 0
+
+! Charmonium species kept as final-state particles.
+321:mayDecay = off
+411:mayDecay = off
+431:mayDecay = off
+113:mayDecay = off
+223:mayDecay = off
+333:mayDecay = off
+443:mayDecay = off                ! J/psi
+100443:mayDecay = off             ! psi(2S)
+
+Print:quiet = on
+Next:numberCount = 0
+Init:showChangedSettings = off
+Init:showChangedParticleData = off
+Init:showProcesses = off
+Init:showMultipartonInteractions = off
+Check:event = off

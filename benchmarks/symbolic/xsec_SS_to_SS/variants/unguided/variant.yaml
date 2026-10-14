@@ -1,0 +1,33 @@
+# benchmarks/symbolic/xsec_SS_to_SS/variants/unguided/variant.yaml is a part of HEPBench.
+# Copyright (C) 2026 HEPBench authors (see AUTHORS for details).
+# HEPBench is licensed under the GNU GPL v3 or later, see LICENSE for details.
+
+name: unguided
+description: |
+  The task stated directly, as a specification rather than a tutorial:
+  the physics, the parameters, and the deliverables, with no
+  pedagogical scaffolding at all.
+  Same physics, parameters and conventions as `guided` (so ground truth
+  and grading are unchanged), but there is no worked output schema, no
+  example, no "give the EXACT result" instruction, no order-of-magnitude
+  warning, and no convention hints; the system prompt carries no task
+  guidance whatsoever, only the autonomy contract. Only the irreducible
+  grading interface survives -- the answer path, the field names, the
+  units and the formula symbol alphabet -- because without it a correct
+  computation is ungradeable.
+
+  The prompt also asks for `results/derivation.md`, a free-form record of
+  how the answer was reached. It is deliberately UNGRADED (the rubric is
+  family-level, so all three spec rungs stay reach-comparable); it
+  survives via the benchmark's artifacts keep_full '.md' rule purely as
+  post-hoc evidence for diagnosing error modes.
+
+  The guided -> scaffold_minimal -> unguided ladder is the specification
+  axis at full, lean and zero scaffolding.
+
+axes:
+  spec: none        # no scaffolding; physics and grading interface only
+  env: bare
+
+user_prompt_file: ./prompts/user.md
+system_prompt_file: ./prompts/system.md

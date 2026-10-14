@@ -1,0 +1,39 @@
+name: recipes_nonorm
+description: |
+  The NORMALIZATION ABLATION, core_only arm -- the bare-agent twin of
+  `defined_nonorm`. Same withheld-procedure sandbox, same user prompt; the
+  system prompt swaps the tool-oriented block for the Environment +
+  Invocation-reference block, exactly as `recipes` does for `defined`.
+
+  So the four cells form a 2x2 with one axis each:
+
+      norm given      norm withheld
+      ------------    -------------
+      defined         defined_nonorm      x tools_defined
+      recipes         recipes_nonorm      x core_only
+
+  and (recipes_nonorm - recipes) vs (defined_nonorm - defined) says whether the
+  domain tools actually supply the normalization knowledge, or whether the
+  agents were only ever reading it out of reference.tex.
+
+  DELIBERATE: the Pythia invocation block is KEPT. It is software-API knowledge
+  (how to drive Pythia8 from Python, the binding-name gotcha, sigmaGen()), not
+  a physics convention -- withholding it too would conflate "does it know how
+  to call Pythia" with "does it know how to normalize a flux", and the whole
+  point of `recipes` was to control for the former. Note the block does expose
+  `infoPython().sigmaGen()`; that surfaces the API, not the prescription for
+  weighting per collision or combining the soft and onia samples.
+
+axes:
+  spec:    defined     # decay widths supplied
+  env:     scaffolded  # model card + spectra + Pythia cards + geometry given
+  recipes: given       # how-to-invoke-the-software hint supplied (core_only)
+  norm:    withheld    # flux-normalization / harvest procedure NOT given
+
+user_prompt_file: ../defined/prompts/user.md
+system_prompt_file: ../recipes/prompts/system.md
+
+sandbox:
+  # The ablated sandbox is authored once, under defined_nonorm, and shared --
+  # mirrors how `recipes` and `defined` both point at `derived`'s template.
+  template_dir: ../defined_nonorm/sandbox/template

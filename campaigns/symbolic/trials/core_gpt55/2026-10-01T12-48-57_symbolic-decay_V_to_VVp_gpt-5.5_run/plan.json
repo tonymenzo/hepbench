@@ -1,0 +1,104 @@
+{
+  "trials": [
+    {
+      "trial_id": "core_only__n000__seed1001",
+      "condition": "core_only",
+      "harness": "codex/default",
+      "loadout": "core_only",
+      "variant": "unguided",
+      "model": "gpt-5.5",
+      "seed": 1001,
+      "index": 0
+    },
+    {
+      "trial_id": "core_only__n001__seed1002",
+      "condition": "core_only",
+      "harness": "codex/default",
+      "loadout": "core_only",
+      "variant": "unguided",
+      "model": "gpt-5.5",
+      "seed": 1002,
+      "index": 1
+    },
+    {
+      "trial_id": "core_only__n002__seed1003",
+      "condition": "core_only",
+      "harness": "codex/default",
+      "loadout": "core_only",
+      "variant": "unguided",
+      "model": "gpt-5.5",
+      "seed": 1003,
+      "index": 2
+    },
+    {
+      "trial_id": "core_only__n003__seed1004",
+      "condition": "core_only",
+      "harness": "codex/default",
+      "loadout": "core_only",
+      "variant": "unguided",
+      "model": "gpt-5.5",
+      "seed": 1004,
+      "index": 3
+    },
+    {
+      "trial_id": "core_only__n004__seed1005",
+      "condition": "core_only",
+      "harness": "codex/default",
+      "loadout": "core_only",
+      "variant": "unguided",
+      "model": "gpt-5.5",
+      "seed": 1005,
+      "index": 4
+    },
+    {
+      "trial_id": "core_only__n005__seed1006",
+      "condition": "core_only",
+      "harness": "codex/default",
+      "loadout": "core_only",
+      "variant": "unguided",
+      "model": "gpt-5.5",
+      "seed": 1006,
+      "index": 5
+    },
+    {
+      "trial_id": "core_only__n006__seed1007",
+      "condition": "core_only",
+      "harness": "codex/default",
+      "loadout": "core_only",
+      "variant": "unguided",
+      "model": "gpt-5.5",
+      "seed": 1007,
+      "index": 6
+    },
+    {
+      "trial_id": "core_only__n007__seed1008",
+      "condition": "core_only",
+      "harness": "codex/default",
+      "loadout": "core_only",
+      "variant": "unguided",
+      "model": "gpt-5.5",
+      "seed": 1008,
+      "index": 7
+    },
+    {
+      "trial_id": "core_only__n008__seed1009",
+      "condition": "core_only",
+      "harness": "codex/default",
+      "loadout": "core_only",
+      "variant": "unguided",
+      "model": "gpt-5.5",
+      "seed": 1009,
+      "index": 8
+    },
+    {
+      "trial_id": "core_only__n009__seed1010",
+      "condition": "core_only",
+      "harness": "codex/default",
+      "loadout": "core_only",
+      "variant": "unguided",
+      "model": "gpt-5.5",
+      "seed": 1010,
+      "index": 9
+    }
+  ]
+}

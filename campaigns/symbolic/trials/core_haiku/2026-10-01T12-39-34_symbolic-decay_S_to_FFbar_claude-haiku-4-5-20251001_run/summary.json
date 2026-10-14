@@ -1,0 +1,276 @@
+{
+  "cells": [
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "condition": "core_only",
+      "n": 10,
+      "mean_score": 0.226,
+      "score_ci95": [
+        0.112,
+        0.354
+      ],
+      "reach_bar_k": 0.124,
+      "reach_bar_k_ci95": [
+        0.052,
+        0.228
+      ],
+      "reach_bar_k_uniform": 0.1769,
+      "reach_bar_k_uniform_ci95": [
+        0.1,
+        0.2846
+      ],
+      "reach_at_k_uniform": 0.4615,
+      "reach_caret_k_uniform": 0.0769,
+      "pass_at_k": 0.0,
+      "pass_caret_k": 0.0,
+      "pass_at_1": 0.0,
+      "metric_correlations": {
+        "labels": [
+          "reach_bar_k",
+          "pass_at_k",
+          "pass_caret_k"
+        ],
+        "matrix": [
+          [
+            1.0,
+            null,
+            null
+          ],
+          [
+            null,
+            1.0,
+            null
+          ],
+          [
+            null,
+            null,
+            1.0
+          ]
+        ],
+        "n_bootstrap": 500
+      },
+      "k": 10,
+      "mean_cost_usd": 0.0,
+      "mean_estimated_api_equivalent_cost_usd": 1.004867,
+      "mean_wall_clock_s": 477.03,
+      "mean_tokens": {
+        "initial_input": 83398,
+        "input": 127,
+        "output": 57025,
+        "cache_read": 1021778,
+        "cache_creation": 60486
+      },
+      "mean_tool_calls": 12.6,
+      "mean_tool_errors": 1.2,
+      "tool_calls_by_name": {
+        "Bash": 62,
+        "Write": 24,
+        "Read": 21,
+        "Edit": 19
+      },
+      "stages": {
+        "answer_present": 1.0,
+        "a_order_of_magnitude": 0.5,
+        "a_within_10pct": 0.2,
+        "a_within_1pct": 0.2,
+        "a_formula": 0.2,
+        "b_order_of_magnitude": 0.6,
+        "b_within_10pct": 0.2,
+        "b_within_1pct": 0.2,
+        "b_formula": 0.2,
+        "c_order_of_magnitude": 0.4,
+        "c_within_10pct": 0.1,
+        "c_within_1pct": 0.1,
+        "c_formula": 0.0
+      },
+      "stage_display": {
+        "answer_present": {
+          "continuous": false,
+          "credit_mean": 1.0,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "a_order_of_magnitude": {
+          "continuous": false,
+          "credit_mean": 0.5,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "a_within_10pct": {
+          "continuous": false,
+          "credit_mean": 0.2,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "a_within_1pct": {
+          "continuous": false,
+          "credit_mean": 0.2,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "a_formula": {
+          "continuous": false,
+          "credit_mean": 0.2,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "b_order_of_magnitude": {
+          "continuous": false,
+          "credit_mean": 0.6,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "b_within_10pct": {
+          "continuous": false,
+          "credit_mean": 0.2,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "b_within_1pct": {
+          "continuous": false,
+          "credit_mean": 0.2,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "b_formula": {
+          "continuous": false,
+          "credit_mean": 0.2,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "c_order_of_magnitude": {
+          "continuous": false,
+          "credit_mean": 0.4,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "c_within_10pct": {
+          "continuous": false,
+          "credit_mean": 0.1,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "c_within_1pct": {
+          "continuous": false,
+          "credit_mean": 0.1,
+          "distance_mean": null,
+          "distance_label": null
+        },
+        "c_formula": {
+          "continuous": false,
+          "credit_mean": 0.0,
+          "distance_mean": null,
+          "distance_label": null
+        }
+      },
+      "failure_modes": {
+        "INCOMPLETE_AT_A_WITHIN_10PCT": 3,
+        "INCOMPLETE_AT_B_WITHIN_10PCT": 2,
+        "INCOMPLETE_AT_A_ORDER_OF_MAGNITUDE": 5
+      },
+      "n_excluded": 0,
+      "excluded_failure_modes": {},
+      "trial_scores": [
+        0.04,
+        0.04,
+        0.04,
+        0.04,
+        0.12,
+        0.16,
+        0.4,
+        0.4,
+        0.44,
+        0.58
+      ],
+      "pass_threshold": null,
+      "retries": {
+        "rate_limit": 0,
+        "transient": 0,
+        "nudges": 0
+      },
+      "tool_usage": {
+        "per_tool": {},
+        "per_tool_errors": {},
+        "total_calls": 0,
+        "total_errors": 0,
+        "adopted_trials": 0,
+        "adopted_mcp": 0,
+        "adopted_script": 0,
+        "n_trials": 10
+      },
+      "ux_ratings": [
+        7,
+        8,
+        7,
+        7
+      ]
+    }
+  ],
+  "paired_deltas": [],
+  "n_total_trials": 10,
+  "n_excluded_trials": 0,
+  "excluded_failure_modes": {},
+  "run_id": "2026-10-01T12-39-34_symbolic-decay_S_to_FFbar_claude-haiku-4-5-20251001_run",
+  "k": 10,
+  "pass_criterion": "all_stages",
+  "reach_weights": {
+    "stage_order": [
+      "answer_present",
+      "a_order_of_magnitude",
+      "a_within_10pct",
+      "a_within_1pct",
+      "a_formula",
+      "b_order_of_magnitude",
+      "b_within_10pct",
+      "b_within_1pct",
+      "b_formula",
+      "c_order_of_magnitude",
+      "c_within_10pct",
+      "c_within_1pct",
+      "c_formula"
+    ],
+    "w": [
+      0.04,
+      0.04,
+      0.06,
+      0.08,
+      0.14,
+      0.04,
+      0.06,
+      0.08,
+      0.14,
+      0.04,
+      0.06,
+      0.08,
+      0.14
+    ],
+    "pass_threshold": null
+  },
+  "total_spent_usd": 0.0,
+  "subscription_harnesses": [
+    "claude-code/default"
+  ],
+  "estimated_api_equivalent_cost_usd": 10.048673,
+  "estimated_cost_basis": null,
+  "aborted_by_budget": false,
+  "aborted_by_session_limit": false,
+  "session_limit": {
+    "aborted": false,
+    "excluded_trials": 0,
+    "not_attempted": 0
+  },
+  "integrity": {
+    "scanned": 10,
+    "flagged": {}
+  },
+  "provenance": {
+    "git_sha": "unknown",
+    "versions": {
+      "toolbench": "0.10.0",
+      "claude_code": "2.1.286"
+    },
+    "harnesses": [
+      "claude-code/default"
+    ]
+  }
+}

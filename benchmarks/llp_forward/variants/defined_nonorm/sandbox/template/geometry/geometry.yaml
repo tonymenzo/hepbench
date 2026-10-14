@@ -1,0 +1,38 @@
+# Toy forward decay volume + downstream detector plane (synthetic values;
+# matches no real experiment). DECLARED pins of this study — use exactly.
+#
+# DECLARED CONVENTIONS (part of the study definition — use exactly):
+#   - The phi is produced at its PARENT'S DECAY POINT (decay-in-flight),
+#     not at the interaction point, and travels in a straight line along
+#     its lab direction. Its decay clock (path length) starts at that
+#     production vertex. For a prompt parent the vertex is the origin.
+#   - Production region / absorber: parents decay (or are swept) in
+#     [0, z_prod_m]; the gap [z_prod_m, z_min_m] is empty baseline. A phi
+#     counts only if its production vertex has z < z_prod_m (this sets a
+#     minimum survival distance and well-conditions the decay-length
+#     branch of the reach).
+#   - Decay volume: cylinder about the beam line (centred on x = x_off_m,
+#     y = 0), z in [z_min_m, z_max_m], radius r_volume_m. The in-volume
+#     path segment [L1, L2] is the intersection of the phi ray {vertex +
+#     s * dir} with the cylinder and z-window, measured FROM the
+#     production vertex; P_dec = exp(-L1/lambda) - exp(-L2/lambda) with
+#     lambda = beta*gamma*c*tau(g) and c*tau set by the TOTAL width.
+#   - Two searches, each evaluated at the in-volume MIDPOINT (so the
+#     acceptance flag is g-independent and one sample reweights the whole
+#     coupling axis):
+#       * two-track (mu mu): sample the isotropic phi -> mu+ mu- decay,
+#         boost both muons to the lab, propagate to the detector plane
+#         z = z_det_m, require BOTH forward-going with transverse radius
+#         r < r_det_m (about x_off_m).
+#       * photon (gamma gamma): the two photons are collinear with the
+#         boosted phi, so require the phi line-of-flight from the decay
+#         point to reach the detector face within r_det_m.
+#     Each declared evaluation point names which search applies.
+geometry:
+  z_min_m: 112.0
+  z_max_m: 163.0
+  r_volume_m: 0.92
+  z_det_m: 165.0
+  r_det_m: 0.92
+  z_prod_m: 50.0
+  x_off_m: 0.0

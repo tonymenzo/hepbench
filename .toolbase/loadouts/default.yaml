@@ -1,0 +1,4 @@
+# Loadout: default. The toolkit version served to every benchmark arm.
+toolkits: {}
+versions:
+  heptapod: 3.0.0
