@@ -17,10 +17,6 @@ plus `results/scan.csv`, a flat table of N_sig over the coupling per
 (search, m_phi), plus the requested `results/reach.pdf`. The grader reduces the
 scan to a band itself, so a perfect submission is one whose N_sig(g) crosses the
 sensitivity threshold exactly at the reference band edges.
-
-An earlier version of this module globbed `llp_forward/*/benchmark.yaml`, a
-nested layout this flat family does not use. It matched nothing, collected zero
-cases, and passed green while testing nothing at all.
 """
 
 import json
@@ -184,8 +180,9 @@ def test_empty_sandbox_scores_zero(bench_dir, tmp_path):
 def test_dropped_channel_loses_completeness(bench_dir, tmp_path):
     """A whole search silently missing must be caught by channel completeness.
 
-    This is precisely the failure the band ladder is blind to: it iterates over
-    reference bands, so a channel absent from the submission is never visited.
+    This is precisely the failure the contour stages are blind to: they
+    iterate over reference bands, so a channel absent from the submission is
+    never visited.
     """
     truth = _truth(bench_dir)
     grade = _grade(bench_dir, _write_sandbox(tmp_path, truth, drop_search="gg"))
@@ -197,14 +194,11 @@ def test_dropped_channel_loses_completeness(bench_dir, tmp_path):
         assert not grade.stages[stage], \
             f"{stage} passed despite a whole search channel being absent"
 
-    # HOW MUCH it costs is deliberately asserted loosely, because the answer
-    # is uncomfortable: ~0.955. `_standardise` prices coverage in its
-    # pass/fail boolean but computes 10^-D over the points that WERE covered,
-    # so an agent that submits only one of two searches keeps almost all of
-    # its continuous credit and loses mainly `channels_present` (weight 0.10).
-    # Dropping half the task for ~4.5% is arguably too cheap; changing it means
-    # reweighting every score in the campaign, so it is recorded here rather
-    # than quietly altered. Tighten this bound if that decision is taken.
+    # HOW MUCH it costs is asserted loosely: ~0.955. `_standardise` prices
+    # coverage in its pass/fail boolean but computes 10^-D over the points
+    # that WERE covered, so an agent that submits only one of two searches
+    # keeps most of its continuous credit and loses mainly `channels_present`
+    # (weight 0.10). The bound below records that pricing.
     assert grade.score < 0.97, grade.score
 
 

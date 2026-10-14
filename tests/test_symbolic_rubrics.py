@@ -23,7 +23,10 @@ from toolbench.core.trajectory import Trajectory
 
 ROOT = Path(__file__).resolve().parents[1]
 SYMBOLIC = ROOT / "benchmarks" / "symbolic"
-BENCH_DIRS = sorted(p.parent for p in SYMBOLIC.glob("*/benchmark.yaml"))
+# Task directories only: `_shared/` holds the assets the tasks inherit and
+# has no rubric of its own.
+BENCH_DIRS = sorted(p.parent for p in SYMBOLIC.glob("*/benchmark.yaml")
+                    if not p.parent.name.startswith("_"))
 
 # Fields graded only on the log10 rung in some families may not exist;
 # everything is driven off truth.json so this stays generic.

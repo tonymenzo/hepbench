@@ -11,17 +11,14 @@ asserted, not trusted.
 If one of these fails, decide which side is wrong before editing: the prompt
 defines the question the agent is answering, and truth.json is the answer.
 """
+import ast
 import json
-import pytest
 import re
-import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
 PROMPT = REPO / "benchmarks/llp_forward/variants/bare/prompts/user.md"
-REFDIR = REPO / "benchmarks/llp_forward/soln/reference"
-sys.path.insert(0, str(REPO / "benchmarks/llp_forward/soln/depr"))
-sys.path.insert(0, str(REPO / "benchmarks/llp_forward/soln/code"))
+SOLN = REPO / "benchmarks/llp_forward/soln"
 
 
 def _text():
@@ -29,17 +26,17 @@ def _text():
 
 
 def _truth():
-    p = REFDIR / "out/truth_a.json"
-    if not p.is_file():
-        p = REPO / "benchmarks/llp_forward/soln/truth.json"
-    return json.loads(p.read_text())
+    return json.loads((SOLN / "truth.json").read_text())
+
+
+def _input():
+    return json.loads((SOLN / "input.json").read_text())
 
 
 def test_geometry_pins_match_the_reference():
     """The apparatus in the prompt is the geometry the reference integrates."""
-    DV = pytest.importorskip("derivation", reason="needs soln/depr/derivation.py, which is not distributed")
     t = _text()
-    g = DV.GEOM
+    g = _input()["geometry"]
     for val, label in ((g["z_min_m"], "decay volume z_min"),
                        (g["z_max_m"], "decay volume z_max"),
                        (g["z_det_m"], "detector plane z"),
@@ -51,24 +48,18 @@ def test_geometry_pins_match_the_reference():
     # on-axis: x_off is zero, and the prompt says so in words instead
     assert g["x_off_m"] == 0.0, "prompt says on-axis but geometry is offset"
     assert "on-axis" in t
-    print("[OK] geometry pins match derivation.GEOM")
+    print("[OK] geometry pins match input.json geometry")
 
 
 def test_normalisation_pins_match_the_reference():
-    import numpy as np
     t = _text()
     truth = _truth()
     assert truth["n_int"] == 2.7e18
     assert "2.7\\times10^{18}" in t, "N_int not stated"
     assert float(truth["n_target"]) == 3.0
     assert "\\geq3" in t, "the N_sig >= 3 rule is not stated"
-    import ast
-    if not (REFDIR / "flux/parent_flux_a.npz").is_file():
-        pytest.skip("needs the reference flux sample, which is not distributed")
-    raw = np.load(REFDIR / "flux/parent_flux_a.npz",
-                  allow_pickle=True)["_meta"].item()
-    # _meta is stored as a repr string, not a dict
-    meta = raw if isinstance(raw, dict) else ast.literal_eval(str(raw))
+    # flux_provenance is stored as the repr of the flux sample's metadata
+    meta = ast.literal_eval(_input()["flux_provenance"])
     assert meta["sigma_inel_mb"] == 80.0
     assert "80.0" in t, "sigma_inel not stated"
     assert meta["sqrt_s_gev"] == 13600.0

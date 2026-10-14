@@ -167,19 +167,18 @@ def test_roles_exported():
 # ---------------------------------------------------------------------------
 # `fixed:` — symbols the TASK pins to a constant.
 #
-# A part that specialises a mass to zero (a massless daughter) declared only
-# the symbols it varies, and `_parse_formula` admits nothing else. So the two
-# correct ways of answering graded differently:
+# A part that specialises a mass to zero (a massless daughter) declares only
+# the symbols it varies, and `_parse_formula` admits nothing else. Without
+# `fixed`, the two correct ways of answering would grade differently:
 #
-#   declare "mass": 0        -> tool returns the specialised form  -> passed
-#   keep it symbolic, values -> tool returns the GENERAL form      -> REJECTED
+#   declare "mass": 0        -> tool returns the specialised form  -> passes
+#   keep it symbolic, values -> tool returns the GENERAL form      -> rejected
 #                               {..., "mS": 0}                        unparsed
 #
-# Both are right and both give the exact number; the second was rejected as if
-# malformed. It also biases one arm: the tools arm naturally returns the
-# general form, so the delta a tools-vs-core campaign measures was shaved on
-# every massless-daughter part (decay_V_to_SVp/b, decay_S_to_SpV/b,
-# decay_V_to_SS/b).
+# Both are right and both give the exact number, and the tools arm naturally
+# returns the general form, so the asymmetry would bias a tools-vs-core
+# comparison on every massless-daughter part (decay_V_to_SVp/b,
+# decay_S_to_SpV/b, decay_V_to_SS/b).
 #
 # `fixed` makes the rubric STATE the specialisation instead of implying it by
 # omission: the symbol is admissible in either formula and substituted before
@@ -275,8 +274,8 @@ def test_absent_fixed_is_unchanged(bench):
 
 
 def test_an_undeclared_symbol_is_named_in_the_message(massless_bench):
-    """The rejection used to read like a syntax error. It should say which
-    symbol was not declared, and that `fixed` is how a task pins one."""
+    """The rejection names the symbol that was not declared and says that
+    `fixed` is how a task pins one, instead of reading like a syntax error."""
     write, check = massless_bench
     write({"width_formula": GENERAL})
     ok, msg = check("answer_formula",
