@@ -18,17 +18,8 @@ description: |
 
   GRADING is by CALIBRATED DISTANCE: a symbolic/value width check, then a
   median |log10(agent/reference)| in dex on the yields and separately on each
-  reach-contour edge, standardised by the reference's own measured
-  Monte-Carlo precision rather than by a chosen tolerance. See
-  benchmarks/llp_forward/soln/notes/accuracy_metric.tex.
-
-  THE SUPERSEDED TOLERANCE LADDER (peak_yield + band_coarse/mid/fine) now
-  lives in benchmarks/llp_forward_legacy, which inherits everything else from
-  here. It is retained so the 2026-07 campaign and the 2026-08-09 pilot stay
-  reproducible; it must not grade new work. Running THIS benchmark is what
-  gets you the live rubric -- which is the point of the move, since the
-  arrangement was previously inverted and grading the parent silently gave
-  the old ladder.
+  reach-contour edge, with the reference's own measured Monte-Carlo
+  precision as the yardstick rather than a chosen tolerance.
 
 # Canonical cells: recipes+core_only (bare agent, told how to invoke the
 # software) vs derived+tools_derived (the heptapod pipeline tools). The system
@@ -55,18 +46,18 @@ artifacts:
               ".yaml", ".md", ".tex", ".txt", ".cmnd", ".log"]
   # The flux / LLP-record .jsonl files ARE the analysis inputs: reproducing a
   # yield (or auditing a normalization) needs the events DecayInVolume actually
-  # scanned. 200 records truncated them to uselessness; 20000 preserves enough
-  # to reconstruct a yield sum to ~1% while bounding disk (~3 MB/file). Grading
-  # itself only reads results/*.{json,csv} (kept full), so this is for ANALYSIS.
+  # scanned. 20000 records preserve enough to reconstruct a yield sum to ~1%
+  # while bounding disk (~3 MB/file). Grading itself only reads
+  # results/*.{json,csv} (kept full), so this is for ANALYSIS.
   truncate:
     - { ext: ".jsonl", max_records: 20000 }
   keep_root: ["todos.md", "report.tex"]
 
-# Stagewise rubric (prefix-product; weights sum to 1.0). Structural +
-# Pythia-presence gates, then a symbolic/value width check, then a
-# log-space coarse->fine tolerance ladder on the declared N_sig points.
-# Every correctness check reads results/answer.json; the only disk-
-# touching check is the loose Pythia-output glob (loadout-robust).
+# Stagewise rubric (prefix-product; weights sum to 1.0). A structural gate,
+# a Pythia-presence report, a symbolic/value width check, channel coverage,
+# then the calibrated distances on the yields and on each contour edge.
+# Every correctness check reads results/answer.json or results/scan.csv; the
+# only disk-touching check is the loose Pythia-output glob (loadout-robust).
 rubric:
   type: stagewise
   pass_threshold: 0.9
@@ -86,10 +77,10 @@ rubric:
 
     - id: pythia_ran
       description: >
-        A forward-flux artifact exists. NON-GATING here: it is satisfied for
-        free in every scaffolded variant by the .cmnd cards we ship, so as a
-        gate it only ever fired on file-NAMING in the bare variant, where no
-        cards are supplied. It reports, it does not zero a trial.
+        A forward-flux artifact exists. Non-gating: the scaffolded variants
+        ship .cmnd cards that satisfy it, so in the bare variant, where no
+        cards are supplied, it would gate on file naming alone. It reports,
+        it does not zero a trial.
       weight: 0.0
       gating: false
       checks:
@@ -98,25 +89,15 @@ rubric:
                        "*parent*", "*pythia*", "*.npz"]
             min_matches: 1
 
-    # ---- theory rung (unchanged from the parent) ----
+    # ---- theory rung ----
     - id: width_correct
       description: derived widths and lifetime, formula + probe values.
       weight: 0.10
-      # NON-GATING. A stage is gating by default unless `continuous`, so this
-      # one silently absorbed everything after it: a trial that got the widths
-      # wrong scored zero on the yield scan and both contour edges no matter
-      # how good they were. That is not what the weights say -- the widths are
-      # 0.10 of the rubric, not a precondition for the other 0.85.
-      #
-      # It bit hard on 2026-08-10: a Sonnet trial wrote a CORRECT formula with
-      # an equation label ("Gamma(phi->mu+mu-) = ..."), which the character
-      # check rejected on the `->`, and its 0.977 yield_distance, 0.984 lower
-      # edge and 0.890 upper edge were all zeroed. Reported 0.0; 0.87 without
-      # the absorption. The parser now strips such a label, but the absorption
-      # was the larger error and is what is fixed here.
-      #
-      # `answer_present` remains gating, correctly: with no answer.json or
-      # scan.csv there is genuinely nothing downstream to score.
+      # NON-GATING. A stage is gating by default unless `continuous`; the
+      # widths are 0.10 of the rubric, not a precondition for the yield and
+      # contour stages, so a wrong width does not zero them. `answer_present`
+      # remains gating: with no answer.json or scan.csv there is nothing
+      # downstream to score.
       gating: false
       checks:
         - llp_formula:
@@ -163,29 +144,18 @@ rubric:
       description: >
         Yield accuracy at the reference's OWN declared (search, m_phi, g)
         points, the agent's scan interpolated in log-log onto those couplings.
-        48 graded points, no grid dependence. NOT compared against
-        `_per_mass.peak`: that is the max of the reference's internal 400-point
-        scan at a coupling the declared set never samples, and comparing it to
-        the max of an agent's own grid measured the mismatch rather than the
-        physics (~0.48 dex for cells whose band edges agree to 0.005-0.03 dex).
-        The PRIMARY accuracy stage.
+        48 graded points, no grid dependence. The PRIMARY accuracy stage.
       weight: 0.40
       checks:
         - llp_yield_distance:
             scan_file: results/scan.csv
             reference: soln/truth.json
-            # MEASURED 2026-08-07 from two independent same-size reference
-            # builds (soln/reference/, seeds 1000/2000, 200k events each,
-            # same pipeline): pair difference / sqrt(2). This supersedes both
-            # earlier values -- 0.0075 (cross-pipeline, invalid) and 0.09
-            # (calibrated off agent noise, which rewards sloppiness).
-            #
-            # TODO per-point sigma. The measured precision is strongly
-            # mass-dependent -- 0.0017 dex in the gamma-gamma lobe rising to
-            # 0.111 dex at m=2.3, where only J/psi and psi(2S) supply the phi.
-            # A single scalar over-penalises the low-mass points and
-            # under-penalises the high-mass ones. The mean is used here as an
-            # interim; see soln/reference/reference.ipynb section 3.
+            # The reference's Monte-Carlo precision: the pair difference /
+            # sqrt(2) of two independent same-size reference builds (seeds
+            # 1000 and 2000, 200k events each, same pipeline). The precision
+            # is mass-dependent, 0.0017 dex in the gamma-gamma lobe rising to
+            # 0.111 dex at m = 2.3, where only J/psi and psi(2S) supply the
+            # phi; a single scalar, the mean, is used.
             sigma: 0.00188
             z_crit: 3.0
 
@@ -197,9 +167,8 @@ rubric:
         production-limited: below it too few LLPs are made, and those that are
         live long enough to fly through the volume undecayed. Graded separately
         from the upper edge -- they are different physics and respond
-        differently to method. On the 2026-08 campaign a single trial sat at
-        0.0028 dex here and 0.066 at the other edge, a factor 19; pooling them
-        turned a bimodal distribution into a misleading unimodal one.
+        differently to method, so pooling them can turn a bimodal
+        distribution into a misleading unimodal one.
       checks:
         - llp_contour_distance:
             scan_file: results/scan.csv

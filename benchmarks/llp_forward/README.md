@@ -1,6 +1,6 @@
 # `llp_forward` — forward long-lived-particle reach
 
-An agent runs the forward-LLP phenomenology pipeline for a muon-philic scalar: generate a forward meson flux with Pythia, decay it to the scalar across every open production channel, propagate the scalars through a decay volume, and report the expected signal yield at a declared set of mass and coupling points. The result is graded against a committed, rerunnable reference.
+An agent runs the forward-LLP phenomenology pipeline for a muon-philic scalar: generate a forward meson flux with Pythia, decay it to the scalar across every open production channel, propagate the scalars through a decay volume, and report the expected signal yield at a declared set of mass and coupling points. The result is graded against a committed reference.
 
 ## Physics
 
@@ -16,7 +16,7 @@ Two searches, a two-track $\mu\mu$ acceptance and a collinear $\gamma\gamma$ acc
 
 The agent writes `results/answer.json` with the width probes and the signal yield $N_{\rm sig}$ at the declared $(\text{search}, m_\phi, g)$ points, a flat yield scan in `results/scan.csv`, and the sensitivity region in `results/reach.pdf`. The grader, not the agent, reduces the yields to the $N_{\rm sig}=3$ boundary, so the graded quantity is the well-conditioned yield and a hand-drawn contour cannot pass.
 
-The rubric has a structural gate followed by independently credited stages: widths and lifetime, channel coverage, the yield scan (the largest weight), the lower and upper sensitivity boundaries, false reach outside the reference-sensitive region, and the plot. Yields and boundaries are scored on a log-ratio distance to the reference, standardised by the reference's own measured Monte Carlo precision. The complete check parameters are in [`benchmark.yaml`](benchmark.yaml); the reference and its derivation are in [`soln/`](soln/README.md).
+The rubric has a structural gate followed by independently credited stages: widths and lifetime, channel coverage, the yield scan (the largest weight), the lower and upper sensitivity boundaries, false reach outside the reference-sensitive region, and the plot. Yields and boundaries are scored on a log-ratio distance to the reference, standardised by the reference's own measured Monte Carlo precision. The complete check parameters are in [`benchmark.yaml`](benchmark.yaml); the reference values are [`soln/truth.json`](soln/truth.json), with the model card they were built from in [`soln/input.json`](soln/input.json).
 
 ## Variants
 
@@ -28,7 +28,6 @@ The variant axis is how much the prompt supplies.
 | `defined` (default) | Full sandbox data products, with the decay widths stated, so the graded task is the simulation pipeline. |
 | `derived` | The same sandbox with the widths withheld; the agent derives them from the Lagrangian first. |
 | `recipes` | The `defined` task with a core-tools system prompt in place of the tool-oriented one. |
-| `defined_nonorm`, `recipes_nonorm` | The normalisation ablation: the same task with the flux-normalisation procedure withheld. |
 
 ## Loadouts
 

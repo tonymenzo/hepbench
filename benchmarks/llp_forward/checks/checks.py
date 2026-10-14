@@ -4,41 +4,56 @@
 # HEPBench is licensed under the GNU GPL v3 or later, see LICENSE for details.
 """
 """
-Custom checks for the `llp_forward` benchmark (v1, full spectrum).
+Custom checks for the `llp_forward` benchmark.
 
-The deliverable is `results/answer.json` (schema shipped in the sandbox
-at results/answer_schema.json): the derived phi decay width fields and
-the expected signal yield N_sig at every DECLARED (search, m_phi, g)
-evaluation point. Ground truth lives in the benchmark's
-`ground_truth/truth.json` (the `reference:` param), generated and
-self-gated by `ground_truth/derivation.py`.
+The graded deliverables are `results/answer.json` (the derived phi decay
+width fields and the probe values) and `results/scan.csv` (the expected
+signal yield N_sig over the coupling g for every (search, m_phi) the agent
+scanned). The reference is `soln/truth.json`, passed to each check as the
+`reference:` param.
 
-The contour (g_low/g_high) is intentionally NOT a graded field: the
-grader reduces the yield cells to the exclusion band itself, so the
-graded quantity is the well-conditioned yield, not the agent's
-root-find. Every correctness check reads answer.json; the only
-disk-touching check is a loose Pythia-output glob.
+The reach contour is not a graded field: the grader root-finds the
+N_sig = target crossings of the agent's own scan, so the graded quantity is
+the well-conditioned yield rather than the agent's root-find. Every
+correctness check reads the deliverables; the only disk-touching check is a
+loose Pythia-output glob.
 
-Checks:
+Checks used by the shipped rubric:
 
-  glob_present     presence: >= min_matches of `patterns` match a file
-                   (loadout-robust: loose, name-based Pythia-output gate).
-  llp_value        scalar answer field vs truth, rel_tol or log10_tol
-                   (adapted from the symbolic family's answer_value).
-  llp_formula      formula string graded by NUMERIC SAMPLING against the
-                   truth formula over a declared symbol domain (the
-                   symbolic family's answer_formula: charset + token
-                   allowlist, sympy parse, fixed pseudo-random points).
-  llp_ctau_pair    both ctau probes within rel_tol AND their ratio
-                   consistent with the total-width ctau ~ g^-2 scaling.
-  llp_nsig_filled  presence: a numeric N_sig for every declared truth
-                   (search, m_phi, g) point (matched by search + m + g).
-  llp_nsig_close   correctness: the agent N_sig within `factor` in
-                   LOG space of truth at >= `min_fraction` of the
-                   declared points (a coarse->fine tolerance ladder).
+  glob_present           presence: >= min_matches of `patterns` match a file
+                         (loose, name-based Pythia-output gate).
+  llp_scan_present       presence: results/scan.csv parses and carries usable
+                         (search, m_phi, g, nsig) rows.
+  llp_value              scalar answer field vs truth, rel_tol or log10_tol.
+  llp_formula            formula string graded by numeric sampling against
+                         the truth formula over a declared symbol domain
+                         (charset and token allowlist, sympy parse, fixed
+                         pseudo-random points).
+  llp_ctau_pair          both ctau probes within rel_tol and their ratio
+                         consistent with the total-width ctau ~ g^-2 scaling.
+  llp_channel_coverage   fraction of reference-reached (search, m_phi) points
+                         carrying any yield.
+  llp_yield_distance     median |log10(agent/reference)| of the yields at the
+                         reference's declared (search, m_phi, g) points, the
+                         agent's scan interpolated in log-log.
+  llp_contour_distance   the same distance on the reach-contour edges derived
+                         from the agent's scan (`edge`: lower, upper, both).
+  llp_no_spurious_reach  no exclusion band where the reference has none.
+  llp_reach_plot         results/reach.pdf exists and carries drawing, text
+                         and filled regions.
 
-The answer-structure gate uses toolbench's built-in `json_with_keys`
-and the optional plot uses `plot_nonempty` — not redefined here.
+Also available to rubrics built on this benchmark:
+
+  llp_band_close         reach band vs reference within `dex_tol`.
+  llp_peak_close         peak N_sig over the scan vs reference within `factor`.
+  llp_scaling            a positive gg yield exists and the weak-coupling rise
+                         goes as g^4.
+  llp_nsig_filled        presence: a numeric N_sig at every declared truth
+                         point in answer.json.
+  llp_nsig_close         the agent N_sig within `factor` in log space of truth
+                         at >= `min_fraction` of the declared points.
+
+The answer-structure gate uses toolbench's built-in `json_with_keys`.
 """
 
 import fnmatch
@@ -101,13 +116,12 @@ def _as_float(val, label: str):
 # A piecewise qualifier appended to an otherwise-valid expression, e.g.
 #   "g**2*m_phi/(8*pi)*(1 - 4*m_mu**2/m_phi**2)**(3/2) for m_phi > 2*m_mu, else 0"
 #   "g**2*... if m_phi > 2*m_mu else 0"
-# The dimuon width IS piecewise -- it vanishes below 2*m_mu, where the
-# phase-space factor turns imaginary -- so an agent that states the condition is
-# being MORE precise than `soln/truth.json`, which stores the bare expression and
-# gets away with it only because `constraints` samples strictly above threshold.
-# The character whitelist below rejects the letters in such a qualifier before
-# anything is parsed, so the graded formula was failing for being too correct.
-# Strip the qualifier and grade the expression it qualifies.
+# The dimuon width is piecewise (it vanishes below 2*m_mu, where the
+# phase-space factor turns imaginary), so an agent that states the condition
+# is at least as precise as `soln/truth.json`, which stores the bare
+# expression and is sampled strictly above threshold. The character allowlist
+# would reject the words in such a qualifier, so the qualifier is stripped and
+# the expression it qualifies is graded.
 _PIECEWISE = re.compile(r"\s+(?:for|if|when|where|valid|only)\s", re.I)
 _ELSE = re.compile(r"\s+else\s+", re.I)
 
@@ -120,12 +134,9 @@ def _strip_lhs(text: str):
 
         Gamma(phi->mu+mu-) = g**2 * m_phi / (8*pi) * (1 - 4*m_mu**2/m_phi**2)**(3/2)
 
-    The label carries `->`, which `_CHARSET` rejects, so the formula was
-    failed for its punctuation while the expression itself was exactly right.
-    That cost a 2026-08-10 Sonnet trial its entire score: `width_correct`
-    absorbs, so a label rejected on characters zeroed a yield scan that had
-    scored 0.977. The rubric asks for a formula, not for a particular way of
-    presenting one.
+    The label carries `->`, which `_CHARSET` rejects, while the expression
+    itself is what the rubric asks for. The rubric asks for a formula, not for
+    a particular way of presenting one, so the label is dropped.
 
     Only a SINGLE leading `=` is stripped, and only when a right-hand side
     remains -- an expression containing a comparison or an assignment chain is
@@ -538,8 +549,8 @@ def check_llp_nsig_close(sandbox: Path, params: dict):
 # ---------------------------------------------------------------------------
 def _agent_reach(obj):
     """{(search, round(m,4)): [(g, nsig), ...] sorted by g} from the answer's
-    `reach` list. Falls back to the legacy flat `points` list (grouped by
-    search+m) so old answers still grade."""
+    `reach` list. Falls back to a flat `points` list (grouped by
+    search+m)."""
     out = {}
     reach = obj.get("reach")
     if isinstance(reach, list):
@@ -568,7 +579,7 @@ def _agent_reach(obj):
                 out[(str(s), round(float(m), 4))] = sorted(pts)
         if out:
             return out
-    for (s, m, g, n) in _agent_points(obj):        # legacy fallback
+    for (s, m, g, n) in _agent_points(obj):        # flat-list fallback
         if n is None or g <= 0.0:
             continue
         out.setdefault((str(s), round(m, 4)), []).append((g, float(n)))
@@ -616,11 +627,9 @@ def _truth_peaks(truth):
 # reference into a continuous [0,1] closeness. Overridable per check via the
 # `dex_scale` rubric param.
 #
-# 3.0, not 1.0: with scale 1 the credit exp(-dist) is numerically dead beyond
-# ~3 dex, so every trial whose yields are off by more than a factor of 1000
-# scores the same zero no matter how much better one of them is. Weak models
-# live in exactly that 1-15 dex range, which made the stage blind where it was
-# most needed. At 3.0 a 1-dex miss reads 0.72, 3 dex 0.37, 10 dex 0.04.
+# At 3.0 a 1-dex miss reads 0.72, 3 dex 0.37 and 10 dex 0.04, so trials that
+# are off by large factors remain distinguishable from one another; with a
+# scale of 1 the credit exp(-dist) is numerically dead beyond ~3 dex.
 _DEX_SCALE = 3.0
 
 
@@ -635,12 +644,8 @@ def _closeness(dex: float, tol: float = 0.0, scale: float = None) -> float:
 
     The stage's OWN tolerance sets the decay scale: credit = exp(-dex/(K*tol))
     with K chosen so that dex == tol scores _CREDIT_AT_TOL. A tighter stage
-    therefore decays faster, which is what makes the coarse/mid/fine ladder
-    three genuinely different measurements.
-
-    Previously the credit used a single global scale and ignored `tol`
-    entirely, so coarse/mid/fine returned the identical number on every trial
-    and 60% of the rubric weight was one measurement counted three times.
+    therefore decays faster, so two stages with different tolerances are
+    genuinely different measurements.
 
     Note the tolerance is a scale, not a free zone: giving full credit
     everywhere inside it saturates the top of the range and makes a
@@ -777,14 +782,10 @@ def check_llp_band_close(sandbox: Path, params: dict):
                         # agent's band does not close: its actual claim is
                         # "excluded from g_lo up to at least the top of my
                         # grid". Score that claim against the reference
-                        # ceiling instead of dropping the endpoint.
-                        #
-                        # Dropping it (the previous behaviour) graded the trial
-                        # on the lower edge alone -- the easier one, since the
-                        # weak-coupling rise is steep and well localized. That
-                        # EXCUSED the exact failure the task warns about
-                        # (a g-grid too narrow to bracket the band) and
-                        # systematically flattered whichever arm truncated more.
+                        # ceiling instead of dropping the endpoint: grading
+                        # the lower edge alone would excuse a g-grid too
+                        # narrow to bracket the band, which the task warns
+                        # about.
                         unclosed = True
                         g_top = max(g for g, _n in scan)
                         ds.append(abs(math.log10(g_top / g_hi_t)))
@@ -899,10 +900,11 @@ def check_llp_no_spurious_reach(sandbox: Path, params: dict):
     """The mirror of band_close: at every (search, m) where the reference has
     NO reach band, the agent must not claim one.
 
-    band_close only iterates over reference masses that HAVE a finite band, so
-    a trial that invents an exclusion where the reference sees none was never
-    graded at all -- and claiming sensitivity you do not have is the most
-    consequential error a reach study can make. Credit is the fraction of
+    band_close and contour_distance iterate only over reference masses that
+    HAVE a finite band, so this is the check that sees a trial inventing an
+    exclusion where the reference has none -- and claiming sensitivity you do
+    not have is the most consequential error a reach study can make. Credit
+    is the fraction of
     null-band points left correctly empty, attenuated by how much spurious
     coupling range was claimed (a sliver over threshold is not the same
     mistake as a decade of invented exclusion).
@@ -1096,19 +1098,17 @@ def check_llp_scaling(sandbox: Path, params: dict):
 
 
 # --------------------------------------------------------------------------
-# calibrated-distance checks (see benchmarks/llp_forward/soln/notes/accuracy_metric.tex)
+# calibrated-distance checks
 #
-# These score ACCURACY as a distance standardised by the reference's own
-# Monte-Carlo precision, instead of against a hand-chosen tolerance. sigma is
-# measured by comparing two independent MC estimates of the same physics
-# (truth.json, 2e6-event flux vs fine_reach_contour.json, 3.9e5) and
-# deconvolving the sample-size ratio; it is NOT a free parameter.
+# These score ACCURACY as a distance in dex. The pass/fail test compares that
+# distance with the reference's own Monte-Carlo precision `sigma`, set in the
+# rubric and measured from independent reference builds, rather than with a
+# hand-chosen tolerance.
 #
 # Reported metrics: `distance` (median |dex|), `z` (= distance / sigma),
-# `coverage` (fraction of graded points answered) and `closeness`
-# (= exp(-z^2/2), the likelihood under "the agent did the same calculation and
-# differs only by MC noise"). The rubric consumes `closeness`; a reader should
-# quote `distance` and `z`.
+# `coverage` (fraction of graded points answered) and `closeness` (= 10^-D,
+# the reciprocal of the median factor the agent is off by). The rubric
+# consumes `closeness`; a reader should quote `distance` and `z`.
 # --------------------------------------------------------------------------
 def _standardise(dists, sigma, z_crit, n_graded, n_cov, signed=None):
     """Turn per-point residuals into a score, a test, and a diagnosis.
@@ -1124,17 +1124,15 @@ def _standardise(dists, sigma, z_crit, n_graded, n_cov, signed=None):
     point then aggregating equals aggregating then scoring; the reported D and
     the reported score cannot disagree.
 
-    This replaces exp(-z^2/2). Once the reference was rebuilt to
-    sigma ~ 0.002 dex, that mapping returned exactly 0.000 for every arm of the
-    2026-08 campaign -- correctly, since the agents' errors are SYSTEMATIC and
-    properly computed error bars make a systematic look MORE significant, not
-    less. A score has to degrade gracefully; a test statistic must not.
+    The score is deliberately not a likelihood such as exp(-z^2/2): with a
+    reference precision of ~0.002 dex that mapping returns 0.000 for any
+    systematic error, since properly computed error bars make a systematic
+    look MORE significant, not less. A score has to degrade gracefully; a
+    test statistic must not.
 
-    z IS STILL COMPUTED, as a test rather than a score: "is this discrepancy
-    real, or could it be sampling noise?" It earns its place -- on the
-    contour's weak-coupling edge the best tooled cells sit at z ~ 1, i.e.
-    consistent with having done the same calculation, while everything else is
-    z >> 1 and therefore systematically displaced.
+    z IS COMPUTED, as a test rather than a score: "is this discrepancy real,
+    or could it be sampling noise?" A cell at z ~ 1 is consistent with having
+    done the same calculation; z >> 1 is systematically displaced.
 
     BIAS AND SCATTER decompose D when signed residuals are available:
 
@@ -1143,9 +1141,7 @@ def _standardise(dists, sigma, z_crit, n_graded, n_cov, signed=None):
     D alone cannot tell "uniformly off by a clean factor" from "randomly wrong
     by the same amount", and those are different results: the first is a
     normalisation or convention slip, the second is a failure to reproduce the
-    functional form. On the 2026-08 campaign the core arms sat at
-    |bias|/D ~ 1.00 with scatter 0.015-0.057 dex -- the whole error was one
-    constant factor, with the shape right to a few percent.
+    functional form.
     """
     if not dists:
         return False, "no graded point produced a usable value", {
@@ -1186,17 +1182,12 @@ def check_llp_yield_distance(sandbox: Path, params: dict):
     """Yield accuracy as a calibrated distance, evaluated AT THE REFERENCE'S OWN
     DECLARED (search, m_phi, g) POINTS.
 
-    Deliberately NOT against `_per_mass.peak`. That field is the maximum of the
-    reference's internal 400-point scan over g in [1e-9, 1], taken at a coupling
-    the declared point set never samples; comparing it to the maximum of an
-    agent's own grid compares two different quantities on two different grids.
-    On the 2026-08 campaign it reported ~0.48 dex for cells whose band edges
-    agree with the reference to 0.005-0.03 dex -- i.e. it was measuring the
-    mismatch, not the physics.
-
-    Here the agent's scan is interpolated in log-log onto the reference's own
-    couplings, so both sides are evaluated at the same (search, m_phi, g). 48
-    graded points instead of 12, and no grid dependence.
+    The agent's scan is interpolated in log-log onto the reference's own
+    couplings, so both sides are evaluated at the same (search, m_phi, g) and
+    the result does not depend on the agent's grid. `_per_mass.peak` is not
+    used: it is the maximum of the reference's internal scan at a coupling the
+    declared point set never samples, so comparing it to the maximum of an
+    agent's own grid would compare two different quantities on two grids.
     """
     truth, err = _load_truth(params)
     if err:
@@ -1241,18 +1232,14 @@ def check_llp_yield_distance(sandbox: Path, params: dict):
 
 
 def check_llp_contour_distance(sandbox: Path, params: dict):
-    """Reach-contour accuracy as a calibrated distance, replacing the
-    coarse/mid/fine ladder. Those three stages scored ONE measurement at three
-    hand-chosen thresholds for 0.40 of the rubric weight.
+    """Reach-contour accuracy as a calibrated distance.
 
     `edge` selects which boundary is graded: 'lower', 'upper', or 'both'.
-    THE TWO EDGES SHOULD BE GRADED SEPARATELY. They are different physics --
-    the lower edge is production-limited, the upper is lifetime-limited -- and
-    they respond differently to method. On the 2026-08 campaign a single trial
-    sat at 0.0028 dex on the lower edge and 0.066 on the upper, a factor 19,
-    so pooling them turned a bimodal distribution into a misleading unimodal
-    one and hid the campaign's most informative result. 'both' is kept only for
-    continuity with the earlier rubric."""
+    The shipped rubric grades the two edges separately. They are different
+    physics -- the lower edge is production-limited, the upper is
+    lifetime-limited -- and they respond differently to method, so pooling
+    them can turn a bimodal distribution into a misleading unimodal one.
+    'both' pools them."""
     truth, err = _load_truth(params)
     if err:
         return False, err
@@ -1297,7 +1284,7 @@ CHECKS = {
     "llp_contour_distance": check_llp_contour_distance,
     "llp_reach_plot": check_llp_reach_plot,
     "llp_scaling": check_llp_scaling,
-    # legacy pinned-grid checks (kept for backward compatibility)
+    # pinned-grid checks, not used by the shipped rubric
     "llp_nsig_filled": check_llp_nsig_filled,
     "llp_nsig_close": check_llp_nsig_close,
 }

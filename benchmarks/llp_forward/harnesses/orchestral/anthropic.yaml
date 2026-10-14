@@ -1,7 +1,4 @@
-# llp_forward family policy: NO WebSearchTool in any harness arm — the
-# reach study is graded against hidden holdout probes and a committed
-# reference contour, so web access is oracle access (spec section 11).
-# Full settable-key reference: toolbench/harness_templates/orchestral.yaml
+# In-process orchestral agent on the Anthropic API.
 name: orchestral/anthropic
 runtime:
   name: orchestral
@@ -14,6 +11,6 @@ core:
           FindFilesTool, FileSearchTool, RunPythonTool,
           TodoRead, TodoWrite]
 loop:
-  max_iterations: 150        # agent.run() round-trip cap (consumed by the runner)
-  max_format_retries: 2      # resume the session on a MODEL_FORMAT_CRASH (bad tool-call JSON)
-  continue_nudges: 0         # presence-gated resumes when the model stops early (0 = strict autonomy)
+  max_iterations: 150
+  max_format_retries: 2                # resume after a malformed tool call
+  continue_nudges: 0                   # no resume when the agent stops early

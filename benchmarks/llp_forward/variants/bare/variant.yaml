@@ -6,9 +6,8 @@ description: |
   colleague for this analysis".
 
   WHY EVERYTHING IS IN THE PROMPT. It is not only realism. What the agent was
-  given becomes a single reviewable artifact instead of three files in two
-  formats, and a prescription can no longer hide in a config file -- which is
-  exactly how the v1 formulation failed (see HISTORY). It also removes a
+  given becomes a single reviewable artifact instead of several files in two
+  formats, and a prescription cannot hide in a config file. It also removes a
   non-physics failure mode: not reading, or misparsing, a supplied .tex.
 
   WHAT IS PINNED, and why each is necessary for truth.json to be the unique
@@ -29,13 +28,12 @@ description: |
                                   zero yield at m_phi = 1.9 and 2.3 -- 8 of the
                                   48 graded points -- and that is a generator
                                   switch, not physics they can derive.
-                                  The word "prompt" USED to appear here and was
-                                  removed: it reads as an instruction to run a
-                                  dedicated NRQCD onia sample, which is what
-                                  both arms of the 2026-08-09 pilot did, and
-                                  that route undercounts the forward J/psi
-                                  flux by 1.32x. Deliberately NOT replaced with
-                                  the recipe -- see WHAT IS WITHHELD
+                                  The word "prompt" is deliberately absent:
+                                  it reads as an instruction to run a
+                                  dedicated NRQCD onia sample, and that route
+                                  undercounts the forward J/psi flux by
+                                  1.32x. The recipe itself is not stated
+                                  either -- see WHAT IS WITHHELD
     harvest at production         the LLP decay is BSM and absent from the
                                   generator, so parents must be caught before
                                   they decay
@@ -85,31 +83,18 @@ description: |
   and is EXACTLY zero for the diphoton search (the photons follow the phi's own
   line, so the decay position cancels algebraically). An agent that samples the
   true decay point will be marginally more correct than the reference, by an
-  amount below its noise floor. See benchmarks/llp_forward/soln/notes/detector_model.tex.
+  amount below its noise floor.
 
   Also not pinned: pt_cut. It is the soft/hard stitching point in the reference
   generator, but n_hard = 0 in every flux ever built, so nothing is stitched
   and it has no effect.
 
-  PAIRS WITH EITHER ARM. Earlier revisions of this file said "core-only by
-  design", because MesonDecayToLLP required `kappa` and `spectrum_spec` as
-  inputs and this variant withholds the files that supplied them, leaving the
-  central domain tool unusable. Heptapod 2.5.0 adds ProductionSpectrumTool,
-  which COMPUTES the spectrum and the reduced branching fraction from a parent
-  name and a mass -- precisely what is withheld here. So `bare` x `core_only`
-  versus `bare` x `tools_defined` is now runnable, and it is the cleanest
+  PAIRS WITH EITHER ARM. MesonDecayToLLP takes `kappa` and `spectrum_spec`
+  as inputs and this variant withholds the files that would supply them, but
+  ProductionSpectrumTool computes the spectrum and the reduced branching
+  fraction from a parent name and a mass -- precisely what is withheld here.
+  So `bare` x `core_only` versus `bare` x `tools_defined` is the cleanest
   tools-versus-no-tools contrast in the suite.
-
-  HISTORY. v1 (2026-08-06) created no headroom over the scaffolded core cell
-  (0.935 vs 0.900). An audit found `geometry.yaml` was not a geometry file: a
-  "DECLARED CONVENTIONS" banner gave away the decay-in-flight vertex, the
-  [L1,L2] ray/cylinder intersection, P_dec with lambda = beta*gamma*c*tau, the
-  midpoint evaluation together with its g-independence rationale, and both
-  acceptance algorithms step by step. Stages 4 and 5 were simply handed over.
-  v2 withheld the prescriptions and kept the arbitrary pins, and also dropped
-  the table of eight named parents from reference.tex. This revision folds the
-  surviving pins into the prompt, supplies the widths (see AXES), and reduces
-  the sandbox to the output contract.
 
 axes:
   spec: defined   # decay widths SUPPLIED, as in the `defined` variant
@@ -117,10 +102,8 @@ axes:
 
 # AXES: why the widths are supplied. Two reasons.
 #
-# It makes this a SINGLE-AXIS contrast. `bare` and `defined` now differ only in
+# It makes this a SINGLE-AXIS contrast. `bare` and `defined` differ only in
 # environment, so a bare-vs-defined delta is attributable to scaffolding alone.
-# Previously this variant moved `spec` AND `env` together and the two effects
-# could not be separated.
 #
 # And the one-loop diphoton width is a single point of catastrophic failure
 # that is not what this variant measures. Below 2 m_mu = 0.2113 GeV the
@@ -135,7 +118,5 @@ system_prompt_file: ./prompts/system.md
 sandbox:
   # ONE file: the output contract. Interface scaffolding is held constant and
   # complete across every variant -- it is not the variable under test, and an
-  # under-specified interface produces non-physics failures. The `pythia_ran`
-  # gate is the standing example: it "only ever fired on file-NAMING in the
-  # bare variant".
+  # under-specified interface produces non-physics failures.
   template_dir: ./sandbox/template
