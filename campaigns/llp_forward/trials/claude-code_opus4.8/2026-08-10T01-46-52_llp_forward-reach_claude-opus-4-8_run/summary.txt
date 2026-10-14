@@ -1,0 +1,147 @@
+================================================================
+                     RUN  llp_forward-reach                     
+================================================================
+  run_id     2026-08-10T01-46-52_llp_forward-reach_claude-opus-4-8_run
+  task       llp_forward-reach       k          5   (n per cell)
+  trials     10                      cells      2
+  budget     $0.00 spent — SUBSCRIPTION (no metered API spend)
+  start      2026-08-10T01:46:52
+  wall       9h49m
+  versions   toolbench 0.7.0  claude_code 2.1.225
+  provenance git f2682f7fb9   harness claude-code/default
+  integrity  CLEAN (10 trials scanned)
+================================================================
+
+
+================================================================
+              CELL  claude-opus-4-8  ×  core_only               
+================================================================
+
+  THREE-VECTOR              (k=5)
+  ------------
+
+      Each row is an expectation over k iid trials of a per-trial
+      score M_j ∈ [0,1]. bar_k = E[mean], at_k = E[max], ^k = E[min].
+      See the accompanying manuscript for definitions and estimators.
+
+      reach         0.80         productivity     (rubric-weighted)
+      reach (eq-w)  0.92         depth            (equal-weight, no rubric)
+      pass@k        1.00         exploration      (best of k)
+      pass^k        0.00         trustworthiness  (worst of k)
+
+      pass criterion: a trial passes iff reach >= 0.9
+
+  STAGES
+  ------
+
+      answer_present        5/5       1.00
+      pythia_ran            5/5       1.00
+      width_correct         5/5       1.00
+      channels_present      5/5  credit 1.00   dist   -
+      yield_distance        0/5  credit 0.62   dist 0.310 median |dex| vs reference
+      contour_lower         0/5  credit 0.75   dist 0.127 median |dex| vs reference
+      contour_upper         0/5  credit 0.91   dist 0.043 median |dex| vs reference
+      no_spurious_reach     3/5  credit 0.99   dist 0.355 dex (log10 g) of invented band
+      reach_plot            5/5  credit 1.00   dist   -
+
+  TRIALS
+  ------
+
+      scores     0.55  0.70  0.85  0.94  0.95   (min 0.55  max 0.95  spread 0.40)
+      UX rating  8        (blind, 1-10)
+
+  FAILURES
+  --------
+
+      INCOMPLETE_AT_YIELD_DISTANCE    5
+
+  COST
+  ----
+
+      cost      $0.00 total       $0.00 / trial
+      wall      4h24m total      52m55s / trial
+      tokens    199,644 initial input / trial
+                4 input  /  1,295 output  (cumulative / trial)
+                231,952 cache read  /  168,712 cache write  / trial
+
+
+================================================================
+            CELL  claude-opus-4-8  ×  tools_defined             
+================================================================
+
+  THREE-VECTOR              (k=5)
+  ------------
+
+      Each row is an expectation over k iid trials of a per-trial
+      score M_j ∈ [0,1]. bar_k = E[mean], at_k = E[max], ^k = E[min].
+      See the accompanying manuscript for definitions and estimators.
+
+      reach         0.97         productivity     (rubric-weighted)
+      reach (eq-w)  0.98         depth            (equal-weight, no rubric)
+      pass@k        1.00         exploration      (best of k)
+      pass^k        1.00         trustworthiness  (worst of k)
+
+      pass criterion: a trial passes iff reach >= 0.9
+
+  STAGES
+  ------
+
+      answer_present        5/5       1.00
+      pythia_ran            5/5       1.00
+      width_correct         5/5       1.00
+      channels_present      5/5  credit 1.00   dist   -
+      yield_distance        0/5  credit 0.97   dist 0.011 median |dex| vs reference
+      contour_lower         4/5  credit 0.95   dist 0.025 median |dex| vs reference
+      contour_upper         0/5  credit 0.91   dist 0.042 median |dex| vs reference
+      no_spurious_reach     5/5  credit 1.00   dist 0.000 dex (log10 g) of invented band
+      reach_plot            5/5  credit 1.00   dist   -
+
+  TRIALS
+  ------
+
+      scores     0.94  0.97  0.97  0.98  0.98   (min 0.94  max 0.98  spread 0.04)
+      UX rating  8  9  8  8  8        (blind, 1-10)
+
+  FAILURES
+  --------
+
+      INCOMPLETE_AT_YIELD_DISTANCE    5
+
+  COST
+  ----
+
+      cost      $0.00 total       $0.00 / trial
+      wall      5h24m total      1h04m / trial
+      tokens    190,633 initial input / trial
+                6 input  /  3,905 output  (cumulative / trial)
+                417,952 cache read  /  158,182 cache write  / trial
+
+
+================================================================
+               CONDITION DELTAS  (paired by seed)               
+================================================================
+
+      Δ = condition_b − condition_a, averaged over shared seeds;
+      CI95 is a paired bootstrap over the seed dimension.
+
+  claude-opus-4-8:  tools_defined − core_only
+      Δreach    +0.17  CI95 [+0.05, +0.31]      (n_pairs=5)
+      Δpass     +0.60  CI95 [+0.20, +1.00]
+
+
+================================================================
+                           ARTIFACTS                            
+================================================================
+
+  manifest           <hepbench>/runs/2026-08-10T01-46-52_llp_forward-reach_claude-opus-4-8_run/manifest.json
+  summary (json)     <hepbench>/runs/2026-08-10T01-46-52_llp_forward-reach_claude-opus-4-8_run/summary.json
+  summary (txt)      <hepbench>/runs/2026-08-10T01-46-52_llp_forward-reach_claude-opus-4-8_run/summary.txt
+  trials (jsonl)     <hepbench>/runs/2026-08-10T01-46-52_llp_forward-reach_claude-opus-4-8_run/trials.jsonl
+  per-trial dirs     <hepbench>/runs/2026-08-10T01-46-52_llp_forward-reach_claude-opus-4-8_run/trials/
+  per-trial audit    <hepbench>/runs/2026-08-10T01-46-52_llp_forward-reach_claude-opus-4-8_run/trials/<id>/audit.txt  (+ audit.html)
+  three-vector plot  <hepbench>/runs/2026-08-10T01-46-52_llp_forward-reach_claude-opus-4-8_run/parallel_coords.png
+  k-dependence plot  <hepbench>/runs/2026-08-10T01-46-52_llp_forward-reach_claude-opus-4-8_run/k_sweep.png
+  per-stage k plot   <hepbench>/runs/2026-08-10T01-46-52_llp_forward-reach_claude-opus-4-8_run/per_stage_k.png
+  overview plot      <hepbench>/runs/2026-08-10T01-46-52_llp_forward-reach_claude-opus-4-8_run/overview.png
+
+================================================================

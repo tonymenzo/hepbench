@@ -1,34 +1,38 @@
 # `llp_forward` campaign
 
-The single-axis tool ablation on the forward-LLP benchmark: `bare × core_only` against `bare × tools_defined` for four systems, five trials each, 40 trials. The out-of-the-box variant ships one file, the output contract, and states everything the answer depends on in the user prompt, so the domain arm's advantage cannot come from scaffolding the arms share.
+From the repository root, open this campaign in the toolbench dashboard:
 
-| System | Harness | Core arm | Domain arm |
-|---|---|---|---|
-| Opus 4.8 | Claude Code | `core_only` | `tools_defined` |
-| Sonnet 5 | Claude Code | `core_only` | `tools_defined_unprompted` |
-| GPT-5.5 | Codex | `core_only` | `tools_defined` |
-| GPT-5.6 | Codex | `core_only` | `tools_defined` |
+```bash
+toolbench dashboard campaigns/llp_forward/trials --port 0
+```
 
-The Codex domain arms carry the system-prompt addendum stating that a toolkit is served and preferred; without it neither GPT model called a domain tool. The Claude Code systems adopted the toolkit unprompted and ran without it. The addendum is recorded in every trial record.
+The `--port 0` option automatically selects an available port and prints the dashboard URL in the terminal. Open that URL in your browser, select a run, then select a trial to inspect its grades. If toolbench is not installed, follow the [Quickstart](../../README.md#quickstart). Viewing the campaign does not require an agent login or HEPTAPOD.
+
+The checkout includes the score records. To inspect transcripts and preserved files, download `hepbench-trials-llp_forward.tar.gz` from [Releases](https://github.com/tonymenzo/hepbench/releases) and extract it from the repository root, replacing the path with your downloaded file:
+
+```bash
+tar xzf /path/to/hepbench-trials-llp_forward.tar.gz -C campaigns/llp_forward
+```
+
+## Campaign
+
+The tool ablation on the forward-LLP benchmark: `core_only` against `tools_defined` on the `bare` variant, four systems, five trials per cell, 40 trials. The `bare` variant ships one file, the output schema, and states everything the answer depends on in the user prompt, so the domain arm's advantage cannot come from scaffolding the arms share.
+
+| Directory | Harness | Model | Core arm | Domain arm | Trials |
+|---|---|---|---|---|---|
+| `claude-code_opus4.8` | Claude Code 2.1.225 | `claude-opus-4-8` | `core_only` | `tools_defined` | 10 |
+| `claude-code_sonnet5` | Claude Code 2.1.226 | `claude-sonnet-5` | `core_only` | `tools_defined_unprompted` | 10 |
+| `codex_gpt5.5` | Codex 0.146.0 | `gpt-5.5` | `core_only` | `tools_defined` | 10 |
+| `codex_gpt5.6` | Codex 0.146.0 | `gpt-5.6-sol` | `core_only` | `tools_defined` | 10 |
+
+All runs: variant `bare`, seeds 1001 to 1005, subscription access, toolbench 0.7.0. The toolkit served to the domain arm is HEPTAPOD 3.0.0 through the `forward-llp-defined` loadout: the `llp` pipeline, `PythiaFromRunCard`, and the run-card guide. The benchmark as graded is [`benchmarks/llp_forward`](../../benchmarks/llp_forward) as committed: regrading every trial's preserved artifacts under it reproduces the recorded stage credits and scores, apart from the weightless `pythia_ran` report in three trials whose flux files are among the omitted intermediates.
+
+The Codex domain arms carry the `tools_defined` system-prompt addendum stating that a toolkit is served and preferred; without it neither GPT model called a domain tool. The Claude Code systems adopted the toolkit unprompted and ran without it. The addendum is recorded in every trial record.
 
 ## Contents
 
 | Path | What it is |
 |---|---|
-| `campaign.yaml` | The ledger: every cell, its seeds, its validity, and the reason for each exclusion. |
-| `config/` | The graded contract as run: `benchmark.yaml`, `checks.py`, the four harnesses, the loadouts, the variant, and the run-card guide served to the domain arm. |
-| `dataset/` | The collected cells (`cells/*.json`), `index.json`, the verified Monte Carlo sample sizes, and the score table. |
-| `graded_record.tar.gz` | The graded evidence of all 40 trials: answer files, yield scans, reach plots, per-trial grades, and audit logs. 3 MB. |
-| `OMITTED.txt` | The ten agent-written flux intermediates over 2 MiB left out of the archive, with hashes. None is an input to any number in the paper. |
+| `trials/<harness>_<model>/<run_id>/` | Per-run ledgers: `trials.jsonl`, `manifest.json`, and the summaries. Both arms are in the same run. |
 
-Transcripts and the full preserved sandboxes are in the release asset `hepbench-trials-llp_forward.tar.gz`.
-
-## Reading the numbers
-
-Every cell records the rubric fingerprint `6555a8797b4c` (sha256 of `benchmark.yaml` and `checks.py`), and every run was regraded under it and came back bit-identical. The noise floor comes from `benchmarks/llp_forward/soln/reference/manifest.json`, two independent same-size reference builds, which is the same source the rubric uses.
-
-The graded distance statistic takes each trial's median |dex| and then the median across trials. The distance of a median curve drawn across trials is smaller, since it cancels their scatter, and is not the graded quantity.
-
-One trial was rerun: GPT-5.6 seed 1001 originally scored zero by overwriting the supplied output schema and validating against its own. The replacement came from `toolbench resume` into the same run directory under the same seed, and the ledger records it.
-
-An excluded Haiku 4.5 cell is recorded in `dataset/README.md`. One of its trials reached the ground truth through the git object store, which the deny-list did not then cover; toolbench now denies `.git` of every repository containing a benchmark.
+The per-trial evidence (transcripts, preserved sandboxes, grades) is in the release asset `hepbench-trials-llp_forward.tar.gz`; extracted into this directory it completes each run for `toolbench dashboard`. Each trial's `prompts.json`, the system and user prompt as composed for that trial, was written into the asset after the campaign from the committed variant prompts and the loadout recorded in `trial.json`; toolbench 0.7.0 did not record it. Agent-written intermediates over 2 MiB are left out of the asset and listed, with hashes, in its `OMITTED.txt`; none is an input to any number in the paper.

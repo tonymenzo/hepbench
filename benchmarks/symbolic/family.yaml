@@ -1,7 +1,0 @@
-# Curated class metadata for the HEPBench results site (read by
-# scripts/build_site.py). Optional: title + a short, hand-written description.
-title: Symbolic manipulation
-description: >-
-  Tree-level decay widths and cross-sections derived from a Lagrangian.
-  Agents return exact numeric values and closed-form expressions, graded
-  against independently verified ground truth on a tolerance ladder.

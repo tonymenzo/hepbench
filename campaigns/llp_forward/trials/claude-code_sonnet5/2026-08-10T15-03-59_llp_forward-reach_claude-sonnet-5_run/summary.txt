@@ -1,0 +1,149 @@
+================================================================
+                     RUN  llp_forward-reach                     
+================================================================
+  run_id     2026-08-10T15-03-59_llp_forward-reach_claude-sonnet-5_run
+  task       llp_forward-reach       k          5   (n per cell)
+  trials     10                      cells      2
+  budget     $0.00 spent — SUBSCRIPTION (no metered API spend)
+  start      2026-08-10T15:03:59
+  wall       9h22m
+  versions   toolbench 0.7.0  claude_code 2.1.226
+  provenance git d8cefaa12a   harness claude-code/sonnet-5
+  integrity  CLEAN (10 trials scanned)
+================================================================
+
+
+================================================================
+       CELL  claude-sonnet-5  ×  tools_defined_unprompted       
+================================================================
+
+  THREE-VECTOR              (k=5)
+  ------------
+
+      Each row is an expectation over k iid trials of a per-trial
+      score M_j ∈ [0,1]. bar_k = E[mean], at_k = E[max], ^k = E[min].
+      See the accompanying manuscript for definitions and estimators.
+
+      reach         0.97         productivity     (rubric-weighted)
+      reach (eq-w)  0.98         depth            (equal-weight, no rubric)
+      pass@k        1.00         exploration      (best of k)
+      pass^k        1.00         trustworthiness  (worst of k)
+
+      pass criterion: a trial passes iff reach >= 0.9
+
+  STAGES
+  ------
+
+      answer_present        5/5       1.00
+      pythia_ran            5/5       1.00
+      width_correct         5/5       1.00
+      channels_present      5/5  credit 1.00   dist   -
+      yield_distance        1/5  credit 0.97   dist 0.015 median |dex| vs reference
+      contour_lower         2/5  credit 0.97   dist 0.015 median |dex| vs reference
+      contour_upper         0/5  credit 0.90   dist 0.045 median |dex| vs reference
+      no_spurious_reach     5/5  credit 1.00   dist 0.000 dex (log10 g) of invented band
+      reach_plot            5/5  credit 1.00   dist   -
+
+  TRIALS
+  ------
+
+      scores     0.94  0.97  0.97  0.97  0.98   (min 0.94  max 0.98  spread 0.05)
+      UX rating  8        (blind, 1-10)
+
+  FAILURES
+  --------
+
+      INCOMPLETE_AT_YIELD_DISTANCE    4
+      INCOMPLETE_AT_CONTOUR_UPPER     1
+
+  COST
+  ----
+
+      cost      $0.00 total       $0.00 / trial
+      wall      5h14m total      1h02m / trial
+      tokens    212,113 initial input / trial
+                6 input  /  6,844 output  (cumulative / trial)
+                478,333 cache read  /  161,078 cache write  / trial
+
+
+================================================================
+              CELL  claude-sonnet-5  ×  core_only               
+================================================================
+
+  THREE-VECTOR              (k=5)
+  ------------
+
+      Each row is an expectation over k iid trials of a per-trial
+      score M_j ∈ [0,1]. bar_k = E[mean], at_k = E[max], ^k = E[min].
+      See the accompanying manuscript for definitions and estimators.
+
+      reach         0.45         productivity     (rubric-weighted)
+      reach (eq-w)  0.64         depth            (equal-weight, no rubric)
+      pass@k        0.00         exploration      (best of k)
+      pass^k        0.00         trustworthiness  (worst of k)
+
+      pass criterion: a trial passes iff reach >= 0.9
+
+  STAGES
+  ------
+
+      answer_present        4/5       0.80
+      pythia_ran            5/5       1.00
+      width_correct         5/5       1.00
+      channels_present      3/5  credit 0.60   dist   -
+      yield_distance        0/5  credit 0.21   dist 0.470 median |dex| vs reference
+      contour_lower         0/5  credit 0.41   dist 0.184 median |dex| vs reference
+      contour_upper         1/5  credit 0.55   dist 0.037 median |dex| vs reference
+      no_spurious_reach     4/5  credit 0.80   dist 0.000 dex (log10 g) of invented band
+      reach_plot            4/5  credit 0.80   dist   -
+
+  TRIALS
+  ------
+
+      scores     0.00  0.20  0.60  0.71  0.73   (min 0.00  max 0.73  spread 0.73)
+
+  FAILURES
+  --------
+
+      INCOMPLETE_AT_YIELD_DISTANCE      3
+      INCOMPLETE_AT_ANSWER_PRESENT      1
+      INCOMPLETE_AT_CHANNELS_PRESENT    1
+
+  COST
+  ----
+
+      cost      $0.00 total       $0.00 / trial
+      wall      4h07m total      49m35s / trial
+      tokens    239,518 initial input / trial
+                4 input  /  809 output  (cumulative / trial)
+                313,225 cache read  /  168,009 cache write  / trial
+
+
+================================================================
+               CONDITION DELTAS  (paired by seed)               
+================================================================
+
+      Δ = condition_b − condition_a, averaged over shared seeds;
+      CI95 is a paired bootstrap over the seed dimension.
+
+  claude-sonnet-5:  core_only − tools_defined_unprompted
+      Δreach    -0.52  CI95 [-0.77, -0.28]      (n_pairs=5)
+      Δpass     -1.00  CI95 [-1.00, -1.00]
+
+
+================================================================
+                           ARTIFACTS                            
+================================================================
+
+  manifest           <hepbench>/runs/2026-08-10T15-03-59_llp_forward-reach_claude-sonnet-5_run/manifest.json
+  summary (json)     <hepbench>/runs/2026-08-10T15-03-59_llp_forward-reach_claude-sonnet-5_run/summary.json
+  summary (txt)      <hepbench>/runs/2026-08-10T15-03-59_llp_forward-reach_claude-sonnet-5_run/summary.txt
+  trials (jsonl)     <hepbench>/runs/2026-08-10T15-03-59_llp_forward-reach_claude-sonnet-5_run/trials.jsonl
+  per-trial dirs     <hepbench>/runs/2026-08-10T15-03-59_llp_forward-reach_claude-sonnet-5_run/trials/
+  per-trial audit    <hepbench>/runs/2026-08-10T15-03-59_llp_forward-reach_claude-sonnet-5_run/trials/<id>/audit.txt  (+ audit.html)
+  three-vector plot  <hepbench>/runs/2026-08-10T15-03-59_llp_forward-reach_claude-sonnet-5_run/parallel_coords.png
+  k-dependence plot  <hepbench>/runs/2026-08-10T15-03-59_llp_forward-reach_claude-sonnet-5_run/k_sweep.png
+  per-stage k plot   <hepbench>/runs/2026-08-10T15-03-59_llp_forward-reach_claude-sonnet-5_run/per_stage_k.png
+  overview plot      <hepbench>/runs/2026-08-10T15-03-59_llp_forward-reach_claude-sonnet-5_run/overview.png
+
+================================================================

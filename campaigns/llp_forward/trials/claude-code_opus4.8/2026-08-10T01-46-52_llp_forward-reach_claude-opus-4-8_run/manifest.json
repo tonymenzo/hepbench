@@ -1,0 +1,432 @@
+{
+  "run_id": "2026-08-10T01-46-52_llp_forward-reach_claude-opus-4-8_run",
+  "created_at": "2026-08-10T01:46:52",
+  "git_sha": "f2682f7fb9f9eae282e27d3229b1efb65165a986",
+  "benchmark_git_sha": "2a57b050e8e2affa4537c5ba6097f744ed619a74",
+  "environment": {
+    "python": "3.12.12",
+    "python_executable": "<python>",
+    "platform": "macOS-15.1-arm64-arm-64bit",
+    "packages": {
+      "numpy": "2.5.1",
+      "scipy": "1.18.0",
+      "matplotlib": "3.11.1",
+      "sympy": "1.14.0",
+      "pythia8mc": "8.317.2",
+      "uproot": "5.7.5",
+      "awkward": "2.11.0",
+      "pyhepmc": "2.16.1"
+    },
+    "conda_prefix": "<conda>/envs/hepbench"
+  },
+  "benchmark": "llp_forward-reach",
+  "benchmark_dir": "<hepbench>/benchmarks/llp_forward",
+  "benchmark_extends": null,
+  "benchmark_config": {
+    "name": "llp_forward-reach",
+    "version": "1.0.0",
+    "description": "Muon-philic scalar LLP reach study (collider-forward, full spectrum).\nFrom a pinned model card, the agent GENERATES the forward meson flux\nwith the provided Pythia cards, harvests it (per-collision normalized),\ndecays it to the scalar across every open channel -- pseudoscalar\nM -> mu nu phi (pi/K/D/Ds) and vector V -> mu mu phi (rho/omega/phi/\nJ/psi/psi2S) -- derives the phi -> mu mu (tree) and phi -> gamma gamma\n(one-loop) widths, propagates through a decay-in-flight / z_prod decay\nvolume, and reports N_sig at a declared set of (search, m_phi, g)\npoints spanning the gamma gamma lobe, the dimuon wedge, and the charm/\nJ-psi high-mass frontier. All pins are declared toy values.\n\nGRADING is by CALIBRATED DISTANCE: a symbolic/value width check, then a\nmedian |log10(agent/reference)| in dex on the yields and separately on each\nreach-contour edge, standardised by the reference's own measured\nMonte-Carlo precision rather than by a chosen tolerance. See\nanalysis/notes/accuracy_metric.tex.\n\nTHE SUPERSEDED TOLERANCE LADDER (peak_yield + band_coarse/mid/fine) now\nlives in benchmarks/llp_forward_legacy, which inherits everything else from\nhere. It is retained so the 2026-07 campaign and the 2026-08-09 pilot stay\nreproducible; it must not grade new work. Running THIS benchmark is what\ngets you the live rubric -- which is the point of the move, since the\narrangement was previously inverted and grading the parent silently gave\nthe old ladder.\n",
+    "default_harness": "claude-code/default",
+    "default_loadout": "tools_defined",
+    "default_variant": "defined",
+    "ground_truth": {
+      "dir": "<hepbench>/benchmarks/llp_forward/soln"
+    },
+    "checks": "<hepbench>/benchmarks/llp_forward/checks/checks.py",
+    "artifacts": {
+      "keep_full": [
+        ".json",
+        ".csv",
+        ".npz",
+        ".npy",
+        ".py",
+        ".pdf",
+        ".png",
+        ".yaml",
+        ".md",
+        ".tex",
+        ".txt",
+        ".cmnd",
+        ".log"
+      ],
+      "truncate": [
+        {
+          "ext": ".jsonl",
+          "max_records": 20000
+        }
+      ],
+      "keep_root": [
+        "todos.md",
+        "report.tex"
+      ]
+    },
+    "rubric": {
+      "type": "stagewise",
+      "pass_threshold": 0.9,
+      "stages": [
+        {
+          "id": "answer_present",
+          "description": "results/answer.json holds the probes AND results/scan.csv holds the scans.",
+          "weight": 0.0,
+          "gating": true,
+          "checks": [
+            {
+              "json_with_keys": {
+                "file": "results/answer.json",
+                "required_keys": [
+                  "width_formula_mumu",
+                  "width_probe_gev",
+                  "width_gg_probe_gev",
+                  "ctau_probe_m"
+                ]
+              }
+            },
+            {
+              "llp_scan_present": {
+                "scan_file": "results/scan.csv"
+              }
+            }
+          ]
+        },
+        {
+          "id": "pythia_ran",
+          "description": "A forward-flux artifact exists. NON-GATING here: it is satisfied for free in every scaffolded variant by the .cmnd cards we ship, so as a gate it only ever fired on file-NAMING in the bare variant, where no cards are supplied. It reports, it does not zero a trial.\n",
+          "weight": 0.0,
+          "gating": false,
+          "checks": [
+            {
+              "glob_present": {
+                "patterns": [
+                  "*.cmnd",
+                  "*events*",
+                  "*flux*",
+                  "*.hepmc*",
+                  "*.lhe*",
+                  "*parent*",
+                  "*pythia*",
+                  "*.npz"
+                ],
+                "min_matches": 1
+              }
+            }
+          ]
+        },
+        {
+          "id": "width_correct",
+          "description": "derived widths and lifetime, formula + probe values.",
+          "weight": 0.1,
+          "checks": [
+            {
+              "llp_formula": {
+                "file": "results/answer.json",
+                "field": "width_formula_mumu",
+                "reference": "soln/truth.json",
+                "symbols": {
+                  "g": [
+                    1e-07,
+                    0.001
+                  ],
+                  "m_phi": [
+                    0.24,
+                    1.8
+                  ],
+                  "m_mu": [
+                    0.09,
+                    0.115
+                  ]
+                },
+                "constraints": [
+                  "m_phi - 2*m_mu"
+                ],
+                "n_points": 10,
+                "rel_tol": 1e-06
+              }
+            },
+            {
+              "llp_value": {
+                "file": "results/answer.json",
+                "field": "width_probe_gev",
+                "reference": "soln/truth.json",
+                "rel_tol": 0.01
+              }
+            },
+            {
+              "llp_value": {
+                "file": "results/answer.json",
+                "field": "width_gg_probe_gev",
+                "reference": "soln/truth.json",
+                "rel_tol": 0.05
+              }
+            },
+            {
+              "llp_ctau_pair": {
+                "file": "results/answer.json",
+                "field": "ctau_probe_m",
+                "reference": "soln/truth.json",
+                "rel_tol": 0.05,
+                "ratio_tol": 0.01
+              }
+            }
+          ]
+        },
+        {
+          "id": "channels_present",
+          "continuous": true,
+          "description": "fraction of reference-reached (search, mass) points carrying any yield.",
+          "weight": 0.1,
+          "checks": [
+            {
+              "llp_channel_coverage": {
+                "scan_file": "results/scan.csv",
+                "reference": "soln/truth.json",
+                "min_fraction": 1.0,
+                "max_mass": 0.7
+              }
+            }
+          ]
+        },
+        {
+          "id": "yield_distance",
+          "continuous": true,
+          "description": "Yield accuracy at the reference's OWN declared (search, m_phi, g) points, the agent's scan interpolated in log-log onto those couplings. 48 graded points, no grid dependence. NOT compared against `_per_mass.peak`: that is the max of the reference's internal 400-point scan at a coupling the declared set never samples, and comparing it to the max of an agent's own grid measured the mismatch rather than the physics (~0.48 dex for cells whose band edges agree to 0.005-0.03 dex). The PRIMARY accuracy stage.\n",
+          "weight": 0.4,
+          "checks": [
+            {
+              "llp_yield_distance": {
+                "scan_file": "results/scan.csv",
+                "reference": "soln/truth.json",
+                "sigma": 0.00188,
+                "z_crit": 3.0
+              }
+            }
+          ]
+        },
+        {
+          "id": "contour_lower",
+          "continuous": true,
+          "weight": 0.15,
+          "description": "Reach-contour accuracy at the WEAK-coupling boundary, which is production-limited: below it too few LLPs are made, and those that are live long enough to fly through the volume undecayed. Graded separately from the upper edge -- they are different physics and respond differently to method. On the 2026-08 campaign a single trial sat at 0.0028 dex here and 0.066 at the other edge, a factor 19; pooling them turned a bimodal distribution into a misleading unimodal one.\n",
+          "checks": [
+            {
+              "llp_contour_distance": {
+                "scan_file": "results/scan.csv",
+                "reference": "soln/truth.json",
+                "edge": "lower",
+                "sigma": 0.002,
+                "z_crit": 3.0
+              }
+            }
+          ]
+        },
+        {
+          "id": "contour_upper",
+          "continuous": true,
+          "weight": 0.15,
+          "description": "Reach-contour accuracy at the STRONG-coupling boundary, which is lifetime-limited: above it c*tau ~ 1/g^2 is short enough that the LLP decays before reaching the volume. This edge is set by parents decaying just upstream of the absorber -- a thin sliver of the parent decay-length distribution -- so it is the sample-starved observable and needs the finest decay-length sampling. Weighted below the lower edge for that reason.\n",
+          "checks": [
+            {
+              "llp_contour_distance": {
+                "scan_file": "results/scan.csv",
+                "reference": "soln/truth.json",
+                "edge": "upper",
+                "sigma": 0.002,
+                "z_crit": 3.0
+              }
+            }
+          ]
+        },
+        {
+          "id": "no_spurious_reach",
+          "continuous": true,
+          "description": "no invented exclusion where the reference has none.",
+          "weight": 0.05,
+          "checks": [
+            {
+              "llp_no_spurious_reach": {
+                "scan_file": "results/scan.csv",
+                "reference": "soln/truth.json",
+                "min_fraction": 1.0
+              }
+            }
+          ]
+        },
+        {
+          "id": "reach_plot",
+          "continuous": true,
+          "gating": false,
+          "description": "the requested figure exists and carries filled regions.",
+          "weight": 0.05,
+          "checks": [
+            {
+              "llp_reach_plot": {
+                "file": "results/reach.pdf"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "extends": null
+  },
+  "harnesses": [
+    {
+      "id": "claude-code/default",
+      "runtime": {
+        "name": "claude_code",
+        "call_timeout_s": 3600,
+        "disallowed_tools": [
+          "WebSearch",
+          "WebFetch",
+          "Monitor",
+          "ScheduleWakeup"
+        ],
+        "sandbox": true,
+        "env": {
+          "ENABLE_TOOL_SEARCH": "false"
+        }
+      },
+      "provider": {
+        "name": "subscription",
+        "model": "claude-haiku-4-5"
+      },
+      "core": {
+        "builtin": true
+      },
+      "loop": {
+        "max_iterations": 150,
+        "max_format_retries": 2,
+        "continue_nudges": 0,
+        "max_rate_limit_retries": 3,
+        "ux_feedback": "graded",
+        "audit_html": false
+      }
+    }
+  ],
+  "loadouts": [
+    "core_only",
+    "tools_defined"
+  ],
+  "variants": [
+    {
+      "name": "bare",
+      "description": "OUT-OF-THE-BOX. Everything the answer depends on is stated in the USER\nPROMPT, and the sandbox ships one file: results/answer_schema.json, the\noutput contract. This is the closest variant to \"open a harness and ask a\ncolleague for this analysis\".\n\nWHY EVERYTHING IS IN THE PROMPT. It is not only realism. What the agent was\ngiven becomes a single reviewable artifact instead of three files in two\nformats, and a prescription can no longer hide in a config file -- which is\nexactly how the v1 formulation failed (see HISTORY). It also removes a\nnon-physics failure mode: not reading, or misparsing, a supplied .tex.\n\nWHAT IS PINNED, and why each is necessary for truth.json to be the unique\nanswer:\n  the Lagrangian                fixes both widths and c*tau\n  the two width expressions     see AXES below\n  production topologies         P -> mu nu phi, V -> mu+ mu- phi. Names the\n                                process; without it an agent can miss the\n                                vector channel and with it the entire\n                                high-mass reach\n  sqrt(s), generator, tune      the flux is a SIMULATION OUTPUT, not a fact.\n                                Two generators, or two tunes, give different\n                                forward strangeness and therefore different\n                                N_sig\n  soft QCD + charmonium         charmonium is the ONLY source above\n                                m_phi ~ 1.76 GeV, where the pseudoscalars\n                                close. An agent running plain SoftQCD gets\n                                zero yield at m_phi = 1.9 and 2.3 -- 8 of the\n                                48 graded points -- and that is a generator\n                                switch, not physics they can derive.\n                                The word \"prompt\" USED to appear here and was\n                                removed: it reads as an instruction to run a\n                                dedicated NRQCD onia sample, which is what\n                                both arms of the 2026-08-09 pilot did, and\n                                that route undercounts the forward J/psi\n                                flux by 1.32x. Deliberately NOT replaced with\n                                the recipe -- see WHAT IS WITHHELD\n  harvest at production         the LLP decay is BSM and absent from the\n                                generator, so parents must be caught before\n                                they decay\n  theta_max = 0.05 rad          NOT droppable. The volume subtends\n                                0.92/112 = 8.2 mrad, so 10 mrad reads as\n                                generous -- and loses 20% of the yield,\n                                because the phi is not collinear with its\n                                parent. Measured retention: 73.9% at\n                                8.2 mrad, 80.4% at 10, 93.5% at 20,\n                                100.000% at 50\n  sigma_inel, N_int             set the absolute normalization\n  the geometry pins             the apparatus\n  the two acceptance defs       arbitrary detector definitions\n  N* = 3                        defines the contour\n  the mass grid, the probes     where the answer is evaluated\n  the output contract           interface, held constant across variants\n\nWHAT IS WITHHELD -- this is the work: which hadrons can radiate a phi (the\nparent enumeration), B_hat and the rest-frame energy spectra, the\ndecay-in-flight production vertex, P_dec, the ray/cylinder intersection, the\nacceptance algorithms, the g^2 reweighting, and how many events to generate.\n\nALSO WITHHELD, and worth its own note: the generator recipe for charmonium.\nThe reference uses ONE inclusive sample (SoftQCD with Onia switched on in the\nsame run). A dedicated NRQCD onia sample run alongside a separate soft-QCD\none is 1.32x low, and that is not a convention mismatch -- it is an\nINCOMPLETE FLUX. Measured at 13.6 TeV / Monash, forward J/psi per inelastic\ncollision: inclusive 1.074e-3, dedicated-only 8.07e-4. Soft QCD with Onia OFF\nstill makes 2.48e-4 from string fragmentation, and 52 of 59 have no b-hadron\nancestor, so it is not feed-down -- it is a real production mechanism the\ndedicated NRQCD run simply does not have. The combination is additive rather\nthan double-counted: 126 (onia) + 39 (soft) = 165 against 168 observed, so\nthe onia processes are not ALSO generated inside MPI and Pythia's \"should not\ncombine softQCD processes with hard ones\" warning does not bite.\n\nSo the task asks for the total forward charmonium flux and an agent that\ndelivers 76% of it has undercounted, which is gradeable physics rather than\na coin flip. That is why the prompt does NOT state the recipe: encoding it is\nexactly the kind of domain practice the llp bundle should carry, and holding\nit out of the prompt is what makes the tools arm's advantage real signal\ninstead of a common-mode offset that cancels. SoftQCD:all and\nSoftQCD:inelastic are interchangeable here (kaons agree to 0.3%); the\nload-bearing part is only that charmonium is in the same run.\n\nNOT PINNED, deliberately: the in-volume midpoint convention the reference\nuses to evaluate acceptance. It is worth <= 0.004 dex for the dimuon search\nand is EXACTLY zero for the diphoton search (the photons follow the phi's own\nline, so the decay position cancels algebraically). An agent that samples the\ntrue decay point will be marginally more correct than the reference, by an\namount below its noise floor. See analysis/notes/detector_model.tex.\n\nAlso not pinned: pt_cut. It is the soft/hard stitching point in the reference\ngenerator, but n_hard = 0 in every flux ever built, so nothing is stitched\nand it has no effect.\n\nPAIRS WITH EITHER ARM. Earlier revisions of this file said \"core-only by\ndesign\", because MesonDecayToLLP required `kappa` and `spectrum_spec` as\ninputs and this variant withholds the files that supplied them, leaving the\ncentral domain tool unusable. Heptapod 2.5.0 adds ProductionSpectrumTool,\nwhich COMPUTES the spectrum and the reduced branching fraction from a parent\nname and a mass -- precisely what is withheld here. So `bare` x `core_only`\nversus `bare` x `tools_defined` is now runnable, and it is the cleanest\ntools-versus-no-tools contrast in the suite.\n\nHISTORY. v1 (2026-08-06) created no headroom over the scaffolded core cell\n(0.935 vs 0.900). An audit found `geometry.yaml` was not a geometry file: a\n\"DECLARED CONVENTIONS\" banner gave away the decay-in-flight vertex, the\n[L1,L2] ray/cylinder intersection, P_dec with lambda = beta*gamma*c*tau, the\nmidpoint evaluation together with its g-independence rationale, and both\nacceptance algorithms step by step. Stages 4 and 5 were simply handed over.\nv2 withheld the prescriptions and kept the arbitrary pins, and also dropped\nthe table of eight named parents from reference.tex. This revision folds the\nsurviving pins into the prompt, supplies the widths (see AXES), and reduces\nthe sandbox to the output contract.\n",
+      "axes": {
+        "spec": "defined",
+        "env": "bare"
+      }
+    }
+  ],
+  "models": [
+    {
+      "model": "claude-opus-4-8"
+    }
+  ],
+  "task": "llp_forward-reach",
+  "conditions": [
+    "core_only",
+    "tools_defined"
+  ],
+  "n_per_cell": 5,
+  "seeds": [
+    1001,
+    1002,
+    1003,
+    1004,
+    1005
+  ],
+  "judge": {
+    "kind": "rule",
+    "harness": null,
+    "model": null
+  },
+  "max_cost_usd": 0.0,
+  "max_iterations": null,
+  "max_format_retries": null,
+  "continue_nudges": null,
+  "max_rate_limit_retries": null,
+  "max_transient_retries": null,
+  "ux_feedback": null,
+  "audit_html": false,
+  "parallel": 2,
+  "dry_run": false,
+  "versions": {
+    "orchestral-ai": "1.10.0",
+    "toolbench": "0.7.0"
+  },
+  "runtime_versions": {
+    "claude_code": "2.1.225 (Claude Code)"
+  },
+  "rubric_total_weight": 1.0,
+  "pass_criterion": "reach>=0.9",
+  "reach_weights": {
+    "stage_order": [
+      "answer_present",
+      "pythia_ran",
+      "width_correct",
+      "channels_present",
+      "yield_distance",
+      "contour_lower",
+      "contour_upper",
+      "no_spurious_reach",
+      "reach_plot"
+    ],
+    "w": [
+      0.0,
+      0.0,
+      0.1,
+      0.1,
+      0.4,
+      0.15,
+      0.15,
+      0.05,
+      0.05
+    ],
+    "pass_threshold": 0.9
+  },
+  "litellm_pricing": null,
+  "resolution": [
+    {
+      "harness": "claude-code/default",
+      "loadout": "core_only",
+      "core": {
+        "builtin": true,
+        "tools": []
+      },
+      "sources": []
+    },
+    {
+      "harness": "claude-code/default",
+      "loadout": "tools_defined",
+      "core": {
+        "builtin": true,
+        "tools": []
+      },
+      "sources": [
+        {
+          "backend": "toolbase",
+          "config": {
+            "loadout": "forward-llp-defined"
+          },
+          "select": null,
+          "tools": [
+            "heptapod__ProductionSpectrum",
+            "heptapod__HarvestForwardFlux",
+            "heptapod__MesonDecayToLLP",
+            "heptapod__DecayInVolumeVsCoupling",
+            "heptapod__DecayInVolumeVsLifetime",
+            "heptapod__PythiaFromRunCard"
+          ],
+          "provenance": {
+            "toolkits": {
+              "heptapod": {
+                "version": "3.0.0",
+                "environment": "venv"
+              }
+            },
+            "toolbase_version": "0.14.0"
+          }
+        }
+      ]
+    }
+  ]
+}
