@@ -4,6 +4,7 @@
 
 name: symbolic-decay_S_to_SpV
 version: "1.0.0"
+extends: ../_shared
 description: |
   Tree-level two-body width of a scalar into a lighter scalar plus a
   massive vector, via the derivative coupling
@@ -13,14 +14,8 @@ description: |
   Gamma ~ lambda^(3/2). Exact numeric widths (GeV) + closed-form formulas.
   Ground truth in ground_truth/derivation.py (conventions ../CONVENTIONS.md).
 
-default_harness: orchestral/anthropic
-default_loadout: core_only
-default_variant: unguided
-
 ground_truth:
   dir: ./ground_truth
-
-checks: ../_shared/checks.py
 
 artifacts:
   keep_full: [".json", ".py", ".md", ".wl", ".txt"]

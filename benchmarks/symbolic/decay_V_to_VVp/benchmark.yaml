@@ -4,6 +4,7 @@
 
 name: symbolic-decay_V_to_VVp
 version: "1.0.0"
+extends: ../_shared
 description: |
   Tree-level two-body width of a massive vector into two distinct massive
   vectors via the Yang-Mills triple-gauge vertex (the Z'->W+W- archetype).
@@ -14,14 +15,8 @@ description: |
   independent contractions of the vertex (explicit polarization vectors vs
   completeness-tensor einsum); conventions in ../CONVENTIONS.md.
 
-default_harness: orchestral/anthropic
-default_loadout: core_only
-default_variant: unguided
-
 ground_truth:
   dir: ./ground_truth
-
-checks: ../_shared/checks.py
 
 artifacts:
   keep_full: [".json", ".py", ".md", ".wl", ".txt"]

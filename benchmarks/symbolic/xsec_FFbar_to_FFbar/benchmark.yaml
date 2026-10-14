@@ -4,6 +4,7 @@
 
 name: symbolic-xsec_FFbar_to_FFbar
 version: "1.0.0"
+extends: ../_shared
 description: |
   Tree-level s-channel annihilation of a massless fermion pair into a
   distinct massless fermion pair: (a) massless vector mediator (the
@@ -14,14 +15,8 @@ description: |
   and verified in ground_truth/derivation.py (P&S eq. (5.13); explicit-
   spinor numeric integration).
 
-default_harness: orchestral/anthropic
-default_loadout: core_only
-default_variant: unguided
-
 ground_truth:
   dir: ./ground_truth
-
-checks: ../_shared/checks.py
 
 artifacts:
   keep_full: [".json", ".py", ".md", ".wl", ".txt"]

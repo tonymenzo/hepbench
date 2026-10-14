@@ -4,6 +4,7 @@
 
 name: symbolic-decay_F_to_FpV
 version: "1.0.0"
+extends: ../_shared
 description: |
   Tree-level two-body width of a heavy Dirac fermion into a lighter
   fermion plus a massive vector (the t->bW archetype): (a) pure vector
@@ -14,14 +15,8 @@ description: |
   verified in ground_truth/derivation.py (reduces to the textbook t->bW
   width; conventions in ../CONVENTIONS.md).
 
-default_harness: orchestral/anthropic
-default_loadout: core_only
-default_variant: unguided
-
 ground_truth:
   dir: ./ground_truth
-
-checks: ../_shared/checks.py
 
 artifacts:
   keep_full: [".json", ".py", ".md", ".wl", ".txt"]

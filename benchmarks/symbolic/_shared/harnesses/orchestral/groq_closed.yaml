@@ -1,8 +1,5 @@
-# Closed-book arm on the Groq route: no execution tools at all. The
-# model must derive the widths and do the arithmetic in-context; file
-# tools exist only so it can deposit results/answer.json. Run with
-#   --harness orchestral/groq_closed --loadouts core_only
-# See orchestral/groq.yaml for the route's caveats (no pricing entry).
+# Closed-book arm: no execution tools, so the derivation and arithmetic happen in-context.
+# File tools remain only to write results/answer.json. Run with --loadouts core_only.
 name: orchestral/groq_closed
 runtime:
   name: orchestral
@@ -14,11 +11,5 @@ core:
   tools: [WriteFileTool, ReadFileTool, TodoRead, TodoWrite]
 loop:
   max_iterations: 20
-  # Raised from 2: gpt-oss-class models emit malformed tool-call JSON
-  # often enough that 2 resumes were exhausted on 3 of 14 sweep
-  # benchmarks, losing the whole trial. The crash is nondeterministic
-  # and a resume costs ~$0.005 against a trial that otherwise scores 0.
-  # Kept uniform across the family: an arm with fewer retries would
-  # show a lower reach for loop-policy reasons, not capability ones.
-  max_format_retries: 5
-  continue_nudges: 0
+  max_format_retries: 5                # resume after a malformed tool call
+  continue_nudges: 0                   # no resume when the agent stops early

@@ -64,23 +64,19 @@ _FUNCS = {
     "acos": sympy.acos,
     # Exact rational exponents. The tasks ask for a "sympy-parseable"
     # formula, and `(...)**Rational(3,2)` is the idiomatic sympy way to
-    # write a 3/2 power -- a real gpt-oss-120b trial wrote exactly that
-    # for the beta^3 width and was rejected on the alphabet despite
-    # being algebraically identical to the ground truth. These are pure
-    # numeric constructors: they widen what counts as a well-formed
-    # answer, not what the grader can execute.
+    # write a 3/2 power. These are pure numeric constructors: they widen
+    # what counts as a well-formed answer, not what the grader can execute.
     "Rational": sympy.Rational,
     "Integer": sympy.Integer,
     "Float": sympy.Float,
     # The eda tools emit this: without `assume_real_couplings` the returned
     # `width_formula` carries `Conjugate(g)`, i.e. |g|^2, which for the real
-    # couplings these tasks specify is g^2. An agent copying the tool's own
-    # output was marked wrong on the alphabet -- 15 trials over five tasks in
-    # the 2026-10 campaigns, each numerically identical to the ground truth.
-    # Both spellings: sympy writes `conjugate`, the tools emit Mathematica's
-    # `Conjugate`. Because `_parse_formula` builds symbols `positive=True`,
-    # conjugate(g) collapses to g at every sample point, so this widens what
-    # counts as well-formed without widening what counts as correct.
+    # couplings these tasks specify is g^2, so an agent may copy the tool's
+    # own output. Both spellings: sympy writes `conjugate`, the tools emit
+    # Mathematica's `Conjugate`. Because `_parse_formula` builds symbols
+    # `positive=True`, conjugate(g) collapses to g at every sample point, so
+    # this widens what counts as well-formed without widening what counts as
+    # correct.
     "conjugate": sympy.conjugate,
     "Conjugate": sympy.conjugate,
 }
@@ -276,11 +272,11 @@ def check_answer_formula(sandbox: Path, params: dict):
     # is evaluated at the point the task actually asks about instead of being
     # rejected for mentioning a symbol the specialised ground truth dropped.
     #
-    # Without this, a part that fixes a mass to zero graded two correct
+    # Without it, a part that fixes a mass to zero would grade two correct
     # answers differently: declare `"mass": 0` and the tool returns the
     # specialised form (passes), keep the mass symbolic and pass 0 in `values`
-    # and it returns the general form (rejected unparsed). It also biased one
-    # arm -- a tools arm naturally returns the general form.
+    # and it returns the general form (rejected unparsed). That would also
+    # bias a tools arm, which naturally returns the general form.
     fixed = params.get("fixed") or {}
     try:
         # `positive=True` to match how `_parse_formula` builds its symbols --

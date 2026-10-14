@@ -4,6 +4,7 @@
 
 name: symbolic-decay_F_to_3body
 version: "1.0.0"
+extends: ../_shared
 description: |
   Muon-decay-shaped three-body width of a heavy fermion through a
   heavy mediator (leading order in m_F/M): (a) vector mediator with
@@ -17,14 +18,8 @@ description: |
   verified by numeric Dalitz integration of explicit-spinor contact
   amplitudes; integrator anchored to the muon width in tests/.
 
-default_harness: orchestral/anthropic
-default_loadout: core_only
-default_variant: unguided
-
 ground_truth:
   dir: ./ground_truth
-
-checks: ../_shared/checks.py
 
 artifacts:
   keep_full: [".json", ".py", ".md", ".wl", ".txt"]

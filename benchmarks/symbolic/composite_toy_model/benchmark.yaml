@@ -4,6 +4,7 @@
 
 name: symbolic-composite_toy_model
 version: "1.0.0"
+extends: ../_shared
 description: |
   The composite of the symbolic family: one toy Lagrangian (heavy
   scalar coupled to two fermion species and a light scalar), full
@@ -16,14 +17,8 @@ description: |
   formula fields). Ground truth derived and verified in
   ground_truth/derivation.py.
 
-default_harness: orchestral/anthropic
-default_loadout: core_only
-default_variant: unguided
-
 ground_truth:
   dir: ./ground_truth
-
-checks: ../_shared/checks.py
 
 artifacts:
   keep_full: [".json", ".py", ".md", ".wl", ".txt"]

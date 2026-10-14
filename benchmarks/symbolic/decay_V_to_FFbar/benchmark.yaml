@@ -4,6 +4,7 @@
 
 name: symbolic-decay_V_to_FFbar
 version: "1.0.0"
+extends: ../_shared
 description: |
   Tree-level width of a massive neutral vector into a Dirac fermion
   pair: (a) pure vector coupling L = g V_mu psibar gamma^mu psi, (b)
@@ -15,14 +16,8 @@ description: |
   derived and verified in ground_truth/derivation.py (Barger-Phillips;
   Langacker arXiv:0801.1345).
 
-default_harness: orchestral/anthropic
-default_loadout: core_only
-default_variant: unguided
-
 ground_truth:
   dir: ./ground_truth
-
-checks: ../_shared/checks.py
 
 artifacts:
   keep_full: [".json", ".py", ".md", ".wl", ".txt"]

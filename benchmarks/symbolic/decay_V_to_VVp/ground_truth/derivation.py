@@ -150,10 +150,9 @@ def _check_against_literature():
     exactly at every mass ratio; the as-drawn assignment converges to it only
     asymptotically -- 0.209 of it at mV/m = 3, 0.800 at mV/m = 10. Both share
     the leading longitudinal coefficient 1/192, which is why a high-mV limit
-    check cannot discriminate and the old `me_hi/me_lo > 10` growth assertion
-    passed on the wrong vertex.
+    or growth check alone cannot discriminate between the two.
 
-    The ratios below are therefore the real regression guard for this task.
+    The ratios below are therefore the guard for this task.
     """
     def literature(g, mV, m):
         x = m * m / (mV * mV)
@@ -224,10 +223,9 @@ def main():
                             "longitudinal m_V^5/(m1^2 m2^2) scaling checked",
             "convention": "YM triple-gauge vertex with ALL-INCOMING momenta "
                           "(k1+k2+k3=0); for P -> q1 q2 that is "
-                          "(P, -q1, -q2). Superseded the as-drawn "
-                          "(P, q1, q2) assignment on 2026-09-11, which was "
-                          "the formula outside its domain and gave widths "
-                          "low by ~2.9x at these mass ratios.",
+                          "(P, -q1, -q2). The as-drawn (P, q1, q2) "
+                          "assignment is the vertex outside its domain and "
+                          "gives widths low by ~2.9x at these mass ratios.",
             "citations": [
                 "J.L. Hewett, T.G. Rizzo, Phys.Rept. 183 (1989) 193 "
                 "(Z' -> W+W- and heavy-vector decays)",

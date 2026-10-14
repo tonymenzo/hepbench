@@ -4,6 +4,7 @@
 
 name: symbolic-decay_V_to_SVp
 version: "1.0.0"
+extends: ../_shared
 description: |
   Tree-level two-body width of a massive vector into a scalar plus a
   second massive vector, via the SVV coupling L = g S V_mu V'^mu (g of mass
@@ -12,14 +13,8 @@ description: |
   (Z'->h Z type). Exact numeric widths (GeV) + closed-form formulas.
   Ground truth in ground_truth/derivation.py (conventions ../CONVENTIONS.md).
 
-default_harness: orchestral/anthropic
-default_loadout: core_only
-default_variant: unguided
-
 ground_truth:
   dir: ./ground_truth
-
-checks: ../_shared/checks.py
 
 artifacts:
   keep_full: [".json", ".py", ".md", ".wl", ".txt"]

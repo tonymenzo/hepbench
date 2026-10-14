@@ -1,11 +1,5 @@
-# The domain arm of the family's two-cell ablation. Pairs with the `unguided`
-# variant; core_only is the other cell. The two cells differ by exactly one
-# thing: this arm adds ComputeDecayRate and ComputeCrossSection, served by
-# toolbase from the symbolic-eda loadout, and nothing else. Both arms keep the
-# harness's Python, so only the symbolic derivation is in the difference.
-#
-# The addendum declares the toolset as the intended path. It carries no
-# physics and lives on the loadout, so it never reaches core_only.
+# Domain arm: core_only plus ComputeDecayRate and ComputeCrossSection served by
+# toolbase. The addendum names them as the intended path and reaches only this arm.
 name: tools_eda
 tools:
   sources:

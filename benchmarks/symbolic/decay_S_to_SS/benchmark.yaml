@@ -4,6 +4,7 @@
 
 name: symbolic-decay_S_to_SS
 version: "1.0.0"
+extends: ../_shared
 description: |
   Tree-level two-body widths of a generic real scalar into scalar
   pairs: (a) L = -(mu/2) phi chi^2 with IDENTICAL final-state scalars
@@ -14,14 +15,8 @@ description: |
   verified in ground_truth/derivation.py (PDG Kinematics review eq.
   50.18; Griffiths ABC theory sec. 6.3).
 
-default_harness: orchestral/anthropic
-default_loadout: core_only
-default_variant: unguided
-
 ground_truth:
   dir: ./ground_truth
-
-checks: ../_shared/checks.py
 
 artifacts:
   keep_full: [".json", ".py", ".md", ".wl", ".txt"]

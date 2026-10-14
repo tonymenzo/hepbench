@@ -4,6 +4,7 @@
 
 name: symbolic-decay_F_to_FprimeS
 version: "1.0.0"
+extends: ../_shared
 description: |
   Tree-level two-body width of a heavy Dirac fermion into a lighter
   fermion plus a real scalar: (a) scalar Yukawa L = -y phi psibar Psi
@@ -15,14 +16,8 @@ description: |
   (Djouadi arXiv:hep-ph/0503173 sec. 1.3.4; Aguilar-Saavedra
   arXiv:0907.3155 appendix).
 
-default_harness: orchestral/anthropic
-default_loadout: core_only
-default_variant: unguided
-
 ground_truth:
   dir: ./ground_truth
-
-checks: ../_shared/checks.py
 
 artifacts:
   keep_full: [".json", ".py", ".md", ".wl", ".txt"]

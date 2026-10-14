@@ -4,6 +4,7 @@
 
 name: symbolic-decay_S_to_FFbar
 version: "1.0.0"
+extends: ../_shared
 # Curated for the results site: nickname_tex renders as MathML; summary is the
 # one-line blurb shown in class listings (the full description stays below).
 nickname_tex: S \to f\bar f
@@ -26,14 +27,8 @@ description: |
   (literature: Djouadi, arXiv:hep-ph/0503172 sec. 2.3 and
   arXiv:hep-ph/0503173 secs. 1.2.2, 1.3.4).
 
-default_harness: orchestral/anthropic
-default_loadout: core_only
-default_variant: unguided
-
 ground_truth:
   dir: ./ground_truth
-
-checks: ../_shared/checks.py
 
 artifacts:
   keep_full: [".json", ".py", ".md", ".wl", ".txt"]

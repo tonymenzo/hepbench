@@ -4,6 +4,7 @@
 
 name: symbolic-xsec_SS_to_SS
 version: "1.0.0"
+extends: ../_shared
 description: |
   Tree-level 2 -> 2 scalar scattering from quartic contact terms:
   (a) phi phi -> phi phi from L = -(lambda/4!) phi^4 (vertex
@@ -15,14 +16,8 @@ description: |
   ground_truth/derivation.py (P&S eq. (4.84) + sec. 4.6; Srednicki
   ch. 11).
 
-default_harness: orchestral/anthropic
-default_loadout: core_only
-default_variant: unguided
-
 ground_truth:
   dir: ./ground_truth
-
-checks: ../_shared/checks.py
 
 artifacts:
   keep_full: [".json", ".py", ".md", ".wl", ".txt"]

@@ -1,68 +1,21 @@
-# claude-code — drives the trial with the Claude Code CLI (`claude -p`) under the
-# user's logged-in subscription. The MCP toolkit comes from the loadout; the
-# model defaults to claude-haiku-4-5 and is overridable via `--models`.
+# Claude Code CLI (`claude -p`) under the user's subscription.
 name: claude-code/default
 runtime:
-  # Shells out to `claude -p ... --output-format stream-json`; resumable across
-  # the runner's format-crash / nudge loop.
   name: claude_code
-  # ANTI-ORACLE, and NOT optional here. README.md's policy was written for the
-  # orchestral harnesses, whose file tools are jailed and whose tool list drops
-  # WebSearchTool and RunCommandTool. Neither holds for this runtime: Claude
-  # Code ships its own Bash, Read and WebSearch, so without the two keys below
-  # a trial can simply read ground_truth/truth.json -- or look the formula up,
-  # since every one of them is published.
-  #
-  # `sandbox: true` confines Bash WRITES to the trial sandbox and DENIES READS
-  # of the runner's protected paths, which are the whole benchmark directory
-  # plus the toolbase tree and the git object stores. That covers truth.json,
-  # derivation.py and checks.py together, so it is a stronger guarantee than
-  # the detection net README.md describes for orchestral -- prevention rather
-  # than after-the-fact zeroing. It applies to Bash and its children only; MCP
-  # tools run outside it, which is irrelevant for core_only and harmless for
-  # tools_eda (ComputeDecayRate/ComputeCrossSection touch no benchmark paths).
-  #
-  # Bash is KEPT rather than disallowed. The policy's reason for dropping
-  # RunCommandTool was that a shell is the natural way to cat the key -- and
-  # the sandbox removes that path without also removing the agent's ability to
-  # run Python, which the numeric rung legitimately needs.
-  sandbox: true
+  call_timeout_s: 3600                 # per MCP call, seconds
   disallowed_tools: [WebSearch, WebFetch, Monitor, ScheduleWakeup]
+  sandbox: true                        # confine Bash to the sandbox and deny reads of the benchmark tree
   env:
-    # Eager-load the MCP toolset instead of deferring it behind ToolSearch.
-    # With ToolSearch on, a served tool is a name the agent must first go
-    # looking for, which puts "did it think to search" inside the measurement
-    # -- the nuisance variable llp_forward watched dominate a run (six tools
-    # served and visible, none called in fifteen turns). Matches
-    # llp_forward/harnesses/claude-code/default.yaml. Harmless for core_only,
-    # which serves no MCP tools at all.
-    ENABLE_TOOL_SEARCH: "false"
-  # Per-MCP-tool-call timeout (s) for `toolbase serve --call-timeout`: toolbase's
-  # 60s default kills multi-thousand-event Pythia/Delphes calls. Harmless for
-  # light toolkits.
-  call_timeout_s: 3600
+    ENABLE_TOOL_SEARCH: "false"        # serve MCP tools eagerly rather than behind ToolSearch
 provider:
-  # Credential-free placeholder: the in-process llm is never called (the claude
-  # CLI owns the model call). `model` pins the default; `--models` overrides.
-  name: subscription
-  model: claude-haiku-4-5
+  name: subscription                   # the CLI owns the model call
+  model: claude-haiku-4-5              # overridden by --model
   max_tokens: 8192
 core:
-  # Claude Code ships its own core tools (Bash/Write/Edit/Read/Glob/Grep/
-  # TodoWrite); the MCP toolkit comes from the loadout.
-  builtin: true
+  builtin: true                        # Claude Code's own tools; MCP tools come from the loadout
 loop:
-  # The CLI runs the whole agent loop per `claude -p` call: one run = one trial.
   max_iterations: 150
-  # Two UNSCORED turns per trial: a blind tool-usability rating, then
-  # the grade is revealed and an informed critique collected.
-  ux_feedback: graded
-  # Raised from 2: gpt-oss-class models emit malformed tool-call JSON
-  # often enough that 2 resumes were exhausted on 3 of 14 sweep
-  # benchmarks, losing the whole trial. The crash is nondeterministic
-  # and a resume costs ~$0.005 against a trial that otherwise scores 0.
-  # Kept uniform across the family: an arm with fewer retries would
-  # show a lower reach for loop-policy reasons, not capability ones.
-  max_format_retries: 5
-  continue_nudges: 0
+  ux_feedback: graded                  # two unscored post-trial turns: a critique of the served tools
+  max_format_retries: 5                # resume after a malformed tool call
+  continue_nudges: 0                   # no resume when the agent stops early
   max_rate_limit_retries: 3
